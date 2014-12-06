@@ -6,12 +6,14 @@
   app.controller('navigationVM', function navigationVMScope($scope, $mdSidenav, sitemap) {
     $scope.menu = sitemap;
 
+    $scope.navigation = $mdSidenav('navigation');
+
     $scope.showNavigation = function showNavigation() {
-      $mdSidenav('navigation').open();
+      $scope.navigation.open();
     };
 
     $scope.hideNavigation = function hideNavigation() {
-      $mdSidenav('navigation').close();
+      $scope.navigation.close();
     };
   });
 }(window.angular));

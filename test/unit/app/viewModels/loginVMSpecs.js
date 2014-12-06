@@ -3,15 +3,14 @@
 
   describe('loginVMSpecs', function loginVMSpecs() {
 
-    var $scope, $httpBackend, events, testGlobals, $mdSidenav, userDAO, $cookies;
+    var $scope, $httpBackend, events, testGlobals, userDAO, $cookies;
     beforeEach(module('imber-test'));
 
-    beforeEach(inject(function (testSetup, _$mdSidenav_, _userDAO_, _$cookies_) {
+    beforeEach(inject(function (testSetup, _userDAO_, _$cookies_) {
       testGlobals = testSetup.setupControllerTest('loginVM');
       $scope = testGlobals.$scope;
       $httpBackend = testGlobals.$httpBackend;
       events = testGlobals.events;
-      $mdSidenav = _$mdSidenav_;
       userDAO = _userDAO_;
       $cookies = _$cookies_;
     }));
