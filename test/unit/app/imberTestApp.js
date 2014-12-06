@@ -14,7 +14,17 @@
 
     function createDefaultTestGlobals() {
       return {
-        $httpBackend: $httpBackend
+        $httpBackend: $httpBackend,
+        createDefaultUserAuthResponse: createDefaultUserAuthResponse
+      };
+    }
+
+    function createDefaultUserAuthResponse() {
+      return {
+        authToken: 'returnedAuthToken',
+        user: {
+          userName: 'enof'
+        }
       };
     }
 
@@ -30,10 +40,10 @@
     function setupControllerTest(controllerName) {
       var testGlobals = createDefaultTestGlobals();
 
-      testGlobals.scope = $rootScope.$new();
+      testGlobals.$scope = $rootScope.$new();
 
       $controller(controllerName, {
-        $scope: testGlobals.scope
+        $scope: testGlobals.$scope
       });
       return testGlobals;
     }

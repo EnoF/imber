@@ -42,6 +42,7 @@ module.exports = function (grunt) {
           '<%= app.dist %>/js/imber.min.js': [
             '<%= app.app %>/bower_components/angular/angular.min.js',
             '<%= app.app %>/bower_components/angular-route/angular-route.min.js',
+            '<%= app.app %>/bower_components/angular-cookies/angular-cookies.min.js',
             '<%= app.app %>/bower_components/angular-aria/angular-aria.min.js',
             '<%= app.app %>/bower_components/angular-animate/angular-animate.min.js',
             '<%= app.app %>/bower_components/hammerjs/hammer.min.js',

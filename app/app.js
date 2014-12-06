@@ -1,7 +1,7 @@
 (function appScope(angular) {
   'use strict';
 
-  var app = angular.module('imber', ['ngMaterial', 'ngRoute']);
+  var app = angular.module('imber', ['ngMaterial', 'ngRoute', 'ngCookies']);
 
   var sitemap = [
     {

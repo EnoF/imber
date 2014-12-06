@@ -3,32 +3,72 @@
 
   describe('loginVMSpecs', function loginVMSpecs() {
 
-    var scope, $httpBackend, events, testGlobals, $mdSidenav;
+    var $scope, $httpBackend, events, testGlobals, $mdSidenav, userDAO, $cookies;
     beforeEach(module('imber-test'));
 
-    beforeEach(inject(function (testSetup, _$mdSidenav_) {
+    beforeEach(inject(function (testSetup, _$mdSidenav_, _userDAO_, _$cookies_) {
       testGlobals = testSetup.setupControllerTest('loginVM');
-      scope = testGlobals.scope;
+      $scope = testGlobals.$scope;
       $httpBackend = testGlobals.$httpBackend;
       events = testGlobals.events;
       $mdSidenav = _$mdSidenav_;
+      userDAO = _userDAO_;
+      $cookies = _$cookies_;
     }));
 
     describe('login', function loginScope() {
       it('should login an existing user', function login() {
         // given
+        $scope.userName = 'enof';
+        $scope.password = 'secret';
+
+        // predict
+        var expectedResponse = testGlobals.createDefaultUserAuthResponse();
+        $httpBackend.expect('POST', '/login', {
+          userName: $scope.userName,
+          password: $scope.password
+        }).respond(200, expectedResponse);
 
         // when
+        $scope.login();
+        $httpBackend.flush();
 
         // then
+        expect($scope.loggedIn()).to.be.true;
+        expect($cookies.authToken).to.equal(expectedResponse.authToken);
+        expect(userDAO.getCurrentUser().userName).to.equal(expectedResponse.user.userName);
       });
 
-      it('should login a user with cookies', function loginWithCookies() {
+      it('should not attempt to login a user with empty values', function empty() {
         // given
+        expect($scope.userName).to.be.null;
+        expect($scope.password).to.be.null;
+        sinon.spy(userDAO, 'login');
 
         // when
+        $scope.login();
 
         // then
+        expect(userDAO.login).not.to.have.been.called;
+      });
+
+      it('should login with the authToken in the cookies', function loginWithCookies() {
+        // given
+        $cookies.authToken = 'abcxyz';
+
+        // predict
+        var expectedResponse = testGlobals.createDefaultUserAuthResponse();
+        $httpBackend.expect('POST', '/reauthenticate', {
+          authToken: $cookies.authToken
+        }).respond(200, expectedResponse);
+
+        // when
+        $scope.login();
+        $httpBackend.flush();
+
+        // then
+        expect($scope.loggedIn()).to.be.true;
+        expect($cookies.authToken).to.equal(expectedResponse.authToken);
       });
     });
   });
