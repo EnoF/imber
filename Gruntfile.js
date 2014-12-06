@@ -82,6 +82,8 @@ module.exports = function (grunt) {
           out: '<%= app.tmp %>/docs'
         },
         src: [
+          '<%= app.app %>/dao/*.js',
+          '<%= app.app %>/models/*.js',
           '<%= app.app %>/viewModels/*.js',
           '<%= app.app %>/models/*.js',
           '<%= app.server %>/{,*/}*.js',
