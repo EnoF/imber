@@ -3,7 +3,7 @@
 
   var app = angular.module('imber');
 
-  app.factory('userDAO', function userDAOFactory($http, $q, $cookies) {
+  app.factory('userDAO', function userDAOFactory($http, $q, $cookies, User) {
 
     var currentUser = null;
 
@@ -37,7 +37,7 @@
         // Set the newly created auth token on the cookie.
         $cookies.authToken = response.data.authToken;
         // The returned user data will be held in cache.
-        currentUser = response.data.user;
+        currentUser = new User(response.data.user);
         // Return the `user` model.
         deferred.resolve(currentUser);
       }).catch(function error() {

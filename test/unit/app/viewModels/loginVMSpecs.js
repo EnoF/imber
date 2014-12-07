@@ -35,7 +35,7 @@
         // then
         expect($scope.loggedIn()).to.be.true;
         expect($cookies.authToken).to.equal(expectedResponse.authToken);
-        expect(userDAO.getCurrentUser().userName).to.equal(expectedResponse.user.userName);
+        expect(userDAO.getCurrentUser().getUserName()).to.equal(expectedResponse.user.userName);
       });
 
       it('should not attempt to login a user with empty values', function empty() {

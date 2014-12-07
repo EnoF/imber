@@ -49,6 +49,7 @@ module.exports = function (grunt) {
             '<%= app.app %>/bower_components/angular-material/angular-material.min.js',
             '<%= app.app %>/bower_components/famous/dist/famous.min.js',
             '<%= app.app %>/bower_components/famous-angular/dist/famous-angular.min.js',
+            '<%= app.app %>/bower_components/enofjs/dist/enofjs/enof.min.js',
             '.tmp/pre.imber.js'
           ]
         }

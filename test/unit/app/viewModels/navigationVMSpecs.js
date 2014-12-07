@@ -15,6 +15,7 @@
 
     it('should open the navigation', function openNavigation() {
       // given
+      $scope.getNavigation();
       sinon.spy($scope.navigation, 'open');
 
       // when
@@ -26,6 +27,7 @@
 
     it('should close the navigation', function closeNavigation() {
       // given
+      $scope.getNavigation();
       sinon.spy($scope.navigation, 'close');
 
       // when
