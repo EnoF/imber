@@ -9,7 +9,7 @@
   var users = [
     {
       _id: '545726928469e940235ce769',
-      name: 'enof',
+      userName: 'EnoF',
       password: 'someEncryptedPassword'
     }
   ];
