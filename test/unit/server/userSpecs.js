@@ -151,6 +151,28 @@
           then(done).
           catch(done);
       });
+
+      it('should login with an case insensitive usename', function insensitive() {
+
+      });
+    });
+
+    describe('user registration', function registration() {
+      it('should register a new user', function registerNewUser() {
+
+      });
+
+      it('should abort a registration when username is in use', function usernameInUse() {
+
+      });
+
+      it('should abort a registration when email has been registered', function emailRegistered() {
+
+      });
+
+      it('should convert all usernames to lowercase when registering', function lowerCase() {
+
+      });
     });
   });
 

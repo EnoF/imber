@@ -14,6 +14,14 @@
 
     describe('register', function registerScope() {
       it('should register an new user', function registerNewUser() {
+        // given
+        $scope.email = 'andyt@live.nl';
+        $scope.userName = 'EnoF';
+        $scope.password = 'SomeUberSpecialPassword1!';
+
+        // when
+
+        // then
 
       });
 
