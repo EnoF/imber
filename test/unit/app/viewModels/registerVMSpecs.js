@@ -66,7 +66,29 @@
       });
 
       it('should reject registering multiple users under the same email', function sameEmail() {
+        // given
+        $scope.email = 'andyt@live.nl';
+        $scope.userName = 'EnoF';
+        $scope.password = 'SomeUberSpecialPassword1!';
 
+        // predict
+        var expectedResponse = {
+          email: true
+        };
+        $httpBackend.expect('POST', '/user', {
+          userName: $scope.userName,
+          password: $scope.password,
+          email: $scope.email
+        }).respond(410, expectedResponse);
+
+        // when
+        $scope.register();
+        $httpBackend.flush();
+
+        // then
+        expect($scope.email).to.be.null;
+        expect($scope.userName).to.equal('EnoF');
+        expect($scope.password).to.equal('SomeUberSpecialPassword1!');
       });
     });
   })

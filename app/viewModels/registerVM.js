@@ -24,9 +24,17 @@
       var errors = errorResponse.data;
       if (errors.userName) {
         $scope.userName = null;
-        $mdToast.show($mdToast.simple().
-          content('Please use a different username.'));
+        $scope.toastError('username');
       }
+      if (errors.email) {
+        $scope.email = null;
+        $scope.toastError('email');
+      }
+    };
+
+    $scope.toastError = function toastError(field) {
+      $mdToast.show($mdToast.simple().
+        content('Please use a different ' + field + '.'));
     };
 
     $scope.reset = function reset() {
