@@ -283,6 +283,16 @@ module.exports = function (grunt) {
           livereload: true
         }
       },
+      preprocess: {
+        files: [
+          '<%= app.app %>/index.html'
+        ],
+        tasks: ['preprocess:develop'],
+        options: {
+          // Start a live reload server on the default port 35729
+          livereload: true
+        }
+      },
       testsApp: {
         files: [
           '<%= app.app %>/**/*.js',
@@ -318,7 +328,8 @@ module.exports = function (grunt) {
     'clean',
     'jshint',
     'less',
-    'ngtemplates:dev'
+    'ngtemplates:dev',
+    'preprocess:develop'
   ]);
 
   grunt.registerTask('setupEnv', [
