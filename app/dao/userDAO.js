@@ -48,6 +48,15 @@
       return deferred.promise;
     }
 
+    function registerUser(userName, password, email) {
+      // When successfully registered, log the user in.
+      return handleAuthentication($http.post('/user', {
+        userName: userName,
+        password: password,
+        email: email
+      }));
+    }
+
     function loggedIn() {
       return !!currentUser;
     }
@@ -57,7 +66,8 @@
       getCurrentUser: getCurrentUser,
       login: login,
       loggedIn: loggedIn,
-      reauthenticate: reauthenticate
+      reauthenticate: reauthenticate,
+      registerUser: registerUser
     };
   });
 }(window.angular));

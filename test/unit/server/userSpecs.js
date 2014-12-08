@@ -169,10 +169,6 @@
       it('should abort a registration when email has been registered', function emailRegistered() {
 
       });
-
-      it('should convert all usernames to lowercase when registering', function lowerCase() {
-
-      });
     });
   });
 
