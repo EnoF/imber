@@ -1,16 +1,17 @@
 <md-whiteframe class="md-whiteframe-z1"
                layout-padding>
   <md-content>
-    <h2>Login to Imber</h2>
+    <h2>Login</h2>
 
     <form novalidate>
-      <div layout-sm="column"
-           layout="row">
+      <div layout="column">
         <md-text-float label="user name"
-                       ng-model="userName"></md-text-float>
+                       ng-model="userName"
+                       required></md-text-float>
         <md-text-float label="password"
                        ng-model="password"
-                       type="password"></md-text-float>
+                       type="password"
+                       required></md-text-float>
       </div>
       <md-button class="md-raised"
                  ng-click="login()">login
