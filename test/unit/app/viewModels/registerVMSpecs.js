@@ -21,7 +21,7 @@
         $scope.password = 'SomeUberSpecialPassword1!';
 
         // predict
-        var expectedResponse = testGlobals.createDefaultUserAuthResponse()
+        var expectedResponse = testGlobals.createDefaultUserAuthResponse();
         $httpBackend.expect('POST', '/user', {
           userName: $scope.userName,
           password: $scope.password,
@@ -40,7 +40,29 @@
       });
 
       it('should reject registering multiple users under the same name', function uniqueName() {
+        // given
+        $scope.email = 'andyt@live.nl';
+        $scope.userName = 'EnoF';
+        $scope.password = 'SomeUberSpecialPassword1!';
 
+        // predict
+        var expectedResponse = {
+          userName: true
+        };
+        $httpBackend.expect('POST', '/user', {
+          userName: $scope.userName,
+          password: $scope.password,
+          email: $scope.email
+        }).respond(410, expectedResponse);
+
+        // when
+        $scope.register();
+        $httpBackend.flush();
+
+        // then
+        expect($scope.email).to.equal('andyt@live.nl');
+        expect($scope.userName).to.be.null;
+        expect($scope.password).to.equal('SomeUberSpecialPassword1!');
       });
 
       it('should reject registering multiple users under the same email', function sameEmail() {

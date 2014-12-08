@@ -40,10 +40,10 @@
         currentUser = new User(response.data.user);
         // Return the `user` model.
         deferred.resolve(currentUser);
-      }).catch(function error() {
+      }).catch(function thrownError(error) {
         // Clean the user out of cache.
         currentUser = null;
-        deferred.reject();
+        deferred.reject(error);
       });
       return deferred.promise;
     }
