@@ -55,7 +55,9 @@
   function login(req, res) {
     var deferred = queue.defer();
     User.findOne({
-      userName: req.body.userName,
+      userName: {
+        $regex: new RegExp('^' + req.body.userName + '$', 'i')
+      },
       password: req.body.password
     }, deferred.makeNodeResolver());
     deferred.promise.then(createNewAuthToken(res));

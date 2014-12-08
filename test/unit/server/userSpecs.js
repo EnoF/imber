@@ -152,8 +152,33 @@
           catch(done);
       });
 
-      it('should login with an case insensitive usename', function insensitive() {
-
+      it('should login with an case insensitive usename', function insensitive(done) {
+        var req;
+        var res;
+        queue().
+          then(function given() {
+            req = {
+              body: {
+                userName: 'enof',
+                password: 'someEncryptedPassword'
+              }
+            };
+            res = {};
+            res.send = sinon.spy();
+          }).
+          then(function when() {
+            return user.login(req, res);
+          }).
+          then(function then() {
+            expect(res.send).to.have.been.called;
+            var response = res.send.args[0][0];
+            var decrypted = AES.decrypt(response.authToken, process.env.IMBER_AES_KEY);
+            var message = decrypted.toString(CryptoJS.enc.Utf8);
+            expect(message).to.have.string('EnoF;');
+            expect(response.user.userName).to.equal('EnoF');
+          }).
+          then(done).
+          catch(done);
       });
     });
 
