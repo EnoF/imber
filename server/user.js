@@ -5,7 +5,8 @@
 
   var userSchema = new Schema({
     userName: String,
-    password: String
+    password: String,
+    email: String
   });
 
   var User = mongoose.model('User', userSchema);
@@ -85,6 +86,13 @@
         if (user === null) {
           // Create the new user.
           newUser.save(deferred.makeNodeResolver());
+        } else {
+          // User can't be used.
+          res.status(410).send({
+            userName: user.userName === req.body.userName,
+            email: user.email === req.body.email
+          });
+          deferred.reject();
         }
       });
     deferred.promise.then(createNewAuthToken(res, newUser));
