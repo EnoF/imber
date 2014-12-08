@@ -12,7 +12,7 @@
 
   app.use(bodyParser.json());
 
-  mongoose.connect('mongodb://localhost:27017/imber');
+  mongoose.connect(process.env.IMBER_MONGO);
 
   var db = mongoose.connection;
   db.on('error', console.error);

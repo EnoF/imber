@@ -47,8 +47,6 @@ module.exports = function (grunt) {
             '<%= app.app %>/bower_components/angular-animate/angular-animate.min.js',
             '<%= app.app %>/bower_components/hammerjs/hammer.min.js',
             '<%= app.app %>/bower_components/angular-material/angular-material.min.js',
-            '<%= app.app %>/bower_components/famous/dist/famous.min.js',
-            '<%= app.app %>/bower_components/famous-angular/dist/famous-angular.min.js',
             '<%= app.app %>/bower_components/enofjs/dist/enofjs/enof.min.js',
             '.tmp/pre.imber.js'
           ]
@@ -58,6 +56,12 @@ module.exports = function (grunt) {
     copy: {
       dist: {
         files: [
+          {
+            expand: true,
+            cwd: '<%= app.app %>/pages',
+            dest: '<%= app.dist %>/pages',
+            src: '*.html'
+          },
           {
             expand: true,
             cwd: '<%= app.tmp %>/styles',
@@ -153,6 +157,7 @@ module.exports = function (grunt) {
         cwd: '<%= app.app %>',
         src: [
           'app.js',
+          'dao/*.js',
           'widgets/**/*.js',
           'viewModels/*.js',
           'modules/*.js',
@@ -198,6 +203,21 @@ module.exports = function (grunt) {
         }
       }
     },
+    preprocess: {
+      develop: {
+        src: '<%= app.app %>/index.html',
+        dest: '<%= app.tmp %>/index.html'
+      },
+      release: {
+        src: '<%= app.app %>/index.html',
+        dest: '<%= app.dist %>/index.html',
+        options: {
+          context: {
+            NODE_ENV: 'production'
+          }
+        }
+      }
+    },
     simplemocha: {
       all: { src: ['test/unit/server/**/*.js'] }
     },
@@ -222,6 +242,7 @@ module.exports = function (grunt) {
           '<%= app.tmp %>/pre.imber.js': [
             '.tmp/ngmin/app.js',
             '.tmp/scripts/ngtemplates.js',
+            '.tmp/ngmin/dao/*.js',
             '.tmp/ngmin/widgets/**/*.js',
             '.tmp/ngmin/viewModels/*.js',
             '.tmp/ngmin/modules/*.js',
@@ -331,7 +352,8 @@ module.exports = function (grunt) {
     'ngAnnotate',
     'uglify',
     'copy',
-    'concat'
+    'concat',
+    'preprocess:release'
   ]);
 
   grunt.registerTask('default', [

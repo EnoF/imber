@@ -1,5 +1,6 @@
 {
   "name": "imber",
+  "subdomain": "imber",
   "version": "0.0.1",
   "description": "Imber the strategy game",
   "authors": [
@@ -28,6 +29,7 @@
     "grunt-karma": "~0.8.0",
     "grunt-ng-annotate": "^0.3.0",
     "grunt-open": "~0.2.0",
+    "grunt-preprocess": "^4.0.0",
     "grunt-processhtml": "~0.3.0",
     "grunt-shell": "~0.7.0",
     "grunt-simple-mocha": "^0.4.0",
@@ -53,7 +55,8 @@
     "npm": ">=1.2.10"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "start": "node imber.js"
   },
   "repository": "ssh://git@github.com:EnoF/imber.git",
   "dependencies": {
