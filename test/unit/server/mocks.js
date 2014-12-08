@@ -10,7 +10,8 @@
     {
       _id: '545726928469e940235ce769',
       userName: 'EnoF',
-      password: 'someEncryptedPassword'
+      password: 'someEncryptedPassword',
+      email: 'andyt@live.nl'
     }
   ];
 

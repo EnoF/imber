@@ -18,8 +18,11 @@
     return authToken.toString();
   }
 
-  function createNewAuthToken(res) {
+  function createNewAuthToken(res, newUser) {
     return function createNewAuthToken(user) {
+      // During the creation of a user, the user will be passed with
+      // the initial function call.
+      user = newUser || user;
       // User is not found
       if (user === null) {
         res.status(401).send('bad credentials');
@@ -73,9 +76,40 @@
     return deferred.promise;
   }
 
+  function register(req, res) {
+    var deferred = queue.defer();
+    var newUser = new User(req.body);
+    isUserDetailConflicting(req.body.userName, req.body.email).
+      then(function checkExistance(user) {
+        // There is no conflicting user found!
+        if (user === null) {
+          // Create the new user.
+          newUser.save(deferred.makeNodeResolver());
+        }
+      });
+    deferred.promise.then(createNewAuthToken(res, newUser));
+    return deferred.promise;
+  }
+
+  function isUserDetailConflicting(userName, email) {
+    var deferred = queue.defer();
+    User.findOne({
+      $or: [
+        {
+          userName: userName
+        },
+        {
+          email: email
+        }
+      ]
+    }, deferred.makeNodeResolver());
+    return deferred.promise;
+  }
+
   module.exports = {
     login: login,
-    reauthenticate: reauthenticate
+    reauthenticate: reauthenticate,
+    register: register
   };
 
 }(require('mongoose'), require('q'), require('crypto-js/aes'), require('crypto-js')));

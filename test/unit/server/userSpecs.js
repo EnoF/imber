@@ -158,8 +158,34 @@
     });
 
     describe('user registration', function registration() {
-      it('should register a new user', function registerNewUser() {
-
+      it('should register a new user', function registerNewUser(done) {
+        var req;
+        var res;
+        queue().
+          then(function given() {
+            req = {
+              body: {
+                userName: 'Rina',
+                password: 'someEncryptedPassword',
+                email: 'rina@rini.ichi'
+              }
+            };
+            res = {};
+            res.send = sinon.spy();
+          }).
+          then(function when() {
+            return user.register(req, res);
+          }).
+          then(function then() {
+            expect(res.send).to.have.been.called;
+            var response = res.send.args[0][0];
+            var decrypted = AES.decrypt(response.authToken, process.env.IMBER_AES_KEY);
+            var message = decrypted.toString(CryptoJS.enc.Utf8);
+            expect(message).to.have.string('Rina;');
+            expect(response.user.userName).to.equal(req.body.userName);
+          }).
+          then(done).
+          catch(done);
       });
 
       it('should abort a registration when username is in use', function usernameInUse() {
