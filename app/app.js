@@ -36,17 +36,20 @@
     $routeProvider.otherwise({
       redirectTo: '/login'
     });
-  }).run(function forceLogin($rootScope, $location) {
+  }).run(function forceLogin($rootScope, $location, $cookies) {
     // register listener to watch route changes
     $rootScope.$on('$routeChangeStart', function (event, next) {
-      if ($rootScope.user == null) {
+      if (!$cookies.authToken) {
         // no logged user, we should be going to #login
-        if (next.templateUrl == 'pages/login.html') {
+        if (next.templateUrl === 'pages/login.html') {
           // already going to #login, no redirect needed
         } else {
           // not going to #login, we should redirect now
           $location.path('/login');
         }
+      } else {
+        // redirect to the dashboard
+        $location.path('/dashboard');
       }
     });
   });
