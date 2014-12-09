@@ -58,6 +58,12 @@ module.exports = function (grunt) {
         files: [
           {
             expand: true,
+            cwd: '<%= app.app %>/icons',
+            dest: '<%= app.dist %>/icons',
+            src: '*.svg'
+          },
+          {
+            expand: true,
             cwd: '<%= app.app %>/pages',
             dest: '<%= app.dist %>/pages',
             src: '*.html'
