@@ -1,10 +1,13 @@
 <md-whiteframe class="md-whiteframe-z1"
                layout-padding>
   <md-content>
-    <h2>Login</h2>
+    <h2>Sign up</h2>
 
     <form novalidate>
       <div layout="column">
+        <md-text-float label="email"
+                       ng-model="email"
+                       required></md-text-float>
         <md-text-float label="user name"
                        ng-model="userName"
                        required></md-text-float>
@@ -14,7 +17,7 @@
                        required></md-text-float>
       </div>
       <md-button class="md-raised"
-                 ng-click="login()">login
+                 ng-click="register()">register
       </md-button>
     </form>
   </md-content>

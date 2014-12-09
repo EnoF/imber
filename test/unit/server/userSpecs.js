@@ -151,6 +151,129 @@
           then(done).
           catch(done);
       });
+
+      it('should login with an case insensitive usename', function insensitive(done) {
+        var req;
+        var res;
+        queue().
+          then(function given() {
+            req = {
+              body: {
+                userName: 'enof',
+                password: 'someEncryptedPassword'
+              }
+            };
+            res = {};
+            res.send = sinon.spy();
+          }).
+          then(function when() {
+            return user.login(req, res);
+          }).
+          then(function then() {
+            expect(res.send).to.have.been.called;
+            var response = res.send.args[0][0];
+            var decrypted = AES.decrypt(response.authToken, process.env.IMBER_AES_KEY);
+            var message = decrypted.toString(CryptoJS.enc.Utf8);
+            expect(message).to.have.string('EnoF;');
+            expect(response.user.userName).to.equal('EnoF');
+          }).
+          then(done).
+          catch(done);
+      });
+    });
+
+    describe('user registration', function registration() {
+      it('should register a new user', function registerNewUser(done) {
+        var req;
+        var res;
+        queue().
+          then(function given() {
+            req = {
+              body: {
+                userName: 'Rina',
+                password: 'someEncryptedPassword',
+                email: 'rina@rini.ichi'
+              }
+            };
+            res = {};
+            res.send = sinon.spy();
+          }).
+          then(function when() {
+            return user.register(req, res);
+          }).
+          then(function then() {
+            expect(res.send).to.have.been.called;
+            var response = res.send.args[0][0];
+            var decrypted = AES.decrypt(response.authToken, process.env.IMBER_AES_KEY);
+            var message = decrypted.toString(CryptoJS.enc.Utf8);
+            expect(message).to.have.string('Rina;');
+            expect(response.user.userName).to.equal(req.body.userName);
+          }).
+          then(done).
+          catch(done);
+      });
+
+      it('should abort a registration when username is in use', function usernameInUse(done) {
+        var req;
+        var res;
+        queue().
+          then(function given() {
+            req = {
+              body: {
+                userName: 'EnoF',
+                password: 'someEncryptedPassword',
+                email: 'somenotfound@email.com'
+              }
+            };
+            res = {};
+            res.send = sinon.spy();
+            res.status = sinon.stub();
+            res.status.returns({
+              send: res.send
+            });
+          }).
+          then(function when() {
+            return user.register(req, res);
+          }).
+          fail(function then() {
+            expect(res.send).to.have.been.called;
+            var response = res.send.args[0][0];
+            expect(response.userName).to.be.true;
+          }).
+          then(done).
+          catch(done);
+      });
+
+      it('should abort a registration when email has been registered', function emailRegistered(done) {
+        var req;
+        var res;
+        queue().
+          then(function given() {
+            req = {
+              body: {
+                userName: 'someNoneExistingUsername',
+                password: 'someEncryptedPassword',
+                email: 'andyt@live.nl'
+              }
+            };
+            res = {};
+            res.send = sinon.spy();
+            res.status = sinon.stub();
+            res.status.returns({
+              send: res.send
+            });
+          }).
+          then(function when() {
+            return user.register(req, res);
+          }).
+          fail(function then() {
+            expect(res.send).to.have.been.called;
+            var response = res.send.args[0][0];
+            expect(response.email).to.be.true;
+          }).
+          then(done).
+          catch(done);
+      });
     });
   });
 

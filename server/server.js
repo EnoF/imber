@@ -7,6 +7,7 @@
   'use strict';
 
   var app = express();
+  var user = require('./user');
 
   params.extend(app);
 
@@ -19,6 +20,11 @@
   db.once('open', function initiateServer() {
 
     app.param('id', String);
+
+    app.post('/login', user.login);
+    app.post('/reauthenticate', user.reauthenticate);
+
+    app.post('/user', user.register);
 
   });
   module.exports = app;

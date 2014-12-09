@@ -40,12 +40,21 @@
         currentUser = new User(response.data.user);
         // Return the `user` model.
         deferred.resolve(currentUser);
-      }).catch(function error() {
+      }).catch(function thrownError(error) {
         // Clean the user out of cache.
         currentUser = null;
-        deferred.reject();
+        deferred.reject(error);
       });
       return deferred.promise;
+    }
+
+    function registerUser(userName, password, email) {
+      // When successfully registered, log the user in.
+      return handleAuthentication($http.post('/user', {
+        userName: userName,
+        password: password,
+        email: email
+      }));
     }
 
     function loggedIn() {
@@ -57,7 +66,8 @@
       getCurrentUser: getCurrentUser,
       login: login,
       loggedIn: loggedIn,
-      reauthenticate: reauthenticate
+      reauthenticate: reauthenticate,
+      registerUser: registerUser
     };
   });
 }(window.angular));
