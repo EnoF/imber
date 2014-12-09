@@ -5,11 +5,6 @@
 
   var sitemap = [
     {
-      url: '/login',
-      templateUrl: 'pages/login.html',
-      label: 'login'
-    },
-    {
       url: '/dashboard',
       templateUrl: 'pages/dashboard.html',
       label: 'dashboard'
@@ -32,6 +27,11 @@
         templateUrl: page.templateUrl
       });
     }
+    // The login is added seperately since it will not be a clickable link
+    // in the menu.
+    $routeProvider.when('/login', {
+      templateUrl: 'pages/login.html'
+    });
 
     $routeProvider.otherwise({
       redirectTo: '/login'
