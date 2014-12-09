@@ -91,5 +91,43 @@
         expect($scope.password).to.equal('SomeUberSpecialPassword1!');
       });
     });
+
+    describe('error message builder', function errorMessageBuilder() {
+      it('should add a . at the end of the message', function dot() {
+        // given
+        var errors = ['userName'];
+
+        // when
+        var message = $scope.buildErrorMessage(errors);
+
+        // then
+        expect(message.substr(message.length - 1, 1)).to.equal('.');
+      });
+
+      it('should add ` and ` before the last word', function and() {
+        // given
+        var errors = ['userName', 'email'];
+
+        // when
+        var message = $scope.buildErrorMessage(errors);
+
+        // then
+        var andPosition = message.length - 1 - errors[1].length - ' and '.length;
+        expect(message.substr(andPosition, ' and '.length)).to.equal(' and ');
+      });
+
+      it('should add `, ` between the first and second word', function and() {
+        // given
+        var errors = ['userName', 'email', 'password'];
+
+        // when
+        var message = $scope.buildErrorMessage(errors);
+
+        // then
+        var commaPosition = message.length - 1 - errors[2].length - ' and '.length -
+          errors[1].length - ', '.length;
+        expect(message.substr(commaPosition, ', '.length)).to.equal(', ');
+      });
+    });
   })
 }());

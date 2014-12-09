@@ -22,19 +22,39 @@
 
     $scope.notifyError = function notifyError(errorResponse) {
       var errors = errorResponse.data;
+      var errorsFound = [];
       if (errors.userName) {
+        errorsFound.push('username');
         $scope.userName = null;
-        $scope.toastError('username');
       }
       if (errors.email) {
         $scope.email = null;
-        $scope.toastError('email');
+        errorsFound.push('email');
       }
+      $scope.toastError(errorsFound);
     };
 
-    $scope.toastError = function toastError(field) {
+    $scope.toastError = function toastError(errors) {
+
       $mdToast.show($mdToast.simple().
-        content('Please use a different ' + field + '.'));
+        content($scope.buildErrorMessage(errors)));
+    };
+
+    $scope.buildErrorMessage = function buildErrorMessage(errors) {
+      var errorMessage = 'Please use a different ';
+
+      for (var i = 0; i < errors.length; i++) {
+        errorMessage += errors[i];
+        if (i === errors.length - 1) {
+          errorMessage += '.';
+        } else if (i === errors.length - 2) {
+          errorMessage += ' and ';
+        } else {
+          errorMessage += ', ';
+        }
+      }
+
+      return errorMessage;
     };
 
     $scope.reset = function reset() {
