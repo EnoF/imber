@@ -1,20 +1,22 @@
-(function registerVMSpecsScope() {
+(function registerVMSpecsScope(sinon) {
   'use strict';
 
   describe('registerVMSpecs', function registerVMSpecs() {
-    var $scope, $httpBackend, testGlobals, userDAO, $cookies;
+    var $scope, $httpBackend, testGlobals, userDAO, $cookies, events;
     beforeEach(module('imber-test'));
 
     beforeEach(inject(function injector(testSetup, _userDAO_, _$cookies_) {
       testGlobals = testSetup.setupControllerTest('registerVM');
       $scope = testGlobals.$scope;
       $httpBackend = testGlobals.$httpBackend;
+      events = testGlobals.events;
       userDAO = _userDAO_;
       $cookies = _$cookies_;
     }));
 
     describe('register', function registerScope() {
-      it('should register an new user', function registerNewUser() {
+      it('should register an new user', registerNewUser);
+      function registerNewUser() {
         // given
         $scope.email = 'andyt@live.nl';
         $scope.userName = 'EnoF';
@@ -37,7 +39,7 @@
         expect($scope.email).to.be.null;
         expect($scope.userName).to.be.null;
         expect($scope.password).to.be.null;
-      });
+      }
 
       it('should reject registering multiple users under the same name', function uniqueName() {
         // given
@@ -90,6 +92,17 @@
         expect($scope.userName).to.equal('EnoF');
         expect($scope.password).to.equal('SomeUberSpecialPassword1!');
       });
+
+      it('should notify the parent the user has loggedin successfully', function loggedinSuccess() {
+        // given
+        sinon.spy($scope, '$emit');
+
+        // when
+        registerNewUser();
+
+        // then
+        expect($scope.$emit).to.have.been.calledWith(events.LOGGEDIN);
+      });
     });
 
     describe('error message builder', function errorMessageBuilder() {
@@ -130,4 +143,4 @@
       });
     });
   })
-}());
+}(window.sinon));
