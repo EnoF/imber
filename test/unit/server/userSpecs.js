@@ -274,6 +274,99 @@
           then(done).
           catch(done);
       });
+
+      it('should abort a registration when userName is empty', function emailRegistered(done) {
+        var req;
+        var res;
+        queue().
+          then(function given() {
+            req = {
+              body: {
+                userName: '',
+                password: 'someEncryptedPassword',
+                email: 'somenotfound@email.com'
+              }
+            };
+            res = {};
+            res.send = sinon.spy();
+            res.status = sinon.stub();
+            res.status.returns({
+              send: res.send
+            });
+          }).
+          then(function when() {
+            return user.register(req, res);
+          }).
+          fail(function then() {
+            expect(res.send).to.have.been.called;
+            var response = res.send.args[0][0];
+            expect(response.email).to.be.true;
+          }).
+          then(done).
+          catch(done);
+      });
+
+      it('should abort a registration when password is empty', function emailRegistered(done) {
+        var req;
+        var res;
+        queue().
+          then(function given() {
+            req = {
+              body: {
+                userName: 'someNoneExistingUsername',
+                password: '',
+                email: 'somenotfound@email.com'
+              }
+            };
+            res = {};
+            res.send = sinon.spy();
+            res.status = sinon.stub();
+            res.status.returns({
+              send: res.send
+            });
+          }).
+          then(function when() {
+            return user.register(req, res);
+          }).
+          fail(function then() {
+            expect(res.send).to.have.been.called;
+            var response = res.send.args[0][0];
+            expect(response.email).to.be.true;
+          }).
+          then(done).
+          catch(done);
+      });
+
+      it('should abort a registration when email is empty', function emailRegistered(done) {
+        var req;
+        var res;
+        queue().
+          then(function given() {
+            req = {
+              body: {
+                userName: 'someNoneExistingUsername',
+                password: 'someEncryptedPassword',
+                email: ''
+              }
+            };
+            res = {};
+            res.send = sinon.spy();
+            res.status = sinon.stub();
+            res.status.returns({
+              send: res.send
+            });
+          }).
+          then(function when() {
+            return user.register(req, res);
+          }).
+          fail(function then() {
+            expect(res.send).to.have.been.called;
+            var response = res.send.args[0][0];
+            expect(response.email).to.be.true;
+          }).
+          then(done).
+          catch(done);
+      });
     });
   });
 

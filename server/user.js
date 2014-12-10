@@ -1,4 +1,4 @@
-(function userScope(mongoose, queue, AES, CryptoJS) {
+(function userScope(mongoose, queue, AES, HMAC, CryptoJS) {
   'use strict';
 
   var Schema = mongoose.Schema;
@@ -58,7 +58,7 @@
       userName: {
         $regex: new RegExp('^' + req.body.userName + '$', 'i')
       },
-      password: req.body.password
+      password: HMAC(req.body.password, process.env.IMBER_HMAC_KEY).toString()
     }, deferred.makeNodeResolver());
     deferred.promise.then(createNewAuthToken(res));
     return deferred.promise;
@@ -81,24 +81,43 @@
 
   function register(req, res) {
     var deferred = queue.defer();
+    isValidRegistration(req.body, deferred);
+    req.body.password = HMAC(req.body.password,
+      process.env.IMBER_HMAC_KEY).toString();
     var newUser = new User(req.body);
     isUserDetailConflicting(req.body.userName, req.body.email).
-      then(function checkExistance(user) {
-        // There is no conflicting user found!
-        if (user === null) {
-          // Create the new user.
-          newUser.save(deferred.makeNodeResolver());
-        } else {
-          // User can't be used.
-          res.status(410).send({
-            userName: user.userName === req.body.userName,
-            email: user.email === req.body.email
-          });
-          deferred.reject();
-        }
-      });
+      then(checkExistance(newUser, deferred));
     deferred.promise.then(createNewAuthToken(res, newUser));
+    deferred.promise.fail(sendRegistrationInvalid(req, res, newUser));
     return deferred.promise;
+  }
+
+  function checkExistance(newUser, deferred) {
+    return function noSuchUser(user) {
+      // There is no conflicting user found!
+      if (user === null) {
+        // Create the new user.
+        newUser.save(deferred.makeNodeResolver());
+      } else {
+        deferred.reject();
+      }
+    }
+  }
+
+  function sendRegistrationInvalid(req, res, user) {
+    return function registrationIsInvalid() {
+      // User can't be used.
+      res.status(410).send({
+        userName: user.userName === req.body.userName,
+        email: user.email === req.body.email
+      });
+    };
+  }
+
+  function isValidRegistration(details, deferred) {
+    if (!details.userName || !details.password || !details.email) {
+      deferred.reject();
+    }
   }
 
   function isUserDetailConflicting(userName, email) {
@@ -122,4 +141,5 @@
     register: register
   };
 
-}(require('mongoose'), require('q'), require('crypto-js/aes'), require('crypto-js')));
+}(require('mongoose'), require('q'), require('crypto-js/aes'),
+  require('crypto-js/hmac-sha256'), require('crypto-js')));
