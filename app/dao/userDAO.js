@@ -61,11 +61,24 @@
       return !!currentUser;
     }
 
+    function logout() {
+      var promise = $http.post('/logout', {
+        authToken: $cookies.authToken
+      });
+      promise.then(handleLogout);
+      return promise;
+    }
+
+    function handleLogout() {
+      delete $cookies.authToken;
+    }
+
     // Return the `DAO` as a singleton.
     return {
       getCurrentUser: getCurrentUser,
       login: login,
       loggedIn: loggedIn,
+      logout: logout,
       reauthenticate: reauthenticate,
       registerUser: registerUser
     };
