@@ -1,11 +1,13 @@
-(function userDAO(angular) {
+(function userDAO(angular, JSON) {
   'use strict';
 
   var app = angular.module('imber');
 
   app.factory('userDAO', function userDAOFactory($http, $q, $cookies, User) {
-
     var currentUser = null;
+    if ($cookies.currentUser) {
+      currentUser = new User(JSON.parse($cookies.currentUser));
+    }
 
     // The cached logged in user.
     function getCurrentUser() {
@@ -38,11 +40,13 @@
         $cookies.authToken = response.data.authToken;
         // The returned user data will be held in cache.
         currentUser = new User(response.data.user);
+        $cookies.currentUser = JSON.stringify(response.data.user);
         // Return the `user` model.
         deferred.resolve(currentUser);
       }).catch(function thrownError(error) {
         // Clean the user out of cache.
         currentUser = null;
+        delete $cookies.currentUser;
         deferred.reject(error);
       });
       return deferred.promise;
@@ -62,15 +66,9 @@
     }
 
     function logout() {
-      var promise = $http.post('/logout', {
-        authToken: $cookies.authToken
-      });
-      promise.then(handleLogout);
-      return promise;
-    }
-
-    function handleLogout() {
       delete $cookies.authToken;
+      delete $cookies.currentUser;
+      currentUser = null;
     }
 
     // Return the `DAO` as a singleton.
@@ -83,4 +81,4 @@
       registerUser: registerUser
     };
   });
-}(window.angular));
+}(window.angular, window.JSON));

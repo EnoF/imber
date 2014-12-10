@@ -7,10 +7,7 @@
     $scope.user = null;
 
     $scope.logout = function logout() {
-      userDAO.logout().then($scope.loggedOut);
-    };
-
-    $scope.loggedOut = function loggedOut() {
+      userDAO.logout();
       $scope.user = null;
       $scope.$emit(events.LOGGED_OUT);
     };

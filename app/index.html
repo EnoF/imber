@@ -28,6 +28,10 @@
         <md-icon icon="/icons/ic_menu_24px.svg"></md-icon>
       </md-button>
       <h1>Imber</h1>
+      <logout ng-if="isLoggedIn()"
+              flex
+              layout="row"
+              layout-align="end"></logout>
     </div>
   </md-toolbar>
   <div class="content-container"

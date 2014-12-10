@@ -21,14 +21,8 @@
         $cookies.authToken = 'someauthtoken';
         $scope.user = {};
 
-        // predict
-        $httpBackend.expect('POST', '/logout', {
-          authToken: $cookies.authToken
-        }).respond(200, 'ok');
-
         // when
         $scope.logout();
-        $httpBackend.flush();
 
         // then
         expect($cookies.authToken).to.be.undefined;
