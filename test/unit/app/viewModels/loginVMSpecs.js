@@ -3,16 +3,17 @@
 
   describe('loginVMSpecs', function loginVMSpecs() {
 
-    var $scope, $httpBackend, testGlobals, userDAO, $cookies, events;
+    var $scope, $httpBackend, testGlobals, userDAO, $cookies, events, $mdToast;
     beforeEach(module('imber-test'));
 
-    beforeEach(inject(function injector(testSetup, _userDAO_, _$cookies_) {
+    beforeEach(inject(function injector(testSetup, _userDAO_, _$cookies_, _$mdToast_) {
       testGlobals = testSetup.setupControllerTest('loginVM');
       $scope = testGlobals.$scope;
       $httpBackend = testGlobals.$httpBackend;
       events = testGlobals.events;
       userDAO = _userDAO_;
       $cookies = _$cookies_;
+      $mdToast = _$mdToast_;
     }));
 
     describe('login', function loginScope() {
@@ -80,6 +81,24 @@
 
         // then
         expect($scope.$emit).to.have.been.calledWith(events.LOGGED_IN);
+      });
+
+      it('should show an error when the user can not be logged in', function canNotLoggin() {
+        // given
+        sinon.spy($mdToast, 'show');
+        $cookies.authToken = 'abcxyz';
+
+        // predict
+        $httpBackend.expect('POST', '/reauthenticate', {
+          authToken: $cookies.authToken
+        }).respond(401, 'Unauthorized');
+
+        // when
+        $scope.login();
+        $httpBackend.flush();
+
+        // then
+        expect($mdToast.show).to.have.been.called;
       });
     });
   });

@@ -17,13 +17,19 @@
         } else {
           promise = $q.defer().promise;
         }
-        promise.then($scope.notifyLoggedIn);
+        promise.then($scope.notifyLoggedIn,
+          $scope.notifyFailedLogin);
       };
 
       $scope.notifyLoggedIn = function notifyLoggedIn() {
         $scope.$emit(events.LOGGED_IN);
         $mdToast.show($mdToast.simple().
           content('Welcome ' + $scope.userName + '!'));
+      };
+
+      $scope.notifyFailedLogin = function notifyFailedLogin() {
+        $mdToast.show($mdToast.simple().
+          content('Login incorrect! Please try again.'));
       };
 
       $scope.loggedIn = userDAO.loggedIn;
