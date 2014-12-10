@@ -39,16 +39,18 @@
   }).run(function forceLogin($rootScope, $location, $cookies) {
     // register listener to watch route changes
     $rootScope.$on('$routeChangeStart', function (event, next) {
+      var loginPage = 'pages/login.html';
       if (!$cookies.authToken) {
         // no logged user, we should be going to #login
-        if (next.templateUrl === 'pages/login.html') {
+        if (next.templateUrl === loginPage) {
           // already going to #login, no redirect needed
         } else {
           // not going to #login, we should redirect now
           $location.path('/login');
         }
-      } else {
-        // redirect to the dashboard
+      } else if (next.templateUrl === loginPage) {
+        // prevent navigating to the login page when logged in,
+        // redirect to the dashboard instead
         $location.path('/dashboard');
       }
     });
