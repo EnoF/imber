@@ -7,8 +7,7 @@
     return {
       controller: 'loginVM',
       restrict: 'E',
-      scope: {
-      },
+      scope: {},
       templateUrl: 'login'
     };
   });

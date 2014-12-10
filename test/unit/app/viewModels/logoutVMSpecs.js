@@ -46,9 +46,5 @@
         expect($scope.$emit).to.have.been.calledWith(events.LOGGED_OUT);
       });
     });
-
-    it('load the user model', function loggedIn() {
-
-    });
   });
 }(window.sinon));
