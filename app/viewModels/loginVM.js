@@ -20,7 +20,7 @@
     };
 
     $scope.notifyLoggedIn = function notifyLoggedIn() {
-      $scope.$emit(events.LOGGEDIN);
+      $scope.$emit(events.LOGGED_IN);
     };
 
     $scope.loggedIn = userDAO.loggedIn;

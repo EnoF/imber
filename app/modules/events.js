@@ -5,7 +5,8 @@
 
   app.factory('events', function eventsFactory() {
     return {
-      LOGGEDIN: 'loggedin'
+      LOGGED_IN: 'loggedI;n',
+      LOGGED_OUT: 'loggedOut'
     };
   });
 }(window.angular));

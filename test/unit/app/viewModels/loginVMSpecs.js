@@ -79,7 +79,7 @@
         loginWithCookies();
 
         // then
-        expect($scope.$emit).to.have.been.calledWith(events.LOGGEDIN);
+        expect($scope.$emit).to.have.been.calledWith(events.LOGGED_IN);
       });
     });
   });

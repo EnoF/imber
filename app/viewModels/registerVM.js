@@ -17,7 +17,7 @@
     $scope.registrationSuccessfull = function registrationSuccessfull() {
       $mdToast.show($mdToast.simple().
         content('Welcome ' + $scope.userName + '!'));
-      $scope.$emit(events.LOGGEDIN);
+      $scope.$emit(events.LOGGED_IN);
       $scope.reset();
     };
 
