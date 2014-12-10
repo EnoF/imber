@@ -5,7 +5,7 @@
 
   app.factory('events', function eventsFactory() {
     return {
-      LOGGED_IN: 'loggedI;n',
+      LOGGED_IN: 'loggedIn',
       LOGGED_OUT: 'loggedOut'
     };
   });
