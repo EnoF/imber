@@ -3,7 +3,7 @@
 
   var app = angular.module('imber');
 
-  app.controller('navigationVM', function navigationVMScope($scope, $mdSidenav, sitemap) {
+  app.controller('navigationVM', function navigationVMScope($scope, $mdSidenav, sitemap, userDAO) {
     $scope.menu = sitemap;
 
     $scope.getNavigation = function getNavigation() {
@@ -18,5 +18,7 @@
     $scope.hideNavigation = function hideNavigation() {
       $scope.getNavigation().close();
     };
+
+    $scope.isLoggedIn = userDAO.loggedIn;
   });
 }(window.angular));

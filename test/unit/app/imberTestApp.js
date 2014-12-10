@@ -3,7 +3,7 @@
 
   var app = angular.module('imber-test', ['imber']);
 
-  app.factory('testSetup', function testSetupScope($rootScope, $httpBackend, $compile, $controller) {
+  app.factory('testSetup', function testSetupScope($rootScope, $httpBackend, $compile, $controller, events) {
 
     function initializeDirective(scope, directive) {
       $compile(directive)(scope);
@@ -15,7 +15,8 @@
     function createDefaultTestGlobals() {
       return {
         $httpBackend: $httpBackend,
-        createDefaultUserAuthResponse: createDefaultUserAuthResponse
+        createDefaultUserAuthResponse: createDefaultUserAuthResponse,
+        events: events
       };
     }
 

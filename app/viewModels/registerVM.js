@@ -3,7 +3,7 @@
 
   var app = angular.module('imber');
 
-  app.controller('registerVM', function registerVMScope($scope, userDAO, $mdToast) {
+  app.controller('registerVM', function registerVMScope($scope, userDAO, $mdToast, events) {
     $scope.userName = null;
     $scope.password = null;
     $scope.email = null;
@@ -17,6 +17,7 @@
     $scope.registrationSuccessfull = function registrationSuccessfull() {
       $mdToast.show($mdToast.simple().
         content('Welcome ' + $scope.userName + '!'));
+      $scope.$emit(events.LOGGED_IN);
       $scope.reset();
     };
 

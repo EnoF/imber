@@ -1,4 +1,4 @@
-(function userScope(mongoose, queue, AES, CryptoJS) {
+(function userScope(mongoose, queue, AES, HMAC, CryptoJS) {
   'use strict';
 
   var Schema = mongoose.Schema;
@@ -55,10 +55,12 @@
   function login(req, res) {
     var deferred = queue.defer();
     User.findOne({
+      // Find username case insensitive.
       userName: {
         $regex: new RegExp('^' + req.body.userName + '$', 'i')
       },
-      password: req.body.password
+      // HMAC the password so that we can match it with the encrypted password.
+      password: HMAC(req.body.password, process.env.IMBER_HMAC_KEY).toString()
     }, deferred.makeNodeResolver());
     deferred.promise.then(createNewAuthToken(res));
     return deferred.promise;
@@ -67,12 +69,16 @@
   function reauthenticate(req, res) {
     var deferred = queue.defer();
     try {
+      // Extracting the username will throw an error when
+      // the token is too old or tampered by a hacker.
       var userName = extractUserName(req.body.authToken);
       User.findOne({
         userName: userName
       }, deferred.makeNodeResolver());
       deferred.promise.then(createNewAuthToken(res));
     } catch (error) {
+      // In case the user is no hacker, we want to tell the user
+      // the token is too old.
       res.status(401).send('old token');
       deferred.reject();
     }
@@ -81,28 +87,55 @@
 
   function register(req, res) {
     var deferred = queue.defer();
+    // Check if the provided registration details are valid.
+    isValidRegistration(req.body, deferred);
+    // Encrypt the password before we store an unencrypted password!
+    req.body.password = HMAC(req.body.password,
+      process.env.IMBER_HMAC_KEY).toString();
     var newUser = new User(req.body);
+    // Check if the user has a conflicting username or email with an other user.
     isUserDetailConflicting(req.body.userName, req.body.email).
-      then(function checkExistance(user) {
-        // There is no conflicting user found!
-        if (user === null) {
-          // Create the new user.
-          newUser.save(deferred.makeNodeResolver());
-        } else {
-          // User can't be used.
-          res.status(410).send({
-            userName: user.userName === req.body.userName,
-            email: user.email === req.body.email
-          });
-          deferred.reject();
-        }
-      });
+      then(checkExistance(newUser, deferred));
+    // When registered successful we can directly log the user in.
     deferred.promise.then(createNewAuthToken(res, newUser));
+    // When for what ever reason the registration was rejected,
+    // send a proper response.
+    deferred.promise.fail(sendRegistrationInvalid(req, res, newUser));
     return deferred.promise;
+  }
+
+  function checkExistance(newUser, deferred) {
+    return function noSuchUser(user) {
+      // There is no conflicting user found!
+      if (user === null) {
+        // Create the new user.
+        newUser.save(deferred.makeNodeResolver());
+      } else {
+        deferred.reject();
+      }
+    };
+  }
+
+  function sendRegistrationInvalid(req, res, user) {
+    return function registrationIsInvalid() {
+      // User can't be used.
+      res.status(410).send({
+        userName: user.userName === req.body.userName,
+        email: user.email === req.body.email
+      });
+    };
+  }
+
+  function isValidRegistration(details, deferred) {
+    // All properties must be set!
+    if (!details.userName || !details.password || !details.email) {
+      deferred.reject();
+    }
   }
 
   function isUserDetailConflicting(userName, email) {
     var deferred = queue.defer();
+    // Search for any conflicting users in the db.
     User.findOne({
       $or: [
         {
@@ -122,4 +155,5 @@
     register: register
   };
 
-}(require('mongoose'), require('q'), require('crypto-js/aes'), require('crypto-js')));
+}(require('mongoose'), require('q'), require('crypto-js/aes'),
+  require('crypto-js/hmac-sha256'), require('crypto-js')));

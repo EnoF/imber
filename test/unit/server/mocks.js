@@ -3,17 +3,22 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function apiMocksScope(mongoose, user, queue) {
+(function apiMocksScope(mongoose, user, queue, HMAC) {
   'use strict';
 
   var users = [
     {
       _id: '545726928469e940235ce769',
       userName: 'EnoF',
-      password: 'someEncryptedPassword',
+      password: createPassword('someEncryptedPassword'),
       email: 'andyt@live.nl'
     }
   ];
+
+  function createPassword(password) {
+    return HMAC(password,
+      process.env.IMBER_HMAC_KEY).toString();
+  }
 
   function mocks(done) {
 
@@ -36,4 +41,5 @@
 
 
   module.exports = mocks;
-}(require('mongoose'), require('../../../server/user.js'), require('q')));
+}(require('mongoose'), require('../../../server/user.js'), require('q'),
+  require('crypto-js/hmac-sha256')));
