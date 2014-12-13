@@ -25,14 +25,6 @@
       expect($scope.suggestions).not.to.include('helelel');
     });
 
-    it('should dynamically load the options from the server', function dynamicLoading() {
-      // given
-
-      // when
-
-      // then
-    });
-
     it('should be delayable when the server should be requested', function delayableRequest() {
       // given
 

@@ -9,6 +9,14 @@
     $scope.options = [];
     $scope.suggestions = [];
 
+    function populateOptions(options) {
+      $scope.options = options;
+    }
+
+    $scope.load = function load() {
+      $scope.loadFunction($scope.value).then(populateOptions);
+    };
+
     $scope.suggest = function suggest() {
       $scope.suggestions = genericFilter($scope.options, $scope.value);
     };

@@ -6,7 +6,9 @@
   app.directive('autoComplete', function autoCompleteDirective() {
     return {
       restrict: 'E',
-      scope: {},
+      scope: {
+        loadFunction: '=load'
+      },
       controller: 'autoCompleteVM',
       templateUrl: 'autoComplete'
     };
