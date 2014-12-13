@@ -7,7 +7,9 @@
     return {
       restrict: 'E',
       scope: {
-        loadFunction: '=load'
+        value: '=?value',
+        loadFunction: '=?load',
+        options: '=?options'
       },
       controller: 'autoCompleteVM',
       templateUrl: 'autoComplete'

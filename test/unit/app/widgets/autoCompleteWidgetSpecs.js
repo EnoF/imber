@@ -22,6 +22,25 @@
     it('should instantiate with the provided options', function providedOptions() {
       // given
       parentScope.options = defaultOptions;
+      var directive = angular.element('<auto-complete options="options"></auto-complete>');
+
+      // when
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
+
+      // then
+      expect($scope.options).to.equal(defaultOptions);
+    });
+
+    it('should instantiate with the provided value', function providedValue() {
+      // given
+      parentScope.value = 'banana';
+      var directive = angular.element('<auto-complete value="value"></auto-complete>');
+
+      // when
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
+
+      // then
+      expect($scope.value).to.equal('banana');
     });
 
     it('should dynamically load the options from the server', function dynamicLoading() {

@@ -5,8 +5,9 @@
 
   app.controller('autoCompleteVM', function autoCompleteVM($scope, $filter) {
     var genericFilter = $filter('filter');
-    $scope.value = null;
-    $scope.options = [];
+    $scope.value = $scope.value || null;
+    $scope.options = $scope.options || [];
+    $scope.loadFunction = $scope.loadFunction || angular.noop;
     $scope.suggestions = [];
 
     function populateOptions(options) {
