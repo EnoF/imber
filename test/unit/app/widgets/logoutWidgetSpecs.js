@@ -1,7 +1,7 @@
 (function logoutWidgetSpecsScope(angular, sinon) {
   'use strict';
 
-  describe('logout widget specs', function logoutWidgetSpecs() {
+  describe('<logout> specs', function logoutWidgetSpecs() {
     var $httpBackend, testGlobals, parentScope, userDAO;
     beforeEach(module('imber-test'));
 
@@ -12,14 +12,15 @@
       userDAO = _userDAO_;
     }));
 
-    it('should load the user model', function () {
+    it('should load the user model', function() {
       // given
       var mockUser = {};
       sinon.stub(userDAO, 'getCurrentUser').returns(mockUser);
       var directive = angular.element('<logout></logout>')
 
       // when
-      var scope = testGlobals.initializeDirective(parentScope, directive);
+      var scope = testGlobals.initializeDirective(parentScope,
+        directive);
 
       // then
       expect(scope.user).to.equal(mockUser);
