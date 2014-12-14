@@ -1,19 +1,22 @@
-(function autoCompleteVMScope(angular) {
+(function autoCompleteVMScope(angular, sinon) {
   'use strict';
 
   describe('autoCompleteVM specs', function autoCompleteVMSpecs() {
-    var testGlobals, $scope;
+    var testGlobals, $scope, defaultOptions, $q, $timeout;
 
     beforeEach(module('imber-test'));
 
-    beforeEach(inject(function setupTest(testSetup) {
+    beforeEach(inject(function setupTest(testSetup, _$q_, _$timeout_) {
       testGlobals = testSetup.setupControllerTest('autoCompleteVM');
       $scope = testGlobals.$scope;
+      defaultOptions = ['hello', 'hellow', 'helelel'];
+      $q = _$q_;
+      $timeout = _$timeout_;
     }));
 
     it('should suggest options the moment the user starts typing', function suggestWhileTyping() {
       // given
-      $scope.options = ['hello', 'hellow', 'helelel'];
+      $scope.options = defaultOptions;
 
       // when
       $scope.value = 'hell'
@@ -25,12 +28,36 @@
       expect($scope.suggestions).not.to.include('helelel');
     });
 
-    it('should be delayable when the server should be requested', function delayableRequest() {
+    it('should be not execute the request directly', delayedExecution);
+
+    function delayedExecution() {
       // given
+      $scope.delay = 3000;
+      var deferred = $q.defer();
+      $scope.loadFunction = function loadFunction() {
+        deferred.resolve(defaultOptions);
+        return deferred.promise;
+      };
 
       // when
+      $scope.load();
+      $scope.$apply();
 
       // then
+      expect($scope.options).to.be.empty;
+    }
+
+    it('should execute a delayed request', function shouldExecuteDelayedRequest() {
+      // given
+      delayedExecution();
+
+      // when
+      $timeout.flush();
+
+      // then
+      expect($scope.options).to.include('hello');
+      expect($scope.options).to.include('hellow');
+      expect($scope.options).to.include('helelel');
     });
 
     it('should set a minimun threshold before the server should be requested', function minimunThreshold() {
@@ -41,4 +68,4 @@
       // then
     });
   });
-}(window.angular));
+}(window.angular, window.sinon));

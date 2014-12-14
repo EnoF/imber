@@ -2,14 +2,15 @@
   'use strict';
 
   describe('<auto-complete> specs', function autoCompleteWidgetSpecs() {
-    var testGlobals, parentScope, $q, defaultOptions;
+    var testGlobals, parentScope, $q, defaultOptions, $timeout;
 
     beforeEach(module('imber-test'));
 
-    beforeEach(inject(function setupTest(testSetup, _$q_) {
+    beforeEach(inject(function setupTest(testSetup, _$q_, _$timeout_) {
       testGlobals = testSetup.setupDirectiveTest();
       parentScope = testGlobals.parentScope;
       $q = _$q_;
+      $timeout = _$timeout_;
       defaultOptions = ['options1', 'options2'];
     }));
 
@@ -52,7 +53,7 @@
 
       // when
       $scope.load();
-      $scope.$apply();
+      $timeout.flush();
 
       // then
       expect($scope.options).to.include('option1');

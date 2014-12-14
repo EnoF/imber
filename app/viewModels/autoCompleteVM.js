@@ -3,10 +3,11 @@
 
   var app = angular.module('imber');
 
-  app.controller('autoCompleteVM', function autoCompleteVM($scope, $filter) {
+  app.controller('autoCompleteVM', function autoCompleteVM($scope, $filter, $timeout) {
     var genericFilter = $filter('filter');
     $scope.value = $scope.value || null;
     $scope.options = $scope.options || [];
+    $scope.delay = 0;
     $scope.loadFunction = $scope.loadFunction || angular.noop;
     $scope.suggestions = [];
 
@@ -15,7 +16,9 @@
     }
 
     $scope.load = function load() {
-      $scope.loadFunction($scope.value).then(populateOptions);
+      $timeout(function executeLoad() {
+        $scope.loadFunction($scope.value).then(populateOptions);
+      }, $scope.delay);
     };
 
     $scope.suggest = function suggest() {
