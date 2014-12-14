@@ -32,6 +32,7 @@
 
     function delayedExecution() {
       // given
+      $scope.value = $scope.value || 'he';
       $scope.delay = 3000;
       var deferred = $q.defer();
       $scope.loadFunction = function loadFunction() {
@@ -60,12 +61,17 @@
       expect($scope.options).to.include('helelel');
     });
 
-    it('should set a minimun threshold before the server should be requested', function minimunThreshold() {
+    it('should prevent the request to be executed when the min threshold has not been met', function minimunThreshold() {
       // given
+      $scope.minSearch = 3;
+      $scope.value = 'he';
 
       // when
+      delayedExecution();
+      $timeout.flush();
 
       // then
+      expect($scope.options).to.be.empty;
     });
   });
 }(window.angular, window.sinon));
