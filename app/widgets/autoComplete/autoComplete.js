@@ -7,6 +7,8 @@
     return {
       restrict: 'E',
       scope: {
+        delay: '=?delay',
+        minSearch: '=?minSearch',
         value: '=?value',
         loadFunction: '=?load',
         options: '=?options'

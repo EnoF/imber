@@ -7,8 +7,8 @@
     var genericFilter = $filter('filter');
     $scope.value = $scope.value || '';
     $scope.options = $scope.options || [];
-    $scope.delay = 0;
-    $scope.minSearch = 0;
+    $scope.delay = $scope.delay || 0;
+    $scope.minSearch = $scope.minSearch || 0;
     $scope.loadFunction = $scope.loadFunction || angular.noop;
     $scope.suggestions = [];
 

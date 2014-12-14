@@ -59,5 +59,29 @@
       expect($scope.options).to.include('option1');
       expect($scope.options).to.include('option2');
     });
+
+    it('should configure the delay', function configureDelay() {
+      // given
+      parentScope.parentDelay = 5000;
+      var directive = angular.element('<auto-complete delay="parentDelay"></auto-complete>');
+
+      // when
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
+
+      // then
+      expect($scope.delay).to.equal(5000);
+    });
+
+    it('should configure the minSearch', function configureMinSearch() {
+      // given
+      parentScope.parentMinSearch = 2;
+      var directive = angular.element('<auto-complete min-search="parentMinSearch"></auto-complete>');
+
+      // when
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
+
+      // then
+      expect($scope.minSearch).to.equal(2);
+    });
   });
 }(window.angular, window.sinon));
