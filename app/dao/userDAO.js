@@ -71,6 +71,14 @@
       currentUser = null;
     }
 
+    function search(name) {
+      return $http.get('/user', {
+        params: {
+          search: name
+        }
+      });
+    }
+
     // Return the `DAO` as a singleton.
     return {
       getCurrentUser: getCurrentUser,
@@ -78,7 +86,8 @@
       loggedIn: loggedIn,
       logout: logout,
       reauthenticate: reauthenticate,
-      registerUser: registerUser
+      registerUser: registerUser,
+      search: search
     };
   });
 }(window.angular, window.JSON));
