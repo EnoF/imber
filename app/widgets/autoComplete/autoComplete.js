@@ -15,7 +15,12 @@
         onSelect: '=?onSelect'
       },
       controller: 'autoCompleteVM',
-      templateUrl: 'autoComplete'
+      templateUrl: 'autoComplete',
+      link: function onInitialize(scope) {
+        if (scope.loadFunction === null) {
+          scope.load = angular.noop;
+        }
+      }
     };
   });
 }(window.angular));

@@ -20,7 +20,9 @@
       return deferred.promise;
     }
 
-    it('should instantiate with the provided options', function providedOptions() {
+    it('should instantiate with the provided options', providedOptions);
+
+    function providedOptions() {
       // given
       parentScope.options = defaultOptions;
       var directive = angular.element('<auto-complete options="options"></auto-complete>');
@@ -30,6 +32,21 @@
 
       // then
       expect($scope.options).to.equal(defaultOptions);
+      return $scope;
+    }
+
+    it('should replace the load function with an noop', function replaceForNoop() {
+      // given
+      var $scope = providedOptions();
+      $scope.value = 'some';
+      $scope.loadFunction = sinon.spy();
+
+      // when
+      $scope.load();
+      $timeout.flush();
+
+      // then
+      expect($scope.loadFunction).not.to.have.been.called;
     });
 
     it('should instantiate with the provided value', function providedValue() {
@@ -70,6 +87,15 @@
 
       // then
       expect($scope.delay).to.equal(5000);
+    });
+
+    it('should cancel the previous load when a new load has been fired', function cancelLoad() {
+      // given
+
+      // when
+
+      // then
+
     });
 
     it('should configure the minSearch', function configureMinSearch() {
