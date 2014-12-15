@@ -91,11 +91,21 @@
 
     it('should cancel the previous load when a new load has been fired', function cancelLoad() {
       // given
+      parentScope.load = loadDefaultOptions;
+      parentScope.parentDelay = 5000;
+      var directive = angular.element('<auto-complete load="load" delay="parentDelay"></auto-complete>');
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
+      $scope.value = 'ban';
+      $scope.executeLoad = sinon.spy();
 
       // when
+      $scope.load();
+      $scope.value = 'banana';
+      $scope.load();
+      $timeout.flush();
 
       // then
-
+      expect($scope.executeLoad).to.have.been.calledOnce;
     });
 
     it('should configure the minSearch', function configureMinSearch() {

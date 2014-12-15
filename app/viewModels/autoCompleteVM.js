@@ -5,6 +5,7 @@
 
   app.controller('autoCompleteVM', function autoCompleteVM($scope, $filter, $timeout) {
     var genericFilter = $filter('filter');
+    var lastExecution = null;
     $scope.value = $scope.value || '';
     $scope.options = $scope.options || [];
     $scope.delay = $scope.delay || 0;
@@ -18,7 +19,8 @@
     }
 
     $scope.load = function load() {
-      $timeout($scope.executeLoad, $scope.delay);
+      $timeout.cancel(lastExecution);
+      lastExecution = $timeout($scope.executeLoad, $scope.delay);
     };
 
     $scope.executeLoad = function executeLoad() {
