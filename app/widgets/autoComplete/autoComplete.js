@@ -11,7 +11,8 @@
         minSearch: '=?minSearch',
         value: '=?value',
         loadFunction: '=?load',
-        options: '=?options'
+        options: '=?options',
+        onSelect: '=?onSelect'
       },
       controller: 'autoCompleteVM',
       templateUrl: 'autoComplete'

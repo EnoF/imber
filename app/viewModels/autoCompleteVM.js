@@ -10,6 +10,7 @@
     $scope.delay = $scope.delay || 0;
     $scope.minSearch = $scope.minSearch || 0;
     $scope.loadFunction = $scope.loadFunction || angular.noop;
+    $scope.onSelect = $scope.onSelect || angular.noop;
     $scope.suggestions = [];
 
     function populateOptions(options) {
@@ -22,6 +23,10 @@
           $scope.loadFunction($scope.value).then(populateOptions);
         }
       }, $scope.delay);
+    };
+
+    $scope.select = function select(selection) {
+      $scope.onSelect(selection);
     };
 
     $scope.suggest = function suggest() {

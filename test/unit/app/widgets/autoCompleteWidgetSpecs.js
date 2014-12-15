@@ -83,5 +83,20 @@
       // then
       expect($scope.minSearch).to.equal(2);
     });
+
+    it('should select and call back the registered function', function selectAndCallback() {
+      // given
+      parentScope.selectCallback = sinon.spy();
+      parentScope.parentOptions = defaultOptions;
+      var directive = angular
+        .element('<auto-complete options="parentOptions" on-select="selectCallback"></auto-complete>"');
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
+
+      // when
+      $scope.select(defaultOptions[0]);
+
+      // then
+      expect(parentScope.selectCallback).to.have.been.calledWith(defaultOptions[0]);
+    });
   });
 }(window.angular, window.sinon));
