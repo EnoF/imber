@@ -3,7 +3,7 @@
 
   var app = angular.module('imber');
 
-  app.factory('userDAO', function userDAOFactory($http, $q, $cookies, User) {
+  app.factory('userDAO', function userDAOFactory($http, $q, $cookies, User, $log) {
     var currentUser = null;
     if ($cookies.currentUser) {
       currentUser = new User(JSON.parse($cookies.currentUser));
@@ -12,6 +12,22 @@
     // The cached logged in user.
     function getCurrentUser() {
       return currentUser;
+    }
+
+    // Get the user by name
+    function getByName(name) {
+      var deferred = $q.defer();
+      $http.get('/user', {
+        params: {
+          name: name
+        }
+      }).then(function createUserModel(response) {
+        deferred.resolve(new User(response.data));
+      }, function throwError() {
+        $log.error('user has not been found');
+        deferred.reject();
+      });
+      return deferred.promise;
     }
 
     // Login in with the provided `username` and `password`.
@@ -82,6 +98,7 @@
     // Return the `DAO` as a singleton.
     return {
       getCurrentUser: getCurrentUser,
+      getByName: getByName,
       login: login,
       loggedIn: loggedIn,
       logout: logout,
