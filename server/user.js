@@ -95,7 +95,7 @@
     var newUser = new User(req.body);
     // Check if the user has a conflicting username or email with an other user.
     isUserDetailConflicting(req.body.userName, req.body.email).
-      then(checkExistance(newUser, deferred));
+    then(checkExistance(newUser, deferred));
     // When registered successful we can directly log the user in.
     deferred.promise.then(createNewAuthToken(res, newUser));
     // When for what ever reason the registration was rejected,
@@ -137,22 +137,41 @@
     var deferred = queue.defer();
     // Search for any conflicting users in the db.
     User.findOne({
-      $or: [
-        {
-          userName: userName
-        },
-        {
-          email: email
-        }
-      ]
+      $or: [{
+        userName: userName
+      }, {
+        email: email
+      }]
     }, deferred.makeNodeResolver());
+    return deferred.promise;
+  }
+
+  function search(req, res) {
+    var deferred = queue.defer();
+    // Find the user close to the provided name
+    var name = req.query.search;
+    User.find({
+        userName: new RegExp('^' + name, 'i')
+      }, deferred.makeNodeResolver())
+      .select('userName')
+      .limit(5);
+    deferred.promise.then(function sendUsers(users) {
+      if (users.length === 0) {
+        // when there are no users found
+        res.status(404).send('not found');
+      } else {
+        // otherwise send the result
+        res.send(users);
+      }
+    });
     return deferred.promise;
   }
 
   module.exports = {
     login: login,
     reauthenticate: reauthenticate,
-    register: register
+    register: register,
+    search: search
   };
 
 }(require('mongoose'), require('q'), require('crypto-js/aes'),

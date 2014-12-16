@@ -17,7 +17,8 @@
       given: function given(body) {
         testQueue = queue().then(function given() {
           req = {
-            body: body
+            body: body,
+            query: body
           };
         });
         return testObject;

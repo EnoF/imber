@@ -211,8 +211,31 @@
     });
 
     describe('user search', function() {
-      it('should be able to search for a user', function searchUser() {
+      it('should be able to search for a user', function searchUser(done) {
+        test(done)
+          .given({
+            search: 'eno'
+          })
+          .when(user.search)
+          .then(function assert(res) {
+            expect(res.send).to.have.been.called;
+            var response = res.send.args[0][0];
+            expect(response).to.be.an.instanceof(Array);
+          })
+      });
 
+      it('should only search for users starting with the provided name', function limitToProvidedName(done) {
+        test(done)
+          .given({
+            search: 'nof'
+          })
+          .when(user.search)
+          .then(function assert(res) {
+            expect(res.send).to.have.been.called;
+            var response = res.send.args[0][0];
+            expect(response).to.equal('not found');
+            expect(res.status).to.have.been.calledWith(404);
+          });
       });
 
       it('should be able to find a user by name', function findByName() {
