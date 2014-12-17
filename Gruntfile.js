@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
   var pkg = grunt.file.readJSON('package.json');
@@ -25,15 +25,13 @@ module.exports = function (grunt) {
     },
     clean: {
       all: {
-        files: [
-          {
-            dot: true,
-            src: [
-              '<%= app.tmp %>',
-              '<%= app.dist %>'
-            ]
-          }
-        ]
+        files: [{
+          dot: true,
+          src: [
+            '<%= app.tmp %>',
+            '<%= app.dist %>'
+          ]
+        }]
       }
     },
     concat: {
@@ -55,28 +53,24 @@ module.exports = function (grunt) {
     },
     copy: {
       dist: {
-        files: [
-          {
-            expand: true,
-            cwd: '<%= app.app %>/icons',
-            dest: '<%= app.dist %>/icons',
-            src: '*.svg'
-          },
-          {
-            expand: true,
-            cwd: '<%= app.app %>/pages',
-            dest: '<%= app.dist %>/pages',
-            src: '*.html'
-          },
-          {
-            expand: true,
-            cwd: '<%= app.tmp %>/styles',
-            dest: '<%= app.dist %>/styles',
-            src: [
-              '*.css'
-            ]
-          }
-        ]
+        files: [{
+          expand: true,
+          cwd: '<%= app.app %>/icons',
+          dest: '<%= app.dist %>/icons',
+          src: '*.svg'
+        }, {
+          expand: true,
+          cwd: '<%= app.app %>/pages',
+          dest: '<%= app.dist %>/pages',
+          src: '*.html'
+        }, {
+          expand: true,
+          cwd: '<%= app.tmp %>/styles',
+          dest: '<%= app.dist %>/styles',
+          src: [
+            '*.css'
+          ]
+        }]
       }
     },
     express: {
@@ -183,7 +177,7 @@ module.exports = function (grunt) {
         dest: '<%= app.tmp %>/scripts/templates.js',
         options: {
           module: 'imber',
-          url: function (url) {
+          url: function(url) {
             return url.replace(/(app\/widgets\/([\s\S]*?)\/)/, '').replace(/.html/, '');
           }
         }
@@ -203,7 +197,7 @@ module.exports = function (grunt) {
             removeScriptTypeAttributes: true,
             removeStyleLinkTypeAttributes: true
           },
-          url: function (url) {
+          url: function(url) {
             return url.replace(/(app\/widgets\/([\s\S]*?)\/)/, '').replace(/.html/, '');
           }
         }
@@ -212,7 +206,12 @@ module.exports = function (grunt) {
     preprocess: {
       develop: {
         src: '<%= app.app %>/index.html',
-        dest: '<%= app.tmp %>/index.html'
+        dest: '<%= app.tmp %>/index.html',
+        options: {
+          context: {
+            NODE_ENV: 'development'
+          }
+        }
       },
       release: {
         src: '<%= app.app %>/index.html',
@@ -225,13 +224,14 @@ module.exports = function (grunt) {
       }
     },
     simplemocha: {
-      all: { src: ['test/unit/server/**/*.js'] }
+      all: {
+        src: ['test/unit/server/**/*.js']
+      }
     },
     uglify: {
       options: {
         mangle: {
-          except: [
-          ]
+          except: []
         },
         compress: {
           /* jshint ignore:start */
@@ -239,7 +239,7 @@ module.exports = function (grunt) {
             "DEBUG": false
           },
           dead_code: true
-          /* jshint ignore:end */
+            /* jshint ignore:end */
         },
         banner: '/* imber: v<%= pkg.version %> by EnoF */'
       },
