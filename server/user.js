@@ -152,9 +152,10 @@
     var name = req.query.search;
     User.find({
         userName: new RegExp('^' + name, 'i')
-      }, deferred.makeNodeResolver())
+      })
       .select('userName')
-      .limit(5);
+      .limit(5)
+      .exec(deferred.makeNodeResolver());
     deferred.promise.then(function sendUsers(users) {
       if (users.length === 0) {
         // when there are no users found
@@ -167,7 +168,29 @@
     return deferred.promise;
   }
 
+  function find(req, res) {
+    var deferred = queue.defer();
+    // Find the user close to the provided name
+    var name = req.query.find;
+    User.findOne({
+        userName: new RegExp('^' + name + '$', 'i')
+      })
+      .select('userName')
+      .exec(deferred.makeNodeResolver());
+    deferred.promise.then(function sendUsers(user) {
+      if (user.length === 0) {
+        // when there are no users found
+        res.status(404).send('not found');
+      } else {
+        // otherwise send the result
+        res.send(user);
+      }
+    });
+    return deferred.promise;
+  }
+
   module.exports = {
+    find: find,
     login: login,
     reauthenticate: reauthenticate,
     register: register,

@@ -221,7 +221,9 @@
             expect(res.send).to.have.been.called;
             var response = res.send.args[0][0];
             expect(response).to.be.an.instanceof(Array);
-          })
+            expect(response[0].userName).to.equal('EnoF');
+            expect(response[0].password).to.be.undefined;
+          });
       });
 
       it('should only search for users starting with the provided name', function limitToProvidedName(done) {
@@ -238,8 +240,18 @@
           });
       });
 
-      it('should be able to find a user by name', function findByName() {
-
+      it('should be able to find a user by name', function findByName(done) {
+        test(done)
+          .given({
+            find: 'EnoF'
+          })
+          .when(user.find)
+          .then(function assert(res) {
+            expect(res.send).to.have.been.called;
+            var response = res.send.args[0][0];
+            expect(response.userName).to.equal('EnoF');
+            expect(response.password).to.be.undefined;
+          });
       });
     });
   });
