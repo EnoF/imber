@@ -33,9 +33,7 @@
             password: 'someEncryptedPassword'
           })
           .when(user.login)
-          .then(function assert(res, req) {
-            expect(res.send).to.have.been.called;
-            var response = res.send.args[0][0];
+          .then(function assert(response, req) {
             var decrypted = AES.decrypt(response.authToken, process.env.IMBER_AES_KEY);
             var message = decrypted.toString(CryptoJS.enc.Utf8);
             expect(message).to.have.string('EnoF;');
@@ -50,9 +48,7 @@
             authToken: oldAuth.toString()
           })
           .when(user.reauthenticate)
-          .then(function assert(res) {
-            expect(res.send).to.have.been.called;
-            var response = res.send.args[0][0];
+          .then(function assert(response) {
             var decrypted = AES.decrypt(response.authToken, process.env.IMBER_AES_KEY);
             var message = decrypted.toString(CryptoJS.enc.Utf8);
             expect(message).to.have.string('EnoF;');
@@ -68,11 +64,7 @@
             password: 'some unknown password that will not work'
           })
           .when(user.login)
-          .then(function assert(res) {
-            expect(res.status).to.have.been.called.once;
-            expect(res.send).to.have.been.called.once;
-            var status = res.status.args[0][0];
-            var response = res.send.args[0][0];
+          .then(function assert(response, status) {
             expect(status).to.equal(401);
             expect(response).to.equal('bad credentials');
           });
@@ -87,11 +79,7 @@
             authToken: oldAuth.toString()
           })
           .when(user.reauthenticate)
-          .then(function assert(res) {
-            expect(res.status).to.have.been.called.once;
-            expect(res.send).to.have.been.called.once;
-            var status = res.status.args[0][0];
-            var response = res.send.args[0][0];
+          .then(function assert(response, status) {
             expect(status).to.equal(401);
             expect(response).to.equal('old token');
           });
@@ -104,9 +92,7 @@
             password: 'someEncryptedPassword'
           })
           .when(user.login)
-          .then(function assert(res) {
-            expect(res.send).to.have.been.called;
-            var response = res.send.args[0][0];
+          .then(function assert(response) {
             var decrypted = AES.decrypt(response.authToken, process.env.IMBER_AES_KEY);
             var message = decrypted.toString(CryptoJS.enc.Utf8);
             expect(message).to.have.string('EnoF;');
@@ -124,9 +110,7 @@
             email: 'rina@rini.ichi'
           })
           .when(user.register)
-          .then(function assert(res, req) {
-            expect(res.send).to.have.been.called;
-            var response = res.send.args[0][0];
+          .then(function assert(response, req) {
             var decrypted = AES.decrypt(response.authToken, process.env.IMBER_AES_KEY);
             var message = decrypted.toString(CryptoJS.enc.Utf8);
             expect(message).to.have.string('Rina;');
@@ -142,9 +126,7 @@
             email: 'somenotfound@email.com'
           })
           .when(user.register)
-          .then(function assert(res) {
-            expect(res.send).to.have.been.called;
-            var response = res.send.args[0][0];
+          .then(function assert(response) {
             expect(response.userName).to.be.true;
           });
       });
@@ -157,9 +139,7 @@
             email: 'andyt@live.nl'
           })
           .when(user.register)
-          .then(function assert(res) {
-            expect(res.send).to.have.been.called;
-            var response = res.send.args[0][0];
+          .then(function assert(response) {
             expect(response.email).to.be.true;
           });
       });
@@ -172,9 +152,7 @@
             email: 'somenotfound@email.com'
           })
           .when(user.register)
-          .then(function assert(res) {
-            expect(res.send).to.have.been.called;
-            var response = res.send.args[0][0];
+          .then(function assert(response) {
             expect(response.email).to.be.true;
           });
       });
@@ -187,9 +165,7 @@
             email: 'somenotfound@email.com'
           })
           .when(user.register)
-          .then(function assert(res) {
-            expect(res.send).to.have.been.called;
-            var response = res.send.args[0][0];
+          .then(function assert(response) {
             expect(response.email).to.be.true;
           });
       });
@@ -202,9 +178,7 @@
             email: ''
           })
           .when(user.register)
-          .then(function assert(res) {
-            expect(res.send).to.have.been.called;
-            var response = res.send.args[0][0];
+          .then(function assert(response) {
             expect(response.email).to.be.true;
           });
       });
@@ -217,9 +191,7 @@
             search: 'eno'
           })
           .when(user.search)
-          .then(function assert(res) {
-            expect(res.send).to.have.been.called;
-            var response = res.send.args[0][0];
+          .then(function assert(response) {
             expect(response).to.be.an.instanceof(Array);
             expect(response[0].userName).to.equal('EnoF');
             expect(response[0].password).to.be.undefined;
@@ -232,11 +204,9 @@
             search: 'nof'
           })
           .when(user.search)
-          .then(function assert(res) {
-            expect(res.send).to.have.been.called;
-            var response = res.send.args[0][0];
+          .then(function assert(response, status) {
             expect(response).to.equal('not found');
-            expect(res.status).to.have.been.calledWith(404);
+            expect(status).to.equal(404);
           });
       });
 
@@ -246,12 +216,22 @@
             find: 'EnoF'
           })
           .when(user.find)
-          .then(function assert(res) {
-            expect(res.send).to.have.been.called;
-            var response = res.send.args[0][0];
+          .then(function assert(response) {
             expect(response.userName).to.equal('EnoF');
             expect(response.password).to.be.undefined;
           });
+      });
+
+      it('should only find the user when the full name is given', function findByFullName(done) {
+        test(done)
+          .given({
+            find: 'Eno'
+          })
+          .when(user.find)
+          .then(function assert(response, status) {
+            expect(response).to.equal('not found');
+            expect(status).to.equal(404);
+          })
       });
     });
   });

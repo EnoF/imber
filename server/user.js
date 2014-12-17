@@ -19,7 +19,7 @@
     return authToken.toString();
   }
 
-  function createNewAuthToken(res, newUser) {
+  function createNewAuthToken(res, newUser, deferred) {
     return function createNewAuthToken(user) {
       // During the creation of a user, the user will be passed with
       // the initial function call.
@@ -27,6 +27,7 @@
       // User is not found
       if (user === null) {
         res.status(401).send('bad credentials');
+        deferred.reject();
       } else {
         // Create a new authentication token
         res.send({
@@ -35,6 +36,7 @@
             userName: user.userName
           }
         });
+        deferred.resolve();
       }
     };
   }
@@ -54,6 +56,7 @@
 
   function login(req, res) {
     var deferred = queue.defer();
+    var loginDeferred = queue.defer();
     User.findOne({
       // Find username case insensitive.
       userName: {
@@ -62,8 +65,8 @@
       // HMAC the password so that we can match it with the encrypted password.
       password: HMAC(req.body.password, process.env.IMBER_HMAC_KEY).toString()
     }, deferred.makeNodeResolver());
-    deferred.promise.then(createNewAuthToken(res));
-    return deferred.promise;
+    deferred.promise.then(createNewAuthToken(res, null, loginDeferred));
+    return loginDeferred.promise;
   }
 
   function reauthenticate(req, res) {
@@ -148,6 +151,7 @@
 
   function search(req, res) {
     var deferred = queue.defer();
+    var findDeferred = queue.defer();
     // Find the user close to the provided name
     var name = req.query.search;
     User.find({
@@ -155,37 +159,36 @@
       })
       .select('userName')
       .limit(5)
-      .exec(deferred.makeNodeResolver());
-    deferred.promise.then(function sendUsers(users) {
-      if (users.length === 0) {
-        // when there are no users found
+      .exec(findDeferred.makeNodeResolver());
+    findDeferred.promise.then(handleFindResults(res, deferred));
+    return deferred.promise;
+  }
+
+  function handleFindResults(res, deferred) {
+    return function sendFindResults(result) {
+      if (!result || (result instanceof Array && result.length === 0)) {
+        // when there are no results found
         res.status(404).send('not found');
+        deferred.reject();
       } else {
         // otherwise send the result
-        res.send(users);
+        res.send(result);
+        deferred.resolve();
       }
-    });
-    return deferred.promise;
+    };
   }
 
   function find(req, res) {
     var deferred = queue.defer();
+    var findDeferred = queue.defer();
     // Find the user close to the provided name
     var name = req.query.find;
     User.findOne({
         userName: new RegExp('^' + name + '$', 'i')
       })
       .select('userName')
-      .exec(deferred.makeNodeResolver());
-    deferred.promise.then(function sendUsers(user) {
-      if (user.length === 0) {
-        // when there are no users found
-        res.status(404).send('not found');
-      } else {
-        // otherwise send the result
-        res.send(user);
-      }
-    });
+      .exec(findDeferred.makeNodeResolver());
+    findDeferred.promise.then(handleFindResults(res, deferred));
     return deferred.promise;
   }
 
