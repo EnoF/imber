@@ -48,7 +48,7 @@
       $scope.$emit = sinon.spy();
 
       // predict
-      $httpBackend.expect('GET', '/user?name=banana+king')
+      $httpBackend.expect('GET', '/user?find=banana+king')
         .respond(200, {
           userName: 'Banana King'
         });
@@ -71,7 +71,7 @@
       $scope.$emit = sinon.spy();
 
       // predict
-      $httpBackend.expect('GET', '/user?name=banana+king')
+      $httpBackend.expect('GET', '/user?find=banana+king')
         .respond(404, 'not found');
 
       // when

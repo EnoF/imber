@@ -31,11 +31,17 @@
     };
 
     $scope.select = function select(selection) {
+      $scope.value = selection;
+      $scope.closeSuggestions();
       $scope.onSelect(selection);
     };
 
     $scope.suggest = function suggest() {
       $scope.suggestions = genericFilter($scope.options, $scope.value);
+    };
+
+    $scope.closeSuggestions = function closeSuggestions() {
+      $scope.suggestions = [];
     };
   });
 }(window.angular));

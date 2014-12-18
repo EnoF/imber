@@ -193,10 +193,10 @@
   }
 
   function searchFor(req, res) {
-    if (!!req.query.find) {
-      return find(req, res);
-    } else {
+    if (!!req.query.search) {
       return search(req, res);
+    } else {
+      return find(req, res);
     }
   }
 

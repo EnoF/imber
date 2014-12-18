@@ -19,7 +19,7 @@
       var deferred = $q.defer();
       $http.get('/user', {
         params: {
-          name: name
+          find: name
         }
       }).then(function createUserModel(response) {
         deferred.resolve(new User(response.data));
