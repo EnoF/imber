@@ -8,6 +8,7 @@
       restrict: 'E',
       scope: {
         delay: '=?delay',
+        label: '@label',
         minSearch: '=?minSearch',
         value: '=?value',
         loadFunction: '=?load',

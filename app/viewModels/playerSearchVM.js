@@ -5,6 +5,8 @@
 
   app.controller('playerSearchVM', function playerSearchVM($scope, events, userDAO) {
     $scope.value = '';
+    $scope.delay = 2000;
+    $scope.minSearch = 2;
 
     $scope.onSelect = function onSelect(userName) {
       userDAO.getByName(userName).then(function notifyUserFound(user) {

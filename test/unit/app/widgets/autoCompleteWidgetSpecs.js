@@ -61,6 +61,17 @@
       expect($scope.value).to.equal('banana');
     });
 
+    it('should instantiate with the provided label', function providedLabel() {
+      // given
+      var directive = angular.element('<auto-complete label="search"></auto-complete>');
+
+      // when
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
+
+      // then
+      expect($scope.label).to.equal('search');
+    });
+
     it('should dynamically load the options from the server', function dynamicLoading() {
       // given
       parentScope.load = loadDefaultOptions;
