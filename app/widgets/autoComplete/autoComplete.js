@@ -17,10 +17,16 @@
       },
       controller: 'autoCompleteVM',
       templateUrl: 'autoComplete',
-      link: function onInitialize(scope) {
+      link: function onInitialize(scope, element) {
         if (scope.loadFunction === null) {
           scope.load = angular.noop;
         }
+        element.on('keyup', function determineAction(event) {
+          if (event) {
+
+          }
+          scope.load();
+        });
       }
     };
   });

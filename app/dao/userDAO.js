@@ -88,11 +88,25 @@
     }
 
     function search(name) {
-      return $http.get('/user', {
+      var deferred = $q.defer();
+
+      $http.get('/user', {
         params: {
           search: name
         }
-      });
+      }).then(function resolveWithData(response) {
+        deferred.resolve(convertToNames(response.data));
+      }, deferred.reject);
+
+      return deferred.promise;
+    }
+
+    function convertToNames(users) {
+      var names = [];
+      for (var i = 0; i < users.length; i++) {
+        names[i] = users[i].userName;
+      }
+      return names;
     }
 
     // Return the `DAO` as a singleton.

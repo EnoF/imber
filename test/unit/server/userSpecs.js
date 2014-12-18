@@ -215,7 +215,7 @@
           .given({
             find: 'EnoF'
           })
-          .when(user.find)
+          .when(user.searchFor)
           .then(function assert(response) {
             expect(response.userName).to.equal('EnoF');
             expect(response.password).to.be.undefined;
@@ -231,7 +231,7 @@
           .then(function assert(response, status) {
             expect(response).to.equal('not found');
             expect(status).to.equal(404);
-          })
+          });
       });
     });
   });

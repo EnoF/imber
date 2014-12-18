@@ -9,13 +9,14 @@
     $scope.value = $scope.value || '';
     $scope.options = $scope.options || [];
     $scope.delay = $scope.delay || 0;
-    $scope.minSearch = $scope.minSearch || 0;
+    $scope.minSearch = parseInt($scope.minSearch, 10) || 0;
     $scope.loadFunction = $scope.loadFunction || null;
     $scope.onSelect = $scope.onSelect || angular.noop;
     $scope.suggestions = [];
 
-    function populateOptions(options) {
+    function optionsHasBeenLoaded(options) {
       $scope.options = options;
+      $scope.suggest();
     }
 
     $scope.load = function load() {
@@ -25,7 +26,7 @@
 
     $scope.executeLoad = function executeLoad() {
       if ($scope.value.length > $scope.minSearch) {
-        $scope.loadFunction($scope.value).then(populateOptions);
+        $scope.loadFunction($scope.value).then(optionsHasBeenLoaded);
       }
     };
 

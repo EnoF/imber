@@ -20,7 +20,13 @@
 
       // predict
       $httpBackend.expect('GET', '/user?search=' + searchCriteria)
-        .respond(200, ['banana', 'banana king', 'ban hammer']);
+        .respond(200, [{
+          userName: 'banana'
+        }, {
+          userName: 'banana king'
+        }, {
+          userName: 'ban hammer'
+        }]);
 
       // when
       var promise = $scope.searchPlayer(searchCriteria);
@@ -28,10 +34,12 @@
 
       // then
       promise.then(function expectList(list) {
+        console.log('lol')
         expect(list).to.include('banana');
         expect(list).to.include('banana king');
         expect(list).to.include('ban hammer');
       });
+      $scope.$apply();
     });
 
     it('should provide the selected player model', function selectedPlayerModel() {

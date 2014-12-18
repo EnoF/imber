@@ -192,12 +192,21 @@
     return deferred.promise;
   }
 
+  function searchFor(req, res) {
+    if (!!req.query.find) {
+      return find(req, res);
+    } else {
+      return search(req, res);
+    }
+  }
+
   module.exports = {
     find: find,
     login: login,
     reauthenticate: reauthenticate,
     register: register,
-    search: search
+    search: search,
+    searchFor: searchFor
   };
 
 }(require('mongoose'), require('q'), require('crypto-js/aes'),

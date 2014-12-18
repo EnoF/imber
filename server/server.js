@@ -24,6 +24,7 @@
     app.post('/login', user.login);
     app.post('/reauthenticate', user.reauthenticate);
 
+    app.get('/user', user.searchFor);
     app.post('/user', user.register);
 
   });
