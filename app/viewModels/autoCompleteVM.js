@@ -13,6 +13,7 @@
     $scope.loadFunction = $scope.loadFunction || null;
     $scope.onSelect = $scope.onSelect || angular.noop;
     $scope.suggestions = [];
+    $scope.focus = 0;
 
     function optionsHasBeenLoaded(options) {
       $scope.options = options;
@@ -37,10 +38,24 @@
     };
 
     $scope.suggest = function suggest() {
+      $scope.focus = 0;
       $scope.suggestions = genericFilter($scope.options, $scope.value);
     };
 
+    $scope.focusUp = function focusUp() {
+      if ($scope.focus > 0) {
+        $scope.focus--;
+      }
+    };
+
+    $scope.focusDown = function focusDown() {
+      if ($scope.focus < $scope.options.length - 1) {
+        $scope.focus++;
+      }
+    };
+
     $scope.closeSuggestions = function closeSuggestions() {
+      $timeout.cancel(lastExecution);
       $scope.suggestions = [];
     };
   });

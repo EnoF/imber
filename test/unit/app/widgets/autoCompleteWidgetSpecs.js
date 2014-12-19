@@ -1,4 +1,4 @@
-(function autoCompleteWidgetSpecsScope(angular, sinon) {
+(function autoCompleteWidgetSpecsScope(angular, sinon, $) {
   'use strict';
 
   describe('<auto-complete> specs', function autoCompleteWidgetSpecs() {
@@ -145,5 +145,63 @@
       // then
       expect(parentScope.selectCallback).to.have.been.calledWith(defaultOptions[0]);
     });
+
+    it('should move the focus down on down button', function downButton() {
+      // given
+      parentScope.parentOptions = defaultOptions;
+      var directive = angular
+        .element('<auto-complete options="parentOptions"></auto-complete>"');
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
+      $scope.value = 'opt';
+      $scope.suggest();
+
+      // when
+      var event = $.Event('keydown');
+      event.which = 40;
+      directive.trigger(event);
+      $scope.$apply();
+
+      // then
+      expect($scope.focus).to.equal(1);
+    });
+
+    it('should move the focus up on up button', function upButton() {
+      // given
+      parentScope.parentOptions = defaultOptions;
+      var directive = angular
+        .element('<auto-complete options="parentOptions"></auto-complete>"');
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
+      $scope.value = 'opt';
+      $scope.suggest();
+      $scope.focus = 1;
+
+      // when
+      var event = $.Event('keydown');
+      event.which = 38;
+      directive.trigger(event);
+      $scope.$apply();
+
+      // then
+      expect($scope.focus).to.equal(0);
+    });
+
+    it('should select the selected option on enter', function enterButton() {
+      // given
+      parentScope.parentOptions = defaultOptions;
+      var directive = angular
+        .element('<auto-complete options="parentOptions"></auto-complete>"');
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
+      $scope.value = 'opt';
+      $scope.suggest();
+
+      // when
+      var event = $.Event('keydown');
+      event.which = 13;
+      directive.trigger(event);
+      $scope.$apply();
+
+      // then
+      expect($scope.value).to.equal(defaultOptions[0]);
+    });
   });
-}(window.angular, window.sinon));
+}(window.angular, window.sinon, window.$));

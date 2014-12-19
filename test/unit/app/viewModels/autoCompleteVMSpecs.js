@@ -73,5 +73,54 @@
       // then
       expect($scope.options).to.be.empty;
     });
+
+    it('should focus on the first option when suggesting', focusFirst);
+
+    function focusFirst() {
+      // given
+      $scope.options = defaultOptions;
+      $scope.focus = -1;
+
+      // when
+      $scope.value = 'hell'
+      $scope.suggest();
+
+      // then
+      expect($scope.focus).to.equal(0);
+    }
+
+    it('should never focus beyond the first option', function beyondFirst() {
+      // given
+      focusFirst();
+
+      // when
+      $scope.focusUp();
+
+      // then
+      expect($scope.focus).to.equal(0);
+    });
+
+    it('should focus down', function focusDown() {
+      // given
+      focusFirst();
+
+      // when
+      $scope.focusDown();
+
+      // then
+      expect($scope.focus).to.equal(1);
+    });
+
+    it('should never go beyond the last option', function beyondLast() {
+      // given
+      focusFirst();
+      $scope.focus = defaultOptions.length - 1;
+
+      // when
+      $scope.focusDown();
+
+      // then
+      expect($scope.focus).to.equal(defaultOptions.length - 1);
+    });
   });
 }(window.angular, window.sinon));

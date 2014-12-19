@@ -5,7 +5,7 @@
   <md-list>
     <md-item ng-repeat="suggestion in suggestions"
              ng-click="select(suggestion)">
-      <md-item-content>
+      <md-item-content ng-class="{ 'active': $index === focus }">
         {{ suggestion }}
       </md-item-content>
     </md-item>
