@@ -3,7 +3,7 @@
 
   var app = angular.module('imber');
 
-  app.factory('userDAO', function userDAOFactory($http, $q, $cookies, User) {
+  app.factory('userDAO', function userDAOFactory($http, $q, $cookies, User, $log) {
     var currentUser = null;
     if ($cookies.currentUser) {
       currentUser = new User(JSON.parse($cookies.currentUser));
@@ -12,6 +12,22 @@
     // The cached logged in user.
     function getCurrentUser() {
       return currentUser;
+    }
+
+    // Get the user by name
+    function getByName(name) {
+      var deferred = $q.defer();
+      $http.get('/user', {
+        params: {
+          find: name
+        }
+      }).then(function createUserModel(response) {
+        deferred.resolve(new User(response.data));
+      }, function throwError() {
+        $log.error('user has not been found');
+        deferred.reject();
+      });
+      return deferred.promise;
     }
 
     // Login in with the provided `username` and `password`.
@@ -71,14 +87,38 @@
       currentUser = null;
     }
 
+    function search(name) {
+      var deferred = $q.defer();
+
+      $http.get('/user', {
+        params: {
+          search: name
+        }
+      }).then(function resolveWithData(response) {
+        deferred.resolve(convertToNames(response.data));
+      }, deferred.reject);
+
+      return deferred.promise;
+    }
+
+    function convertToNames(users) {
+      var names = [];
+      for (var i = 0; i < users.length; i++) {
+        names[i] = users[i].userName;
+      }
+      return names;
+    }
+
     // Return the `DAO` as a singleton.
     return {
       getCurrentUser: getCurrentUser,
+      getByName: getByName,
       login: login,
       loggedIn: loggedIn,
       logout: logout,
       reauthenticate: reauthenticate,
-      registerUser: registerUser
+      registerUser: registerUser,
+      search: search
     };
   });
 }(window.angular, window.JSON));

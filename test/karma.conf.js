@@ -4,7 +4,7 @@
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
 
-module.exports = function (config) {
+module.exports = function(config) {
   config.set({
     // base path, that will be used to resolve files and exclude
     basePath: '..',
@@ -14,6 +14,8 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
+      // jQuery for easier testing
+      'app/bower_components/jquery/dist/jquery.js',
       // Angular dependencies
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-route/angular-route.js',

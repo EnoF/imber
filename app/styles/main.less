@@ -5,6 +5,8 @@
 @import (inline) "app/bower_components/famous-angular/dist/famous-angular.css";
 @import "app/widgets/login/login.less";
 @import "app/widgets/logout/logout.less";
+@import "app/widgets/autoComplete/autoComplete.less";
+@import "app/widgets/playerSearch/playerSearch.less";
 @import "app/widgets/register/register.less";
 
 md-sidenav {
@@ -46,4 +48,8 @@ md-sidenav {
 
 h2 {
   color: #aaa;
+}
+
+[ng-view] {
+  min-height: 500px;
 }

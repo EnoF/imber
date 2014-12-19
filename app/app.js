@@ -3,18 +3,15 @@
 
   var app = angular.module('imber', ['ngMaterial', 'ngRoute', 'ngCookies']);
 
-  var sitemap = [
-    {
-      url: '/dashboard',
-      templateUrl: 'pages/dashboard.html',
-      label: 'dashboard'
-    },
-    {
-      url: '/games',
-      templateUrl: 'pages/games.html',
-      label: 'games'
-    }
-  ];
+  var sitemap = [{
+    url: '/dashboard',
+    templateUrl: 'pages/dashboard.html',
+    label: 'dashboard'
+  }, {
+    url: '/games',
+    templateUrl: 'pages/games.html',
+    label: 'games'
+  }];
 
   app.factory('sitemap', function siteMap() {
     return sitemap;

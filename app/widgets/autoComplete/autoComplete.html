@@ -1,0 +1,13 @@
+<md-text-float label="{{ label }}"
+               type="text"
+               ng-model="value"></md-text-float>
+<section>
+  <md-list>
+    <md-item ng-repeat="suggestion in suggestions"
+             ng-click="select(suggestion)">
+      <md-item-content ng-class="{ 'active': $index === focus }">
+        {{ suggestion }}
+      </md-item-content>
+    </md-item>
+  </md-list>
+</section>
