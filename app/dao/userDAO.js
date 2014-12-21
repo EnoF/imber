@@ -3,10 +3,13 @@
 
   var app = angular.module('imber');
 
-  app.factory('userDAO', function userDAOFactory($http, $q, $cookies, User, $log) {
+  app.factory('userDAO', function userDAOFactory($http, $q, ipCookie, User, $log) {
     var currentUser = null;
-    if ($cookies.currentUser) {
-      currentUser = new User(JSON.parse($cookies.currentUser));
+    var expiry = {
+      expires: 10
+    };
+    if (ipCookie('currentUser')) {
+      currentUser = new User(ipCookie('currentUser'));
     }
 
     // The cached logged in user.
@@ -53,16 +56,16 @@
       var deferred = $q.defer();
       authDeferred.then(function returnUser(response) {
         // Set the newly created auth token on the cookie.
-        $cookies.authToken = response.data.authToken;
+        ipCookie('authToken', response.data.authToken, expiry);
         // The returned user data will be held in cache.
         currentUser = new User(response.data.user);
-        $cookies.currentUser = JSON.stringify(response.data.user);
+        ipCookie('currentUser', response.data.user, expiry);
         // Return the `user` model.
         deferred.resolve(currentUser);
       }).catch(function thrownError(error) {
         // Clean the user out of cache.
         currentUser = null;
-        delete $cookies.currentUser;
+        ipCookie.remove('currentUser');
         deferred.reject(error);
       });
       return deferred.promise;
@@ -82,8 +85,8 @@
     }
 
     function logout() {
-      delete $cookies.authToken;
-      delete $cookies.currentUser;
+      ipCookie.remove('authToken');
+      ipCookie.remove('currentUser');
       currentUser = null;
     }
 

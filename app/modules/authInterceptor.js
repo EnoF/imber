@@ -3,12 +3,12 @@
 
     var app = angular.module('imber');
 
-    app.factory('authInterceptor', function ($q, $window, $cookies) {
+    app.factory('authInterceptor', function ($q, $window, ipCookie) {
       return {
         request: function (config) {
           config.headers = config.headers || {};
-          if (!!$cookies.authToken) {
-            config.headers.authorization = $cookies.authToken;
+          if (!!ipCookie('authToken')) {
+            config.headers.authorization = ipCookie('authToken');
           }
           return config;
         }

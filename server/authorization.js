@@ -26,7 +26,7 @@
       User.findOne({
         userName: new RegExp('^' + userName + '$', 'i')
       }, deferred.makeNodeResolver());
-      deferred.promise.then(function continueCall(user) {
+      deferred.promise.then(function continueCall() {
         next();
       });
     } catch (error) {

@@ -34,7 +34,6 @@
 
       // then
       promise.then(function expectList(list) {
-        console.log('lol')
         expect(list).to.include('banana');
         expect(list).to.include('banana king');
         expect(list).to.include('ban hammer');

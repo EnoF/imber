@@ -3,16 +3,16 @@
 
   describe('loginVMSpecs', function loginVMSpecs() {
 
-    var $scope, $httpBackend, testGlobals, userDAO, $cookies, events, $mdToast;
+    var $scope, $httpBackend, testGlobals, userDAO, ipCookie, events, $mdToast;
     beforeEach(module('imber-test'));
 
-    beforeEach(inject(function injector(testSetup, _userDAO_, _$cookies_, _$mdToast_) {
+    beforeEach(inject(function injector(testSetup, _userDAO_, _ipCookie_, _$mdToast_) {
       testGlobals = testSetup.setupControllerTest('loginVM');
       $scope = testGlobals.$scope;
       $httpBackend = testGlobals.$httpBackend;
       events = testGlobals.events;
       userDAO = _userDAO_;
-      $cookies = _$cookies_;
+      ipCookie = _ipCookie_;
       $mdToast = _$mdToast_;
     }));
 
@@ -35,7 +35,7 @@
 
         // then
         expect($scope.loggedIn()).to.be.true;
-        expect($cookies.authToken).to.equal(expectedResponse.authToken);
+        expect(ipCookie('authToken')).to.equal(expectedResponse.authToken);
         expect(userDAO.getCurrentUser().getUserName()).to.equal(expectedResponse.user.userName);
       });
 
@@ -56,13 +56,14 @@
 
       function loginWithCookies() {
         // given
-        $cookies.authToken = 'abcxyz';
+        ipCookie('authToken', 'abcxyz');
 
         // predict
         var expectedResponse = testGlobals.createDefaultUserAuthResponse();
-        $httpBackend.expect('POST', '/api/reauthenticate', {
-          authToken: $cookies.authToken
-        }).respond(200, expectedResponse);
+        $httpBackend.expect('POST',
+          '/api/reauthenticate', {
+            authToken: ipCookie('authToken')
+          }).respond(200, expectedResponse);
 
         // when
         $scope.login();
@@ -70,7 +71,7 @@
 
         // then
         expect($scope.loggedIn()).to.be.true;
-        expect($cookies.authToken).to.equal(expectedResponse.authToken);
+        expect(ipCookie('authToken')).to.equal(expectedResponse.authToken);
       }
 
       it('should notify parent when user is logged in', function notifyLoggedIn() {
@@ -87,11 +88,11 @@
       it('should show an error when the user can not be logged in', function canNotLoggin() {
         // given
         sinon.spy($mdToast, 'show');
-        $cookies.authToken = 'abcxyz';
+        ipCookie('authToken', 'abcxyz');
 
         // predict
         $httpBackend.expect('POST', '/api/reauthenticate', {
-          authToken: $cookies.authToken
+          authToken: ipCookie('authToken')
         }).respond(401, 'Unauthorized');
 
         // when
