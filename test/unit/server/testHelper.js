@@ -35,6 +35,13 @@
         });
         return testObject;
       },
+      givenMethod: function givenMethod(method) {
+        testQueue = queue().then(function given() {
+          req = req || {};
+          req.method = method;
+        });
+        return testObject;
+      },
       givenPath: function givenPath(path) {
         testQueue = queue().then(function given() {
           req = req || {};
@@ -59,7 +66,7 @@
         });
         testQueue = testQueue.then(function success(data) {
           if (isFailCase) return;
-          if (!!req.header) {
+          if (!!req.header || !!req.path || !!req.method) {
             expectations(next);
           } else {
             expect(res.send).to.have.been.called;

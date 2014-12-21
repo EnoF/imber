@@ -50,12 +50,26 @@
         });
     });
 
-    it('should directly forward calls when going to login', function unsecure() {
-
+    it('should directly forward calls when going to login', function unsecure(done) {
+      test(done)
+        .givenPath('/api/login')
+        .givenMethod('POST')
+        .when(authorization)
+        .then(function assert(next) {
+          expect(next).to.have.been.called;
+        });
     });
 
-    it('should limit the unsecure resources to the POSTS', function limitToPosts() {
-
+    it('should limit the unsecure resources to the POSTS', function limitToPosts(done) {
+      test(done)
+        .givenPath('/api/login')
+        .givenMethod('ANY OTHER METHOD')
+        .when(authorization)
+        .then(function assert(response, status, next) {
+          expect(response).to.equal('old token');
+          expect(status).to.equal(401);
+          expect(next).not.to.have.been.called;
+        });
     });
   });
 }());

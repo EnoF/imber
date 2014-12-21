@@ -42,8 +42,7 @@
       '/api/reauthenticate',
       '/api/user'
     ];
-    if (unauthorizedPOSTS.indexOf(req.path) && req.method === 'POST') {
-      console.log(AES, HMAC, CryptoJS);
+    if (unauthorizedPOSTS.indexOf(req.path) !== -1 && req.method === 'POST') {
       next();
       var deferred = queue.defer();
       deferred.resolve();
