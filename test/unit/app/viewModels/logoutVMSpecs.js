@@ -2,30 +2,31 @@
   'use strict';
 
   describe('logout view model specs', function logoutVMSpecs() {
-    var $scope, $httpBackend, testGlobals, userDAO, $cookies, events;
+    var $scope, $httpBackend, testGlobals, userDAO, ipCookie, events;
     beforeEach(module('imber-test'));
 
-    beforeEach(inject(function injector(testSetup, _userDAO_, _$cookies_) {
+    beforeEach(inject(function injector(testSetup, _userDAO_, _ipCookie_) {
       testGlobals = testSetup.setupControllerTest('logoutVM');
       $scope = testGlobals.$scope;
       events = testGlobals.events;
       $httpBackend = testGlobals.$httpBackend;
       userDAO = _userDAO_;
-      $cookies = _$cookies_;
+      ipCookie = _ipCookie_;
     }));
 
     describe('logout the current user', function logoutCurrentUser() {
       it('logout the current user', logoutCurrentUser);
+
       function logoutCurrentUser() {
         // given
-        $cookies.authToken = 'someauthtoken';
+        ipCookie('authToken', 'someauthtoken');
         $scope.user = {};
 
         // when
         $scope.logout();
 
         // then
-        expect($cookies.authToken).to.be.undefined;
+        expect(ipCookie('authToken')).to.be.undefined;
         expect($scope.user).to.be.null;
       }
 

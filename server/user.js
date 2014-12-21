@@ -206,7 +206,8 @@
     reauthenticate: reauthenticate,
     register: register,
     search: search,
-    searchFor: searchFor
+    searchFor: searchFor,
+    User: User
   };
 
 }(require('mongoose'), require('q'), require('crypto-js/aes'),

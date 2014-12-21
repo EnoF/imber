@@ -1,7 +1,7 @@
 (function appScope(angular) {
   'use strict';
 
-  var app = angular.module('imber', ['ngMaterial', 'ngRoute', 'ngCookies']);
+  var app = angular.module('imber', ['ngMaterial', 'ngRoute', 'ipCookie']);
 
   var sitemap = [{
     url: '/dashboard',
@@ -33,11 +33,11 @@
     $routeProvider.otherwise({
       redirectTo: '/login'
     });
-  }).run(function forceLogin($rootScope, $location, $cookies, events) {
+  }).run(function forceLogin($rootScope, $location, ipCookie, events) {
     // register listener to watch route changes
     function redirects(event, next) {
       var loginPage = 'pages/login.html';
-      if (!$cookies.authToken) {
+      if (!ipCookie('authToken')) {
         // no logged user, we should be going to #login
         if (next && next.templateUrl === loginPage) {
           // already going to #login, no redirect needed

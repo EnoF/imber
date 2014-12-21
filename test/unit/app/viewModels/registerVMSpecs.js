@@ -2,20 +2,21 @@
   'use strict';
 
   describe('registerVMSpecs', function registerVMSpecs() {
-    var $scope, $httpBackend, testGlobals, userDAO, $cookies, events;
+    var $scope, $httpBackend, testGlobals, userDAO, ipCookie, events;
     beforeEach(module('imber-test'));
 
-    beforeEach(inject(function injector(testSetup, _userDAO_, _$cookies_) {
+    beforeEach(inject(function injector(testSetup, _userDAO_, _ipCookie_) {
       testGlobals = testSetup.setupControllerTest('registerVM');
       $scope = testGlobals.$scope;
       $httpBackend = testGlobals.$httpBackend;
       events = testGlobals.events;
       userDAO = _userDAO_;
-      $cookies = _$cookies_;
+      ipCookie = _ipCookie_;
     }));
 
     describe('register', function registerScope() {
       it('should register an new user', registerNewUser);
+
       function registerNewUser() {
         // given
         $scope.email = 'andyt@live.nl';
@@ -24,7 +25,7 @@
 
         // predict
         var expectedResponse = testGlobals.createDefaultUserAuthResponse();
-        $httpBackend.expect('POST', '/user', {
+        $httpBackend.expect('POST', '/api/user', {
           userName: $scope.userName,
           password: $scope.password,
           email: $scope.email
@@ -35,7 +36,7 @@
         $httpBackend.flush();
 
         // then
-        expect($cookies.authToken).to.equal(expectedResponse.authToken);
+        expect(ipCookie('authToken')).to.equal(expectedResponse.authToken);
         expect($scope.email).to.be.null;
         expect($scope.userName).to.be.null;
         expect($scope.password).to.be.null;
@@ -51,7 +52,7 @@
         var expectedResponse = {
           userName: true
         };
-        $httpBackend.expect('POST', '/user', {
+        $httpBackend.expect('POST', '/api/user', {
           userName: $scope.userName,
           password: $scope.password,
           email: $scope.email
@@ -77,7 +78,7 @@
         var expectedResponse = {
           email: true
         };
-        $httpBackend.expect('POST', '/user', {
+        $httpBackend.expect('POST', '/api/user', {
           userName: $scope.userName,
           password: $scope.password,
           email: $scope.email

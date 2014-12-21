@@ -3,10 +3,13 @@
 
   var app = angular.module('imber');
 
-  app.factory('userDAO', function userDAOFactory($http, $q, $cookies, User, $log) {
+  app.factory('userDAO', function userDAOFactory($http, $q, ipCookie, User, $log) {
     var currentUser = null;
-    if ($cookies.currentUser) {
-      currentUser = new User(JSON.parse($cookies.currentUser));
+    var expiry = {
+      expires: 10
+    };
+    if (ipCookie('currentUser')) {
+      currentUser = new User(ipCookie('currentUser'));
     }
 
     // The cached logged in user.
@@ -17,7 +20,7 @@
     // Get the user by name
     function getByName(name) {
       var deferred = $q.defer();
-      $http.get('/user', {
+      $http.get('/api/user', {
         params: {
           find: name
         }
@@ -33,7 +36,7 @@
     // Login in with the provided `username` and `password`.
     function login(userName, password) {
       // Use the common handler for the authentication process.
-      return handleAuthentication($http.post('/login', {
+      return handleAuthentication($http.post('/api/login', {
         userName: userName,
         password: password
       }));
@@ -42,7 +45,7 @@
     // Login with the provided `authToken`.
     function reauthenticate(token) {
       // Use the common handler for the authentication process.
-      return handleAuthentication($http.post('/reauthenticate', {
+      return handleAuthentication($http.post('/api/reauthenticate', {
         authToken: token
       }));
     }
@@ -53,16 +56,16 @@
       var deferred = $q.defer();
       authDeferred.then(function returnUser(response) {
         // Set the newly created auth token on the cookie.
-        $cookies.authToken = response.data.authToken;
+        ipCookie('authToken', response.data.authToken, expiry);
         // The returned user data will be held in cache.
         currentUser = new User(response.data.user);
-        $cookies.currentUser = JSON.stringify(response.data.user);
+        ipCookie('currentUser', response.data.user, expiry);
         // Return the `user` model.
         deferred.resolve(currentUser);
       }).catch(function thrownError(error) {
         // Clean the user out of cache.
         currentUser = null;
-        delete $cookies.currentUser;
+        ipCookie.remove('currentUser');
         deferred.reject(error);
       });
       return deferred.promise;
@@ -70,7 +73,7 @@
 
     function registerUser(userName, password, email) {
       // When successfully registered, log the user in.
-      return handleAuthentication($http.post('/user', {
+      return handleAuthentication($http.post('/api/user', {
         userName: userName,
         password: password,
         email: email
@@ -82,15 +85,15 @@
     }
 
     function logout() {
-      delete $cookies.authToken;
-      delete $cookies.currentUser;
+      ipCookie.remove('authToken');
+      ipCookie.remove('currentUser');
       currentUser = null;
     }
 
     function search(name) {
       var deferred = $q.defer();
 
-      $http.get('/user', {
+      $http.get('/api/user', {
         params: {
           search: name
         }

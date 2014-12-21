@@ -19,7 +19,7 @@ module.exports = function(config) {
       // Angular dependencies
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-route/angular-route.js',
-      'app/bower_components/angular-cookies/angular-cookies.js',
+      'app/bower_components/angular-cookie/angular-cookie.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
       'app/bower_components/angular-aria/angular-aria.min.js',
       'app/bower_components/angular-animate/angular-animate.min.js',
