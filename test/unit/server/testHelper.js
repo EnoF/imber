@@ -18,33 +18,50 @@
     res.status.returns({
       send: res.send
     });
+    var next = sinon.spy();
     var testObject = {
       given: function given(body) {
         testQueue = queue().then(function given() {
-          req = {
-            body: body,
-            query: body
-          };
+          req = req || {};
+          req.body = body;
+          req.query = body;
+        });
+        return testObject;
+      },
+      givenHeader: function givenHeader(header) {
+        testQueue = queue().then(function given() {
+          req = req || {};
+          req.header = header;
+        });
+        return testObject;
+      },
+      givenPath: function givenPath(path) {
+        testQueue = queue().then(function given() {
+          req = req || {};
+          req.path = path;
         });
         return testObject;
       },
       when: function when(fn) {
         testQueue = testQueue.then(function when() {
-          return fn(req, res);
+          return fn(req, res, next);
         });
         return testObject;
       },
       then: function then(expectations) {
-        testQueue = testQueue.fail(function failure(data) {
+        testQueue = testQueue.fail(function failure() {
           expect(res.status).to.have.been.called.once;
           expect(res.send).to.have.been.called;
           var response = res.send.args[0][0];
           var status = res.status.args[0][0];
           isFailCase = true;
-          expectations(response, status, data);
+          expectations(response, status, next);
         });
         testQueue = testQueue.then(function success(data) {
-          if (!isFailCase) {
+          if (isFailCase) return;
+          if (!!req.header) {
+            expectations(next);
+          } else {
             expect(res.send).to.have.been.called;
             var response = res.send.args[0][0];
             expectations(response, req, data);
