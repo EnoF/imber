@@ -7,11 +7,16 @@
   'use strict';
 
   var app = express();
+  var router = express.Router();
   var user = require('./user');
+  var authorization = require('./authorization');
 
   params.extend(app);
 
   app.use(bodyParser.json());
+
+  app.use(router);
+  router.use('/api/*', authorization);
 
   mongoose.connect(process.env.IMBER_MONGO);
 
@@ -21,12 +26,11 @@
 
     app.param('id', String);
 
-    app.post('/login', user.login);
-    app.post('/reauthenticate', user.reauthenticate);
+    app.post('/api/login', user.login);
+    app.post('/api/reauthenticate', user.reauthenticate);
+    app.post('/api/user', user.register);
 
-    app.get('/user', user.searchFor);
-    app.post('/user', user.register);
-
+    app.get('/api/user', user.searchFor);
   });
   module.exports = app;
 

@@ -24,7 +24,7 @@
 
         // predict
         var expectedResponse = testGlobals.createDefaultUserAuthResponse();
-        $httpBackend.expect('POST', '/login', {
+        $httpBackend.expect('POST', '/api/login', {
           userName: $scope.userName,
           password: $scope.password
         }).respond(200, expectedResponse);
@@ -53,13 +53,14 @@
       });
 
       it('should login with the authToken in the cookies', loginWithCookies);
+
       function loginWithCookies() {
         // given
         $cookies.authToken = 'abcxyz';
 
         // predict
         var expectedResponse = testGlobals.createDefaultUserAuthResponse();
-        $httpBackend.expect('POST', '/reauthenticate', {
+        $httpBackend.expect('POST', '/api/reauthenticate', {
           authToken: $cookies.authToken
         }).respond(200, expectedResponse);
 
@@ -89,7 +90,7 @@
         $cookies.authToken = 'abcxyz';
 
         // predict
-        $httpBackend.expect('POST', '/reauthenticate', {
+        $httpBackend.expect('POST', '/api/reauthenticate', {
           authToken: $cookies.authToken
         }).respond(401, 'Unauthorized');
 

@@ -19,7 +19,7 @@
       var searchCriteria = 'ban';
 
       // predict
-      $httpBackend.expect('GET', '/user?search=' + searchCriteria)
+      $httpBackend.expect('GET', '/api/user?search=' + searchCriteria)
         .respond(200, [{
           userName: 'banana'
         }, {
@@ -48,7 +48,7 @@
       $scope.$emit = sinon.spy();
 
       // predict
-      $httpBackend.expect('GET', '/user?find=banana+king')
+      $httpBackend.expect('GET', '/api/user?find=banana+king')
         .respond(200, {
           userName: 'Banana King'
         });
@@ -71,7 +71,7 @@
       $scope.$emit = sinon.spy();
 
       // predict
-      $httpBackend.expect('GET', '/user?find=banana+king')
+      $httpBackend.expect('GET', '/api/user?find=banana+king')
         .respond(404, 'not found');
 
       // when

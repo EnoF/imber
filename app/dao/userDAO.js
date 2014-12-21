@@ -17,7 +17,7 @@
     // Get the user by name
     function getByName(name) {
       var deferred = $q.defer();
-      $http.get('/user', {
+      $http.get('/api/user', {
         params: {
           find: name
         }
@@ -33,7 +33,7 @@
     // Login in with the provided `username` and `password`.
     function login(userName, password) {
       // Use the common handler for the authentication process.
-      return handleAuthentication($http.post('/login', {
+      return handleAuthentication($http.post('/api/login', {
         userName: userName,
         password: password
       }));
@@ -42,7 +42,7 @@
     // Login with the provided `authToken`.
     function reauthenticate(token) {
       // Use the common handler for the authentication process.
-      return handleAuthentication($http.post('/reauthenticate', {
+      return handleAuthentication($http.post('/api/reauthenticate', {
         authToken: token
       }));
     }
@@ -70,7 +70,7 @@
 
     function registerUser(userName, password, email) {
       // When successfully registered, log the user in.
-      return handleAuthentication($http.post('/user', {
+      return handleAuthentication($http.post('/api/user', {
         userName: userName,
         password: password,
         email: email
@@ -90,7 +90,7 @@
     function search(name) {
       var deferred = $q.defer();
 
-      $http.get('/user', {
+      $http.get('/api/user', {
         params: {
           search: name
         }

@@ -24,7 +24,7 @@
 
         // predict
         var expectedResponse = testGlobals.createDefaultUserAuthResponse();
-        $httpBackend.expect('POST', '/user', {
+        $httpBackend.expect('POST', '/api/user', {
           userName: $scope.userName,
           password: $scope.password,
           email: $scope.email
@@ -51,7 +51,7 @@
         var expectedResponse = {
           userName: true
         };
-        $httpBackend.expect('POST', '/user', {
+        $httpBackend.expect('POST', '/api/user', {
           userName: $scope.userName,
           password: $scope.password,
           email: $scope.email
@@ -77,7 +77,7 @@
         var expectedResponse = {
           email: true
         };
-        $httpBackend.expect('POST', '/user', {
+        $httpBackend.expect('POST', '/api/user', {
           userName: $scope.userName,
           password: $scope.password,
           email: $scope.email
