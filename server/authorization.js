@@ -22,11 +22,13 @@
     try {
       // Extracting the username will throw an error when
       // the token is too old or tampered by a hacker.
-      var userName = extractUserName(req.header.authorization);
+      var userName = extractUserName(req.header('authorization'));
       User.findOne({
-        userName: userName
+        userName: new RegExp('^' + userName + '$', 'i')
       }, deferred.makeNodeResolver());
-      deferred.promise.then(next);
+      deferred.promise.then(function continueCall(user) {
+        next();
+      });
     } catch (error) {
       // In case the user is no hacker, we want to tell the user
       // the token is too old.
@@ -42,7 +44,7 @@
       '/api/reauthenticate',
       '/api/user'
     ];
-    if (unauthorizedPOSTS.indexOf(req.path) !== -1 && req.method === 'POST') {
+    if (unauthorizedPOSTS.indexOf(req.baseUrl) !== -1 && req.method === 'POST') {
       next();
       var deferred = queue.defer();
       deferred.resolve();

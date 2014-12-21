@@ -31,7 +31,9 @@
       givenHeader: function givenHeader(header) {
         testQueue = queue().then(function given() {
           req = req || {};
-          req.header = header;
+          req.header = function get(prop) {
+            return header[prop];
+          };
         });
         return testObject;
       },
@@ -45,7 +47,7 @@
       givenPath: function givenPath(path) {
         testQueue = queue().then(function given() {
           req = req || {};
-          req.path = path;
+          req.baseUrl = path;
         });
         return testObject;
       },
