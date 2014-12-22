@@ -15,7 +15,7 @@
       };
 
       this.constructor = function constructor(user) {
-        this.private.id = user.id || null;
+        this.private.id = user._id || null;
         this.private.userName = user.userName;
       };
     }
