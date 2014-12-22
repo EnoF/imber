@@ -24,7 +24,8 @@
       return {
         authToken: 'returnedAuthToken',
         user: {
-          userName: 'enof'
+          _id: 'a1b2c3d4e5f6g7',
+          userName: 'EnoF'
         }
       };
     }

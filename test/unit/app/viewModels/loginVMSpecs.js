@@ -36,6 +36,7 @@
         // then
         expect($scope.loggedIn()).to.be.true;
         expect(ipCookie('authToken')).to.equal(expectedResponse.authToken);
+        expect(userDAO.getCurrentUser().getId()).to.equal(expectedResponse.user._id);
         expect(userDAO.getCurrentUser().getUserName()).to.equal(expectedResponse.user.userName);
       });
 
