@@ -14,12 +14,16 @@
 
     function loginDefaultUser() {
       // setup a test user
-      var user = {
-        userName: 'EnoF'
+      var response = {
+        authToken: 'someubercooltoken',
+        user: {
+          _id: 'a1b2c3d4e5f6g7h8',
+          userName: 'EnoF'
+        }
       };
       // setup a call intercepter
-      $httpBackend.when('POST', '/login')
-        .respond(200, user);
+      $httpBackend.when('POST', '/api/login')
+        .respond(200, response);
       // trigger the login call
       userDAO.login();
       $httpBackend.flush();
@@ -30,7 +34,8 @@
         $httpBackend: $httpBackend,
         createDefaultUserAuthResponse: createDefaultUserAuthResponse,
         events: events,
-        loginDefaultUser: loginDefaultUser
+        loginDefaultUser: loginDefaultUser,
+        getLoggedInUser: userDAO.getCurrentUser
       };
     }
 

@@ -2,7 +2,7 @@
   'use strict';
 
   describe('gameCreationVMSpecs', function gameCreationVMSpecs() {
-    var testGlobals, $scope, $q, $httpBackend, User;
+    var testGlobals, $scope, $q, $httpBackend, User, events;
 
     beforeEach(module('imber-test'));
 
@@ -13,6 +13,7 @@
       $q = _$q_;
       User = _User_;
       testGlobals.loginDefaultUser();
+      events = testGlobals.events;
     }));
 
     function createDefaultUser() {
@@ -36,32 +37,37 @@
       expect($scope.opponent).to.equal(opponent);
     });
 
-    it('should create a new game challenge', function newGameChallenge() {
+    it('should create a new game challenge', newGameChallenge);
+
+    function newGameChallenge() {
       // given
       var loggedInUser = testGlobals.getLoggedInUser();
       $scope.opponent = createDefaultUser();
       $scope.$emit = sinon.spy();
 
       // predict
-      $httpBackend.expect('POST', '/games', {
+      $httpBackend.expect('POST', '/api/games', {
         challenger: loggedInUser.getId(),
         opponent: $scope.opponent.getId()
       }).respond(200, 'ok');
 
       // when
       $scope.challenge();
+      $httpBackend.flush();
 
       // then
-      expect($scope.$emit).to.have.been.called;
-    });
+      expect($scope.$emit).to.have.been.calledWith(events.CHALLENGED);
+    }
 
     it('should provide feedback the challenge is pending', function challengePending() {
       // given
+      expect($scope.challenged).to.be.false;
 
       // when
+      newGameChallenge();
 
       // then
-
+      expect($scope.challenged).to.be.true;
     });
   });
 }(window.sinon));
