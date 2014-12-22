@@ -37,6 +37,7 @@
             var decrypted = AES.decrypt(response.authToken, process.env.IMBER_AES_KEY);
             var message = decrypted.toString(CryptoJS.enc.Utf8);
             expect(message).to.have.string('EnoF;');
+            expect(response.user._id.toString()).to.equal('545726928469e940235ce769');
             expect(response.user.userName).to.equal(req.body.userName);
           });
       });
@@ -52,7 +53,8 @@
             var decrypted = AES.decrypt(response.authToken, process.env.IMBER_AES_KEY);
             var message = decrypted.toString(CryptoJS.enc.Utf8);
             expect(message).to.have.string('EnoF;');
-            expect(response.user.userName).to.equal(response.user.userName);
+            expect(response.user._id.toString()).to.equal('545726928469e940235ce769');
+            expect(response.user.userName).to.equal('EnoF');
             expect(response.authToken).not.to.equal(oldAuth);
           });
       });
@@ -114,6 +116,7 @@
             var decrypted = AES.decrypt(response.authToken, process.env.IMBER_AES_KEY);
             var message = decrypted.toString(CryptoJS.enc.Utf8);
             expect(message).to.have.string('Rina;');
+            expect(response.user._id).to.be.defined;
             expect(response.user.userName).to.equal(req.body.userName);
           });
       });

@@ -33,6 +33,7 @@
         res.send({
           authToken: createAuthToken(user.userName),
           user: {
+            _id: user._id,
             userName: user.userName
           }
         });
