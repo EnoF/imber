@@ -66,6 +66,7 @@
         // Clean the user out of cache.
         currentUser = null;
         ipCookie.remove('currentUser');
+        ipCookie.remove('authToken');
         deferred.reject(error);
       });
       return deferred.promise;

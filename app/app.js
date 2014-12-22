@@ -33,7 +33,7 @@
     $routeProvider.otherwise({
       redirectTo: '/login'
     });
-  }).run(function forceLogin($rootScope, $location, ipCookie, events) {
+  }).run(function forceLogin($rootScope, $location, ipCookie, events, userDAO) {
     // register listener to watch route changes
     function redirects(event, next) {
       var loginPage = 'pages/login.html';
@@ -52,7 +52,16 @@
       }
     }
 
+    function reauthenticate() {
+      var token = ipCookie('authToken');
+      if (!!token) {
+        // Reauthenticate the user.
+        userDAO.reauthenticate(token);
+      }
+    }
+
     $rootScope.$on('$routeChangeStart', redirects);
+    $rootScope.$on('$routeChangeStart', reauthenticate);
     $rootScope.$on(events.LOGGED_IN, redirects);
     $rootScope.$on(events.LOGGED_OUT, redirects);
   });
