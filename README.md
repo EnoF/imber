@@ -14,7 +14,7 @@ Run the following commands to get all dependencies:
 To run the server:
 
     grunt server
-    
+
 ##Client##
 The client will be build with `angular`. For the animations we will be using `famous-angular`.
 
@@ -36,8 +36,8 @@ We test for modern browsers only and our unit tests will be run against `Phantom
 
 ##Code documentation##
 The documentation is found when running the server under: `http://localhost:9000/docs` or
-you can find the docs on: `http://enof.github.io/imber/`. To refresh the documentation, 
+you can find the docs on: `http://enof.github.io/imber/`. To refresh the documentation,
 restart the server.
 
 ##Continious integration##
-The code is build with `done.io`.
+The code is build with `drone.io`.
