@@ -1,6 +1,9 @@
-<md-card>
+<md-card ng-if="!challenged">
   <h2>Challenge</h2>
   <player-search></player-search>
   <md-button class="md-raised md-primary"
              ng-click="challenge()">challenge</md-button>
+</md-card>
+<md-card ng-if="challenged">
+  <h2>{{ opponent.getUserName() }} has been challenged!</h2>
 </md-card>

@@ -9,6 +9,7 @@
   var app = express();
   var router = express.Router();
   var user = require('./user');
+  var game = require('./game');
   var authorization = require('./authorization');
 
   params.extend(app);
@@ -31,6 +32,8 @@
     app.post('/api/user', user.register);
 
     app.get('/api/user', user.searchFor);
+
+    app.post('/api/games', game.challenge);
   });
   module.exports = app;
 
