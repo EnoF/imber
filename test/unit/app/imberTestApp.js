@@ -3,7 +3,7 @@
 
   var app = angular.module('imber-test', ['imber']);
 
-  app.factory('testSetup', function testSetupScope($rootScope, $httpBackend, $compile, $controller, events) {
+  app.factory('testSetup', function testSetupScope($rootScope, $httpBackend, $compile, $controller, events, userDAO) {
 
     function initializeDirective(scope, directive) {
       $compile(directive)(scope);
@@ -12,11 +12,30 @@
       return directive.children().scope();
     }
 
+    function loginDefaultUser() {
+      // setup a test user
+      var response = {
+        authToken: 'someubercooltoken',
+        user: {
+          _id: 'a1b2c3d4e5f6g7h8',
+          userName: 'EnoF'
+        }
+      };
+      // setup a call intercepter
+      $httpBackend.when('POST', '/api/login')
+        .respond(200, response);
+      // trigger the login call
+      userDAO.login();
+      $httpBackend.flush();
+    }
+
     function createDefaultTestGlobals() {
       return {
         $httpBackend: $httpBackend,
         createDefaultUserAuthResponse: createDefaultUserAuthResponse,
-        events: events
+        events: events,
+        loginDefaultUser: loginDefaultUser,
+        getLoggedInUser: userDAO.getCurrentUser
       };
     }
 

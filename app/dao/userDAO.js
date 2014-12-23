@@ -66,6 +66,7 @@
         // Clean the user out of cache.
         currentUser = null;
         ipCookie.remove('currentUser');
+        ipCookie.remove('authToken');
         deferred.reject(error);
       });
       return deferred.promise;
@@ -112,8 +113,16 @@
       return names;
     }
 
+    function challenge(opponent) {
+      return $http.post('/api/games', {
+        challenger: currentUser.getId(),
+        opponent: opponent.getId()
+      });
+    }
+
     // Return the `DAO` as a singleton.
     return {
+      challenge: challenge,
       getCurrentUser: getCurrentUser,
       getByName: getByName,
       login: login,

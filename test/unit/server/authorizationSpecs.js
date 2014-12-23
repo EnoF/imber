@@ -31,7 +31,7 @@
           authorization: authToken
         })
         .when(authorization)
-        .then(function assert(next) {
+        .then(function assert(res, next) {
           expect(next).to.have.been.called;
         });
     });
@@ -55,7 +55,7 @@
         .givenPath('/api/login')
         .givenMethod('POST')
         .when(authorization)
-        .then(function assert(next) {
+        .then(function assert(res, next) {
           expect(next).to.have.been.called;
         });
     });

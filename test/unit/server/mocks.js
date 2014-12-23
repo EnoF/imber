@@ -6,14 +6,23 @@
 (function apiMocksScope(mongoose, user, queue, HMAC) {
   'use strict';
 
-  var users = [
-    {
-      _id: '545726928469e940235ce769',
-      userName: 'EnoF',
-      password: createPassword('someEncryptedPassword'),
-      email: 'andyt@live.nl'
-    }
-  ];
+  var users = [{
+    _id: '545726928469e940235ce769',
+    userName: 'EnoF',
+    password: createPassword('someEncryptedPassword'),
+    email: 'andyt@live.nl'
+  }, {
+    _id: '545726928469e940235ce853',
+    userName: 'Banana',
+    password: createPassword('someEncryptedPassword'),
+    email: 'ban@a.na'
+  }];
+
+  var games = [{
+    _id: '548726928469e940235ce769',
+    challenger: '545726928469e940235ce769',
+    opponent: '545726928469e940235ce853'
+  }];
 
   function createPassword(password) {
     return HMAC(password,
@@ -21,24 +30,39 @@
   }
 
   function mocks(done) {
+    var allMocks = [
+      createMocks('User', users),
+      createMocks('Game', games)
+    ];
 
-    var User = mongoose.model('User');
+    queue.all(allMocks)
+      .then(function itsDone() {
+        done();
+      })
+      .catch(done);
+  }
+
+  function createMocks(model, mocks) {
+    var allMocksCreated = queue.defer();
+    var Model = mongoose.model(model);
     var allPromisses = [];
 
-    for (var i = 0; i < users.length; i++) {
-      var data = users[i];
+    for (var i = 0; i < mocks.length; i++) {
+      var data = mocks[i];
       var deferred = queue.defer();
-      User.create(data, deferred.makeNodeResolver());
+      Model.create(data, deferred.makeNodeResolver());
       allPromisses.push(deferred);
     }
 
-    queue.all(allPromisses).
-      then(function resolve() {
-        done();
-      }).
-      catch(done);
+    queue.all(allPromisses)
+      .then(function resolve() {
+        allMocksCreated.resolve();
+      })
+      .fail(function reject() {
+        allMocksCreated.reject()
+      });
+    return allMocksCreated.promise;
   }
-
 
   module.exports = mocks;
 }(require('mongoose'), require('../../../server/user.js'), require('q'),
