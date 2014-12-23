@@ -1,4 +1,4 @@
-(function gameScope(mongoose, queue, user) {
+(function gameScope(mongoose, queue, user, auth) {
   'use strict';
 
   var Schema = mongoose.Schema;
@@ -29,9 +29,15 @@
   function challenge(req, res) {
     var deferred = queue.defer();
     var game = new Game(req.body);
+    var challengerName = auth.extractUserName(req.header('authorization'));
     user.getUserById(req.body.challenger)
-      .then(function playerFound() {
-        game.save(deferred.makeNodeResolver());
+      .then(function playerFound(user) {
+        if (challengerName === user.userName) {
+          game.save(deferred.makeNodeResolver());
+        } else {
+          res.status(403).send('not authorized');
+          deferred.reject();
+        }
       })
       .fail(function playerNotFound() {
         res.status(404).send('challenger not found');
@@ -52,4 +58,4 @@
     challenge: challenge,
     Game: Game
   };
-}(require('mongoose'), require('q'), require('./user')));
+}(require('mongoose'), require('q'), require('./user'), require('./authorization')));

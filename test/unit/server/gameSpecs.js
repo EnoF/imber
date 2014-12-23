@@ -32,6 +32,9 @@
             challenger: '545726928469e940235ce769',
             opponent: '545726928469e940235ce853'
           })
+          .givenHeader({
+            authorization: createAuthToken('EnoF')
+          })
           .when(game.challenge)
           .then(function assert(response) {
             expect(response).to.equal('ok');
@@ -44,6 +47,9 @@
             challenger: '000000000000e000035ce769',
             opponent: '545726928469e940235ce853'
           })
+          .givenHeader({
+            authorization: createAuthToken('EnoF')
+          })
           .when(game.challenge)
           .then(function assert(response, status) {
             expect(response).to.equal('challenger not found');
@@ -51,9 +57,22 @@
           });
       });
 
-      it('should reject a challenge when the challenger and auth token mismatch', function authTokenMisMatch() {
-
-      });
+      it('should reject a challenge when the challenger and auth token mismatch',
+        function authTokenMisMatch(done) {
+          test(done)
+            .given({
+              challenger: '545726928469e940235ce769',
+              opponent: '545726928469e940235ce853'
+            })
+            .givenHeader({
+              authorization: createAuthToken('Rina')
+            })
+            .when(game.challenge)
+            .then(function assert(response, status) {
+              expect(response).to.equal('not authorized');
+              expect(status).to.equal(403);
+            });
+        });
 
       it('should be able to accept a challenge', function acceptChallenge(done) {
         test(done)

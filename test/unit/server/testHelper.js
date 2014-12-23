@@ -66,6 +66,9 @@
       },
       then: function then(expectations) {
         testQueue = testQueue.fail(function failure(error) {
+          if (!!error) {
+            throw new Error(error);
+          }
           expect(res.status).to.have.been.called.once;
           expect(res.send).to.have.been.called;
           var response = res.send.args[0][0];
@@ -76,7 +79,8 @@
         testQueue = testQueue.then(function success(data) {
           if (isFailCase) return;
           if (!!req.header || !!req.path || !!req.method) {
-            expectations(next);
+            var response = res.send.called ? res.send.args[0][0] : null;
+            expectations(response, next);
           } else {
             expect(res.send).to.have.been.called;
             var response = res.send.args[0][0];

@@ -53,4 +53,6 @@
       return reauthenticate(req, res, next);
     }
   };
+
+  module.exports.extractUserName = extractUserName;
 }(require('crypto-js/aes'), ('crypto-js/hmac-sha256'), require('crypto-js'), require('q')));
