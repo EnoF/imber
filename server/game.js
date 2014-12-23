@@ -12,7 +12,10 @@
       type: Schema.Types.ObjectId,
       ref: 'User'
     },
-    started: Boolean
+    started: {
+      type: Boolean,
+      default: false
+    }
   });
 
   var Game = mongoose.model('Game', gameSchema);
