@@ -11,10 +11,20 @@
     opponent: {
       type: Schema.Types.ObjectId,
       ref: 'User'
-    }
+    },
+    started: Boolean
   });
 
   var Game = mongoose.model('Game', gameSchema);
+
+  function accept(req, res) {
+    var deferred = queue.defer();
+    Game.findOne({
+      _id: mongoose.Types.ObjectId(req.params.id)
+    }, deferred.makeNodeResolver());
+    deferred.promise.then(resolveWithOk(res));
+    return deferred.promise;
+  }
 
   function challenge(req, res) {
     var deferred = queue.defer();
@@ -31,6 +41,7 @@
   }
 
   module.exports = {
+    accept: accept,
     challenge: challenge,
     Game: Game
   };

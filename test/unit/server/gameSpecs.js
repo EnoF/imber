@@ -37,6 +37,17 @@
             expect(response).to.equal('ok');
           });
       });
+
+      it('should be able to accept a challenge', function acceptChallenge(done) {
+        test(done)
+          .givenParams({
+            id: '548726928469e940235ce769'
+          })
+          .when(game.accept)
+          .then(function assert(response) {
+            expect(response).to.equal('ok');
+          });
+      });
     });
   });
 }());

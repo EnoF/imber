@@ -51,6 +51,13 @@
         });
         return testObject;
       },
+      givenParams: function givenParams(params) {
+        testQueue = queue().then(function given() {
+          req = req || {};
+          req.params = params;
+        });
+        return testObject;
+      },
       when: function when(fn) {
         testQueue = testQueue.then(function when() {
           return fn(req, res, next);
@@ -58,7 +65,7 @@
         return testObject;
       },
       then: function then(expectations) {
-        testQueue = testQueue.fail(function failure() {
+        testQueue = testQueue.fail(function failure(error) {
           expect(res.status).to.have.been.called.once;
           expect(res.send).to.have.been.called;
           var response = res.send.args[0][0];
