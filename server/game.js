@@ -1,24 +1,7 @@
 (function gameScope(mongoose, queue, user, auth) {
   'use strict';
 
-  var Schema = mongoose.Schema;
-
-  var gameSchema = new Schema({
-    challenger: {
-      type: Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    opponent: {
-      type: Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    started: {
-      type: Boolean,
-      default: false
-    }
-  });
-
-  var Game = mongoose.model('Game', gameSchema);
+  var Game = require('./resources/Game');
 
   function accept(req, res) {
     var deferred = queue.defer();
@@ -58,7 +41,6 @@
 
   module.exports = {
     accept: accept,
-    challenge: challenge,
-    Game: Game
+    challenge: challenge
   };
 }(require('mongoose'), require('q'), require('./user'), require('./authorization')));

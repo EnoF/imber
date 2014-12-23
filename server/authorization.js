@@ -2,7 +2,15 @@
   'use strict';
 
   // Require user model
-  var User = require('./user').User;
+  var User = require('./resources/User');
+
+  function createAuthToken(message) {
+    // The authentication token is based on the user name
+    // and the epoch combined
+    var authToken = AES.encrypt(message + ';' +
+      new Date().getTime(), process.env.IMBER_AES_KEY);
+    return authToken.toString();
+  }
 
   function extractUserName(authToken) {
     // Extract the user name from the auth token.
@@ -55,4 +63,5 @@
   };
 
   module.exports.extractUserName = extractUserName;
+  module.exports.createAuthToken = createAuthToken;
 }(require('crypto-js/aes'), ('crypto-js/hmac-sha256'), require('crypto-js'), require('q')));

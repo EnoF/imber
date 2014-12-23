@@ -1,23 +1,8 @@
-(function userScope(mongoose, queue, AES, HMAC, CryptoJS) {
+(function userScope(mongoose, queue, HMAC) {
   'use strict';
 
-  var Schema = mongoose.Schema;
-
-  var userSchema = new Schema({
-    userName: String,
-    password: String,
-    email: String
-  });
-
-  var User = mongoose.model('User', userSchema);
-
-  function createAuthToken(message) {
-    // The authentication token is based on the user name
-    // and the epoch combined
-    var authToken = AES.encrypt(message + ';' +
-      new Date().getTime(), process.env.IMBER_AES_KEY);
-    return authToken.toString();
-  }
+  var User = require('./resources/User');
+  var auth = require('./authorization');
 
   function createNewAuthToken(res, newUser, deferred) {
     return function createNewAuthToken(user) {
@@ -31,7 +16,7 @@
       } else {
         // Create a new authentication token
         res.send({
-          authToken: createAuthToken(user.userName),
+          authToken: auth.createAuthToken(user.userName),
           user: {
             _id: user._id,
             userName: user.userName
@@ -40,19 +25,6 @@
         deferred.resolve();
       }
     };
-  }
-
-  function extractUserName(authToken) {
-    // Extract the user name from the auth token.
-    var decryptedMessage = AES.decrypt(authToken, process.env.IMBER_AES_KEY);
-    var brokenMessage = decryptedMessage.toString(CryptoJS.enc.Utf8).split(';');
-    var nineDaysAgo = new Date();
-    nineDaysAgo.setDate(nineDaysAgo.getDate() - 9);
-    var tokenDate = new Date(parseInt(brokenMessage[1], 10));
-    if (brokenMessage.length !== 2 || tokenDate < nineDaysAgo) {
-      throw new Error('AuthenticationFailed');
-    }
-    return brokenMessage[0];
   }
 
   function login(req, res) {
@@ -75,7 +47,7 @@
     try {
       // Extracting the username will throw an error when
       // the token is too old or tampered by a hacker.
-      var userName = extractUserName(req.body.authToken);
+      var userName = auth.extractUserName(req.body.authToken);
       User.findOne({
         userName: userName
       }, deferred.makeNodeResolver());
@@ -229,9 +201,7 @@
     reauthenticate: reauthenticate,
     register: register,
     search: search,
-    searchFor: searchFor,
-    User: User
+    searchFor: searchFor
   };
 
-}(require('mongoose'), require('q'), require('crypto-js/aes'),
-  require('crypto-js/hmac-sha256'), require('crypto-js')));
+}(require('mongoose'), require('q'), require('crypto-js/hmac-sha256')));
