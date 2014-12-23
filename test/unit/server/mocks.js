@@ -6,14 +6,17 @@
 (function apiMocksScope(mongoose, user, queue, HMAC) {
   'use strict';
 
-  var users = [
-    {
-      _id: '545726928469e940235ce769',
-      userName: 'EnoF',
-      password: createPassword('someEncryptedPassword'),
-      email: 'andyt@live.nl'
-    }
-  ];
+  var users = [{
+    _id: '545726928469e940235ce769',
+    userName: 'EnoF',
+    password: createPassword('someEncryptedPassword'),
+    email: 'andyt@live.nl'
+  }, {
+    _id: '545726928469e940235ce853',
+    userName: 'Banana',
+    password: createPassword('someEncryptedPassword'),
+    email: 'ban@a.na'
+  }];
 
   function createPassword(password) {
     return HMAC(password,
@@ -33,10 +36,10 @@
     }
 
     queue.all(allPromisses).
-      then(function resolve() {
-        done();
-      }).
-      catch(done);
+    then(function resolve() {
+      done();
+    }).
+    catch(done);
   }
 
 

@@ -98,8 +98,8 @@
       process.env.IMBER_HMAC_KEY).toString();
     var newUser = new User(req.body);
     // Check if the user has a conflicting username or email with an other user.
-    isUserDetailConflicting(req.body.userName, req.body.email).
-    then(checkExistance(newUser, deferred));
+    isUserDetailConflicting(req.body.userName, req.body.email)
+      .then(checkExistance(newUser, deferred));
     // When registered successful we can directly log the user in.
     deferred.promise.then(createNewAuthToken(res, newUser));
     // When for what ever reason the registration was rejected,
