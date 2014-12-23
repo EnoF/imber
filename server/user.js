@@ -193,6 +193,27 @@
     return deferred.promise;
   }
 
+  // Internal function to perform actions on a user.
+  function getUserById(id) {
+    var deferred = queue.defer();
+    var findDeferred = queue.defer();
+    User.findOne({
+      _id: mongoose.Types.ObjectId(id)
+    }, findDeferred.makeNodeResolver());
+    findDeferred.promise.then(resolveOnlyWhenFound(deferred));
+    return deferred.promise;
+  }
+
+  function resolveOnlyWhenFound(deferred) {
+    return function checkUser(user) {
+      if (!!user) {
+        deferred.resolve(user);
+      } else {
+        deferred.reject();
+      }
+    };
+  }
+
   function searchFor(req, res) {
     if (!!req.query.search) {
       return search(req, res);
@@ -203,6 +224,7 @@
 
   module.exports = {
     find: find,
+    getUserById: getUserById,
     login: login,
     reauthenticate: reauthenticate,
     register: register,

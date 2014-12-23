@@ -1,4 +1,4 @@
-(function gameScope(mongoose, queue) {
+(function gameScope(mongoose, queue, user) {
   'use strict';
 
   var Schema = mongoose.Schema;
@@ -29,7 +29,14 @@
   function challenge(req, res) {
     var deferred = queue.defer();
     var game = new Game(req.body);
-    game.save(deferred.makeNodeResolver());
+    user.getUserById(req.body.challenger)
+      .then(function playerFound() {
+        game.save(deferred.makeNodeResolver());
+      })
+      .fail(function playerNotFound() {
+        res.status(404).send('challenger not found');
+        deferred.reject();
+      });
     deferred.promise.then(resolveWithOk(res));
     return deferred.promise;
   }
@@ -45,4 +52,4 @@
     challenge: challenge,
     Game: Game
   };
-}(require('mongoose'), require('q')));
+}(require('mongoose'), require('q'), require('./user')));

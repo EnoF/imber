@@ -38,6 +38,23 @@
           });
       });
 
+      it('should reject a challenge when the challenger can not be found', function challengerNotFound(done) {
+        test(done)
+          .given({
+            challenger: '000000000000e000035ce769',
+            opponent: '545726928469e940235ce853'
+          })
+          .when(game.challenge)
+          .then(function assert(response, status) {
+            expect(response).to.equal('challenger not found');
+            expect(status).to.equal(404);
+          });
+      });
+
+      it('should reject a challenge when the challenger and auth token mismatch', function authTokenMisMatch() {
+
+      });
+
       it('should be able to accept a challenge', function acceptChallenge(done) {
         test(done)
           .givenParams({
@@ -49,5 +66,9 @@
           });
       });
     });
+
+    function createAuthToken(name) {
+      return AES.encrypt(name + ';' + new Date().getTime(), process.env.IMBER_AES_KEY).toString();
+    }
   });
 }());
