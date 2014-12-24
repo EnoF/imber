@@ -4,6 +4,6 @@
   var app = angular.module('imber');
 
   app.controller('challengeVM', function challengeVM($scope) {
-    $scope.id = null;
+    $scope.id = $scope.id || null;
   });
 }(window.angular));
