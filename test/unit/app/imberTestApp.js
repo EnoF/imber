@@ -33,6 +33,7 @@
       return {
         $httpBackend: $httpBackend,
         createDefaultUserAuthResponse: createDefaultUserAuthResponse,
+        createDefaultGameResponse: createDefaultGameResponse,
         events: events,
         loginDefaultUser: loginDefaultUser,
         getLoggedInUser: userDAO.getCurrentUser
@@ -46,6 +47,14 @@
           _id: 'a1b2c3d4e5f6g7',
           userName: 'EnoF'
         }
+      };
+    }
+
+    function createDefaultGameResponse() {
+      return {
+        challenger: 'userid1',
+        opponent: 'userid2',
+        started: false
       };
     }
 
