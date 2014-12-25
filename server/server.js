@@ -33,7 +33,9 @@
 
     app.get('/api/user', user.searchFor);
 
+    app.get('/api/games/:id', game.getGame);
     app.post('/api/games', game.challenge);
+    app.post('/api/games/:id/accept', game.accept);
   });
   module.exports = app;
 

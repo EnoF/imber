@@ -5,8 +5,10 @@
 
   function accept(req, res) {
     var deferred = queue.defer();
-    Game.findOne({
-      _id: mongoose.Types.ObjectId(req.params.id)
+    Game.findByIdAndUpdate(mongoose.Types.ObjectId(req.params.id), {
+      $set: {
+        started: true
+      }
     }, deferred.makeNodeResolver());
     deferred.promise.then(resolveWithOk(res));
     return deferred.promise;
@@ -33,6 +35,17 @@
     return deferred.promise;
   }
 
+  function getGame(req, res) {
+    var deferred = queue.defer();
+    Game.findOne({
+      _id: mongoose.Types.ObjectId(req.params.id)
+    }, deferred.makeNodeResolver());
+    deferred.promise.then(function resolveWithGame(game) {
+      res.send(game);
+    });
+    return deferred.promise;
+  }
+
   function resolveWithOk(res) {
     return function resolveOk() {
       res.send('ok');
@@ -41,6 +54,7 @@
 
   module.exports = {
     accept: accept,
-    challenge: challenge
+    challenge: challenge,
+    getGame: getGame
   };
 }(require('mongoose'), require('q'), require('./user'), require('./authorization')));

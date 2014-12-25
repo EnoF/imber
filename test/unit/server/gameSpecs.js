@@ -73,6 +73,21 @@
               expect(status).to.equal(403);
             });
         });
+    });
+
+    describe('game acceptance', function gameAcceptanceSpecs() {
+      it('should be able to get a challenge by id', function getChallengeById(done) {
+        test(done)
+          .givenParams({
+            id: '548726928469e940235ce769'
+          })
+          .when(game.getGame)
+          .then(function assert(response) {
+            expect(response._id.toString()).to.equal('548726928469e940235ce769');
+            expect(response.challenger.toString()).to.equal('545726928469e940235ce769');
+            expect(response.opponent.toString()).to.equal('545726928469e940235ce853');
+          })
+      });
 
       it('should be able to accept a challenge', function acceptChallenge(done) {
         test(done)
