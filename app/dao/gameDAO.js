@@ -6,6 +6,9 @@
   app.factory('gameDAO', function gameDAOScope($http, $q, Game, userDAO) {
     function gameDAO() {
       this.public = {
+        accept: function accept(id) {
+          return $http.post('/api/games/' + id + '/accept');
+        },
         challenge: function challenge(opponent) {
           var currentUser = userDAO.getCurrentUser();
           return $http.post('/api/games', {
@@ -15,7 +18,7 @@
         },
         getGame: function getGame(id) {
           var deferred = $q.defer();
-          $http.get('/games/' + id)
+          $http.get('/api/games/' + id)
             .then(function resolveGame(response) {
               deferred.resolve(new Game(response.data));
             });
