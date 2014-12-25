@@ -30,6 +30,8 @@
         $mdToast.show($mdToast.simple().content('Login incorrect! Please try again.'));
       };
 
-      $scope.loggedIn = userDAO.loggedIn;
+      $scope.loggedIn = function loggedInProxy() {
+        return userDAO.loggedIn();
+      };
     });
 }(window.angular));

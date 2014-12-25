@@ -19,6 +19,8 @@
       $scope.getNavigation().close();
     };
 
-    $scope.isLoggedIn = userDAO.loggedIn;
+    $scope.isLoggedIn = function isLoggedInProxy() {
+      return userDAO.loggedIn();
+    };
   });
 }(window.angular));

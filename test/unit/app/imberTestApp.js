@@ -36,7 +36,9 @@
         createDefaultGameResponse: createDefaultGameResponse,
         events: events,
         loginDefaultUser: loginDefaultUser,
-        getLoggedInUser: userDAO.getCurrentUser
+        getLoggedInUser: function getCurrentUserProxy() {
+          return userDAO.getCurrentUser();
+        }
       };
     }
 
