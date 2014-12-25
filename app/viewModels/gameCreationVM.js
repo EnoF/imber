@@ -3,7 +3,7 @@
 
   var app = angular.module('imber');
 
-  app.controller('gameCreationVM', function gameCreationVM($scope, userDAO, events) {
+  app.controller('gameCreationVM', function gameCreationVM($scope, gameDAO, events) {
     $scope.opponent = null;
     $scope.challenged = false;
 
@@ -13,7 +13,7 @@
     };
 
     $scope.challenge = function challenge() {
-      userDAO.challenge($scope.opponent)
+      gameDAO.challenge($scope.opponent)
         .then(function notifyChallenged() {
           $scope.challenged = true;
           $scope.$emit(events.CHALLENGED);

@@ -113,30 +113,10 @@
       return names;
     }
 
-    // This should move to it's own DAO.
-    function challenge(opponent) {
-      return $http.post('/api/games', {
-        challenger: currentUser.getId(),
-        opponent: opponent.getId()
-      });
-    }
-
-    // This should move to it's own DAO.
-    function getGame(id) {
-      var deferred = $q.defer();
-      $http.get('/games/' + id)
-        .then(function resolveGame(response) {
-          deferred.resolve(new Game(response.data));
-        });
-      return deferred.promise;
-    }
-
     // Return the `DAO` as a singleton.
     return {
-      challenge: challenge,
       getCurrentUser: getCurrentUser,
       getByName: getByName,
-      getGame: getGame,
       login: login,
       loggedIn: loggedIn,
       logout: logout,
