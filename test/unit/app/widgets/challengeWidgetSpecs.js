@@ -22,5 +22,13 @@
       // then
       expect($scope.id).to.equal('123abc');
     });
+
+    it('should initialize with a provided model', function providedModel() {
+      // given
+
+      // when
+
+      // then
+    });
   });
 }(window.angular));

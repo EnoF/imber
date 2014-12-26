@@ -104,7 +104,7 @@
     });
 
     describe('games retrieval', function gamesRetrievalSpecs() {
-      it('should return last active games limited to 100', function gameOfUser(done) {
+      it('should return last active games limited to 100', function lastActiveGames(done) {
         test(done)
           .given({
             // no params required
@@ -114,6 +114,18 @@
             expect(response).to.be.instanceof(Array);
             expect(response.length).to.equal(1);
           })
+      });
+
+      it('should return the last 100 active games of a given user', function gamesOfUser() {
+
+      });
+
+      it('should return the last 100 active games of a given user as challenger', function gamesAsChallenger() {
+
+      });
+
+      it('should return the last 100 active games of a given user as opponent', function gamesAsOpponent() {
+
       });
     });
 

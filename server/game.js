@@ -58,7 +58,7 @@
       .exec(deferred.makeNodeResolver());
     deferred.promise.then(function resolveWithGames(games) {
       res.send(games);
-    })
+    });
     return deferred.promise;
   }
 
