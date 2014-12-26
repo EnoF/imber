@@ -84,9 +84,11 @@
           .when(game.getGame)
           .then(function assert(response) {
             expect(response._id.toString()).to.equal('548726928469e940235ce769');
-            expect(response.challenger.toString()).to.equal('545726928469e940235ce769');
-            expect(response.opponent.toString()).to.equal('545726928469e940235ce853');
-          })
+            expect(response.challenger._id.toString()).to.equal('545726928469e940235ce769');
+            expect(response.challenger.userName).to.equal('EnoF');
+            expect(response.opponent._id.toString()).to.equal('545726928469e940235ce853');
+            expect(response.opponent.userName).to.equal('Banana');
+          });
       });
 
       it('should be able to accept a challenge', function acceptChallenge(done) {

@@ -31,9 +31,12 @@
 
       // then
       expect($scope.game).to.be.instanceof(Game);
-      expect($scope.game.getChallenger()).to.equal('userid1');
-      expect($scope.game.getOpponent()).to.equal('userid2');
-      expect($scope.game.isStarted()).to.equal(false);
+      expect($scope.game.getChallenger().getId()).to.equal('userid1');
+      expect($scope.game.getChallenger().getUserName()).to.equal('EnoF');
+      expect($scope.game.getOpponent().getId()).to.equal('userid2');
+      expect($scope.game.getOpponent().getUserName()).to.equal('Rina');
+      expect($scope.game.isStarted()).to.equal(
+        false);
     }
 
     it('should load a started challenge', function loadChallengeDetails() {
@@ -52,8 +55,10 @@
 
       // then
       expect($scope.game).to.be.instanceof(Game);
-      expect($scope.game.getChallenger()).to.equal('userid1');
-      expect($scope.game.getOpponent()).to.equal('userid2');
+      expect($scope.game.getChallenger().getId()).to.equal('userid1');
+      expect($scope.game.getChallenger().getUserName()).to.equal('EnoF');
+      expect($scope.game.getOpponent().getId()).to.equal('userid2');
+      expect($scope.game.getOpponent().getUserName()).to.equal('Rina');
       expect($scope.game.isStarted()).to.equal(true);
     });
 

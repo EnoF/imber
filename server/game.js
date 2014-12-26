@@ -38,8 +38,11 @@
   function getGame(req, res) {
     var deferred = queue.defer();
     Game.findOne({
-      _id: mongoose.Types.ObjectId(req.params.id)
-    }, deferred.makeNodeResolver());
+        _id: mongoose.Types.ObjectId(req.params.id)
+      })
+      .populate('challenger')
+      .populate('opponent')
+      .exec(deferred.makeNodeResolver());
     deferred.promise.then(function resolveWithGame(game) {
       res.send(game);
     });

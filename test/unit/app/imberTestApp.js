@@ -54,8 +54,14 @@
 
     function createDefaultGameResponse() {
       return {
-        challenger: 'userid1',
-        opponent: 'userid2',
+        challenger: {
+          _id: 'userid1',
+          userName: 'EnoF'
+        },
+        opponent: {
+          _id: 'userid2',
+          userName: 'Rina'
+        },
         started: false
       };
     }
