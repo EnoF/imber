@@ -34,6 +34,7 @@
     app.get('/api/user', user.searchFor);
 
     app.get('/api/games/:id', game.getGame);
+    app.get('/api/games', game.getLatestGames);
     app.post('/api/games', game.challenge);
     app.post('/api/games/:id/accept', game.accept);
   });

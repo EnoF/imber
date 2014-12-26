@@ -103,6 +103,20 @@
       });
     });
 
+    describe('games retrieval', function gamesRetrievalSpecs() {
+      it('should return last active games limited to 100', function gameOfUser(done) {
+        test(done)
+          .given({
+            // no params required
+          })
+          .when(game.getLatestGames)
+          .then(function assert(response) {
+            expect(response).to.be.instanceof(Array);
+            expect(response.length).to.equal(1);
+          })
+      });
+    });
+
     function createAuthToken(name) {
       return AES.encrypt(name + ';' + new Date().getTime(), process.env.IMBER_AES_KEY).toString();
     }

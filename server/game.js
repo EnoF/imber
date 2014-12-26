@@ -49,6 +49,19 @@
     return deferred.promise;
   }
 
+  function getLatestGames(req, res) {
+    var deferred = queue.defer();
+    Game.find()
+      .populate('challenger')
+      .populate('opponent')
+      .limit(100)
+      .exec(deferred.makeNodeResolver());
+    deferred.promise.then(function resolveWithGames(games) {
+      res.send(games);
+    })
+    return deferred.promise;
+  }
+
   function resolveWithOk(res) {
     return function resolveOk() {
       res.send('ok');
@@ -58,6 +71,7 @@
   module.exports = {
     accept: accept,
     challenge: challenge,
-    getGame: getGame
+    getGame: getGame,
+    getLatestGames: getLatestGames
   };
 }(require('mongoose'), require('q'), require('./user'), require('./authorization')));
