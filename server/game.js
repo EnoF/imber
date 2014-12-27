@@ -64,12 +64,16 @@
   }
 
   function addSearchCriteria(req, query) {
-    if (req.query.user) {
+    if (!!req.query.user) {
       query.or([{
         challenger: mongoose.Types.ObjectId(req.query.user)
       }, {
         opponent: mongoose.Types.ObjectId(req.query.user)
       }]);
+    } else if (!!req.query.challenger) {
+      query.where('challenger').equals(mongoose.Types.ObjectId(req.query.challenger));
+    } else if (!!req.query.opponent) {
+      query.where('opponent').equals(mongoose.Types.ObjectId(req.query.opponent));
     }
   }
 

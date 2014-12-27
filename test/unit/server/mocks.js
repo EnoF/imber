@@ -40,6 +40,10 @@
     _id: '124231928469e940235ce769',
     challenger: '1425949284123440235ce853',
     opponent: '142526928469e940235ce853'
+  }, {
+    _id: '444726928469e940235ce769',
+    challenger: '545726928469e940235ce853',
+    opponent: '545726928469e940235ce769'
   }];
 
   function createPassword(password) {

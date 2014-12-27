@@ -123,16 +123,32 @@
           })
           .when(game.getLatestGames)
           .then(function assert(response) {
-            expect(response).to.containUser('545726928469e940235ce769');
+            expect(response).to.contain.user('545726928469e940235ce769');
           });
       });
 
-      it('should return the last 100 active games of a given user as challenger', function gamesAsChallenger() {
-
+      it('should return active games of a given user as challenger', function gamesAsChallenger(done) {
+        test(done)
+          .given({
+            challenger: '545726928469e940235ce769'
+          })
+          .when(game.getLatestGames)
+          .then(function assert(response) {
+            expect(response).to.contain.challenger('545726928469e940235ce769');
+            expect(response).not.to.contain.opponent('545726928469e940235ce769');
+          });
       });
 
-      it('should return the last 100 active games of a given user as opponent', function gamesAsOpponent() {
-
+      it('should return active games of a given user as opponent', function gamesAsOpponent(done) {
+        test(done)
+          .given({
+            opponent: '545726928469e940235ce769'
+          })
+          .when(game.getLatestGames)
+          .then(function assert(response) {
+            expect(response).not.to.contain.challenger('545726928469e940235ce769');
+            expect(response).to.contain.opponent('545726928469e940235ce769');
+          });
       });
     });
 

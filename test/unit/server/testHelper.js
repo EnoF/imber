@@ -7,11 +7,27 @@
   var sinonChai = require('sinon-chai');
   var expect = chai.expect;
 
-  chai.Assertion.addMethod('containUser', function containsUser(id) {
+  chai.Assertion.addMethod('user', function containsUser(id) {
     var arr = this._obj;
     for (var i = 0; i < arr.length; i++) {
       this.assert(arr[i].challenger._id.toString() === id || arr[i].opponent._id.toString() === id,
         'game ' + arr[i]._id + ' does not contain a challenger or opponent with id ' + id);
+    }
+  });
+
+  chai.Assertion.addMethod('challenger', function containsChallenger(id) {
+    var arr = this._obj;
+    for (var i = 0; i < arr.length; i++) {
+      this.assert(arr[i].challenger._id.toString() === id,
+        'game ' + arr[i]._id + ' to contain challenger ' + id);
+    }
+  });
+
+  chai.Assertion.addMethod('opponent', function containsOpponent(id) {
+    var arr = this._obj;
+    for (var i = 0; i < arr.length; i++) {
+      this.assert(arr[i].opponent._id.toString() === id,
+        'game ' + arr[i]._id + ' to contain opponent ' + id);
     }
   });
 
