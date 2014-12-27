@@ -23,6 +23,18 @@
               deferred.resolve(new Game(response.data));
             });
           return deferred.promise;
+        },
+        getGames: function getGames() {
+          var deferred = $q.defer();
+          $http.get('/api/games')
+            .then(function resolveGame(response) {
+              var games = [];
+              for (var i = 0; i < response.data.length; i++) {
+                games.push(new Game(response.data[i]));
+              }
+              deferred.resolve(games);
+            });
+          return deferred.promise;
         }
       };
     }
