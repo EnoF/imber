@@ -5,6 +5,7 @@
 
   app.factory('events', function eventsFactory() {
     return {
+      ACCEPTED: 'accepted',
       CHALLENGED: 'challenged',
       LOGGED_IN: 'loggedIn',
       LOGGED_OUT: 'loggedOut',

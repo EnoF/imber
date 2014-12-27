@@ -73,6 +73,23 @@
               expect(status).to.equal(403);
             });
         });
+    });
+
+    describe('game acceptance', function gameAcceptanceSpecs() {
+      it('should be able to get a challenge by id', function getChallengeById(done) {
+        test(done)
+          .givenParams({
+            id: '548726928469e940235ce769'
+          })
+          .when(game.getGame)
+          .then(function assert(response) {
+            expect(response._id.toString()).to.equal('548726928469e940235ce769');
+            expect(response.challenger._id.toString()).to.equal('545726928469e940235ce769');
+            expect(response.challenger.userName).to.equal('EnoF');
+            expect(response.opponent._id.toString()).to.equal('545726928469e940235ce853');
+            expect(response.opponent.userName).to.equal('Banana');
+          });
+      });
 
       it('should be able to accept a challenge', function acceptChallenge(done) {
         test(done)
@@ -82,6 +99,55 @@
           .when(game.accept)
           .then(function assert(response) {
             expect(response).to.equal('ok');
+          });
+      });
+    });
+
+    describe('games retrieval', function gamesRetrievalSpecs() {
+      it('should return last active games limited to 100', function lastActiveGames(done) {
+        test(done)
+          .given({
+            // no params required
+          })
+          .when(game.getLatestGames)
+          .then(function assert(response) {
+            expect(response).to.be.instanceof(Array);
+            expect(response).to.have.length.above(1);
+          });
+      });
+
+      it('should return the last 100 active games of a given user', function gamesOfUser(done) {
+        test(done)
+          .given({
+            user: '545726928469e940235ce769'
+          })
+          .when(game.getLatestGames)
+          .then(function assert(response) {
+            expect(response).to.contain.user('545726928469e940235ce769');
+          });
+      });
+
+      it('should return active games of a given user as challenger', function gamesAsChallenger(done) {
+        test(done)
+          .given({
+            challenger: '545726928469e940235ce769'
+          })
+          .when(game.getLatestGames)
+          .then(function assert(response) {
+            expect(response).to.contain.challenger('545726928469e940235ce769');
+            expect(response).not.to.contain.opponent('545726928469e940235ce769');
+          });
+      });
+
+      it('should return active games of a given user as opponent', function gamesAsOpponent(done) {
+        test(done)
+          .given({
+            opponent: '545726928469e940235ce769'
+          })
+          .when(game.getLatestGames)
+          .then(function assert(response) {
+            expect(response).not.to.contain.challenger('545726928469e940235ce769');
+            expect(response).to.contain.opponent('545726928469e940235ce769');
           });
       });
     });

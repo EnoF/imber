@@ -1,0 +1,9 @@
+<md-card>
+  <h2>{{ game.getChallenger().getUserName() }} is challenging {{ game.getOpponent().getUserName() }}</h2>
+  <md-button ng-if="game.getOpponent().getId() === loggedInId"
+             class="md-raised"
+             ng-disabled="game.isStarted()"
+             ng-click="accept()">
+    {{ game.isStarted() ? 'accept' : 'accepted' }}
+  </md-button>
+</md-card>

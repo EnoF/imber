@@ -1,136 +1,125 @@
-(function userDAO(angular, JSON) {
+(function userDAOModelScope(angular, clazz) {
   'use strict';
 
   var app = angular.module('imber');
 
-  app.factory('userDAO', function userDAOFactory($http, $q, ipCookie, User, $log) {
-    var currentUser = null;
-    var expiry = {
-      expires: 10
-    };
-    if (ipCookie('currentUser')) {
-      currentUser = new User(ipCookie('currentUser'));
-    }
+  app.factory('userDAO', function userDAOScope($http, $q, ipCookie, User, $log) {
+    function userDAO() {
+      this.private = {
+        currentUser: {
+          get: null
+        },
+        expiry: {
+          expires: 10
+        },
 
-    // The cached logged in user.
-    function getCurrentUser() {
-      return currentUser;
-    }
+        convertToNames: function convertToNames(users) {
+          var names = [];
+          for (var i = 0; i < users.length; i++) {
+            names[i] = users[i].userName;
+          }
+          return names;
+        },
 
-    // Get the user by name
-    function getByName(name) {
-      var deferred = $q.defer();
-      $http.get('/api/user', {
-        params: {
-          find: name
+        // The handler for both login and reauthentication.
+        handleAuthentication: function handleAuthentication(authDeferred) {
+          // The deferred to be returned to the caller.
+          var deferred = $q.defer();
+          var thisPrivate = this.private;
+          authDeferred.then(function returnUser(response) {
+            // Set the newly created auth token on the cookie.
+            ipCookie('authToken', response.data.authToken, thisPrivate.expiry);
+            // The returned user data will be held in cache.
+            thisPrivate.currentUser = new User(response.data.user);
+            ipCookie('currentUser', response.data.user, thisPrivate.expiry);
+            // Return the `user` model.
+            deferred.resolve(thisPrivate.currentUser);
+          }).catch(function thrownError(error) {
+            // Clean the user out of cache.
+            thisPrivate.currentUser = null;
+            ipCookie.remove('currentUser');
+            ipCookie.remove('authToken');
+            deferred.reject(error);
+          });
+          return deferred.promise;
         }
-      }).then(function createUserModel(response) {
-        deferred.resolve(new User(response.data));
-      }, function throwError() {
-        $log.error('user has not been found');
-        deferred.reject();
-      });
-      return deferred.promise;
-    }
+      };
 
-    // Login in with the provided `username` and `password`.
-    function login(userName, password) {
-      // Use the common handler for the authentication process.
-      return handleAuthentication($http.post('/api/login', {
-        userName: userName,
-        password: password
-      }));
-    }
+      this.public = {
+        // Get the user by name
+        getByName: function getByName(name) {
+          var deferred = $q.defer();
+          $http.get('/api/user', {
+            params: {
+              find: name
+            }
+          }).then(function createUserModel(response) {
+            deferred.resolve(new User(response.data));
+          }, function throwError() {
+            $log.error('user has not been found');
+            deferred.reject();
+          });
+          return deferred.promise;
+        },
 
-    // Login with the provided `authToken`.
-    function reauthenticate(token) {
-      // Use the common handler for the authentication process.
-      return handleAuthentication($http.post('/api/reauthenticate', {
-        authToken: token
-      }));
-    }
+        loggedIn: function loggedIn() {
+          return !!this.private.currentUser;
+        },
 
-    // The handler for both login and reauthentication.
-    function handleAuthentication(authDeferred) {
-      // The deferred to be returned to the caller.
-      var deferred = $q.defer();
-      authDeferred.then(function returnUser(response) {
-        // Set the newly created auth token on the cookie.
-        ipCookie('authToken', response.data.authToken, expiry);
-        // The returned user data will be held in cache.
-        currentUser = new User(response.data.user);
-        ipCookie('currentUser', response.data.user, expiry);
-        // Return the `user` model.
-        deferred.resolve(currentUser);
-      }).catch(function thrownError(error) {
-        // Clean the user out of cache.
-        currentUser = null;
-        ipCookie.remove('currentUser');
-        ipCookie.remove('authToken');
-        deferred.reject(error);
-      });
-      return deferred.promise;
-    }
+        // Login in with the provided `username` and `password`.
+        login: function login(userName, password) {
+          // Use the common handler for the authentication process.
+          return this.private.handleAuthentication($http.post('/api/login', {
+            userName: userName,
+            password: password
+          }));
+        },
 
-    function registerUser(userName, password, email) {
-      // When successfully registered, log the user in.
-      return handleAuthentication($http.post('/api/user', {
-        userName: userName,
-        password: password,
-        email: email
-      }));
-    }
+        logout: function logout() {
+          ipCookie.remove('authToken');
+          ipCookie.remove('currentUser');
+          this.private.currentUser = null;
+        },
 
-    function loggedIn() {
-      return !!currentUser;
-    }
+        // Login with the provided `authToken`.
+        reauthenticate: function reauthenticate(token) {
+          // Use the common handler for the authentication process.
+          return this.private.handleAuthentication($http.post('/api/reauthenticate', {
+            authToken: token
+          }));
+        },
+        registerUser: function registerUser(userName, password, email) {
+          // When successfully registered, log the user in.
+          return this.private.handleAuthentication($http.post('/api/user', {
+            userName: userName,
+            password: password,
+            email: email
+          }));
+        },
+        search: function search(name) {
+          var deferred = $q.defer();
+          var thisPrivate = this.private;
+          $http.get('/api/user', {
+            params: {
+              search: name
+            }
+          }).then(function resolveWithData(response) {
+            deferred.resolve(thisPrivate.convertToNames(response.data));
+          }, deferred.reject);
 
-    function logout() {
-      ipCookie.remove('authToken');
-      ipCookie.remove('currentUser');
-      currentUser = null;
-    }
-
-    function search(name) {
-      var deferred = $q.defer();
-
-      $http.get('/api/user', {
-        params: {
-          search: name
+          return deferred.promise;
         }
-      }).then(function resolveWithData(response) {
-        deferred.resolve(convertToNames(response.data));
-      }, deferred.reject);
+      };
 
-      return deferred.promise;
+      this.constructor = function constructor() {
+        // Retrieve the current user from the cookies if available.
+        if (ipCookie('currentUser')) {
+          this.private.currentUser = new User(ipCookie('currentUser'));
+        }
+      };
     }
 
-    function convertToNames(users) {
-      var names = [];
-      for (var i = 0; i < users.length; i++) {
-        names[i] = users[i].userName;
-      }
-      return names;
-    }
-
-    function challenge(opponent) {
-      return $http.post('/api/games', {
-        challenger: currentUser.getId(),
-        opponent: opponent.getId()
-      });
-    }
-
-    // Return the `DAO` as a singleton.
-    return {
-      challenge: challenge,
-      getCurrentUser: getCurrentUser,
-      getByName: getByName,
-      login: login,
-      loggedIn: loggedIn,
-      logout: logout,
-      reauthenticate: reauthenticate,
-      registerUser: registerUser,
-      search: search
-    };
+    var UserDAO = clazz(userDAO);
+    return new UserDAO();
   });
-}(window.angular, window.JSON));
+}(window.angular, window.enofjs.clazz));
