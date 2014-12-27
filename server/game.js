@@ -40,8 +40,8 @@
     Game.findOne({
         _id: mongoose.Types.ObjectId(req.params.id)
       })
-      .populate('challenger')
-      .populate('opponent')
+      .populate('challenger', '_id userName')
+      .populate('opponent', '_id userName')
       .exec(deferred.makeNodeResolver());
     deferred.promise.then(function resolveWithGame(game) {
       res.send(game);
@@ -52,8 +52,8 @@
   function getLatestGames(req, res) {
     var deferred = queue.defer();
     var findQuery = Game.find()
-      .populate('challenger')
-      .populate('opponent')
+      .populate('challenger', '_id userName')
+      .populate('opponent', '_id userName')
       .limit(100);
     addSearchCriteria(req, findQuery);
     findQuery.exec(deferred.makeNodeResolver());
