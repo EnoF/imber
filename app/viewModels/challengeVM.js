@@ -5,7 +5,7 @@
 
   app.controller('challengeVM', function challengeVM($scope, events, gameDAO) {
     $scope.id = $scope.id || null;
-    $scope.game = null;
+    $scope.game = $scope.game || null;
 
     $scope.accept = function accept() {
       gameDAO.accept($scope.id)

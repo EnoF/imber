@@ -7,10 +7,18 @@
     return {
       restrict: 'E',
       scope: {
-        id: '=?id'
+        id: '=?id',
+        game: '=?game'
       },
       controller: 'challengeVM',
-      templateUrl: 'challenge'
+      templateUrl: 'challenge',
+      link: function challengeConstructor(scope) {
+        if (!!scope.game) {
+          scope.id = scope.game.getId();
+        } else if (!!scope.id) {
+          scope.load();
+        }
+      }
     };
   });
 }(window.angular));
