@@ -7,7 +7,7 @@
     return {
       restrict: 'E',
       scope: {
-        id: '=id'
+        id: '=?id'
       },
       controller: 'challengeVM',
       templateUrl: 'challenge'

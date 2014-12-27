@@ -6,9 +6,17 @@
   app.directive('challenges', function challengesDirective() {
     return {
       restrict: 'E',
-      scope: {},
+      scope: {
+        user: '=?user',
+        challenger: '=?challenger',
+        opponent: '=?opponent'
+      },
       controller: 'challengesVM',
-      templateUrl: 'challenges'
+      templateUrl: 'challenges',
+      link: function challengesConstructor(scope) {
+        // load the challenges.
+        scope.load();
+      }
     };
   });
 }(window.angular));

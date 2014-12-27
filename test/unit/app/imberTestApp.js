@@ -3,7 +3,8 @@
 
   var app = angular.module('imber-test', ['imber']);
 
-  app.factory('testSetup', function testSetupScope($rootScope, $httpBackend, $compile, $controller, events, userDAO) {
+  app.factory('testSetup', function testSetupScope($rootScope, $httpBackend, $compile, $controller, events, userDAO,
+    User) {
 
     function initializeDirective(scope, directive) {
       $compile(directive)(scope);
@@ -32,8 +33,10 @@
     function createDefaultTestGlobals() {
       return {
         $httpBackend: $httpBackend,
+        createDefaultUser: createDefaultUser,
         createDefaultUserAuthResponse: createDefaultUserAuthResponse,
         createDefaultGameResponse: createDefaultGameResponse,
+        createDefaultGamesResponse: createDefaultGamesResponse,
         events: events,
         loginDefaultUser: loginDefaultUser,
         getLoggedInUser: function getCurrentUserProxy() {
@@ -64,6 +67,37 @@
         },
         started: false
       };
+    }
+
+    function createDefaultGamesResponse() {
+      return [{
+        _id: 'game1',
+        challenger: {
+          _id: 'id1',
+          userName: 'EnoF'
+        },
+        opponent: {
+          _id: 'id2',
+          userName: 'Rina'
+        }
+      }, {
+        _id: 'game2',
+        challenger: {
+          _id: 'id1',
+          userName: 'EnoF'
+        },
+        opponent: {
+          _id: 'id2',
+          userName: 'Rina'
+        }
+      }];
+    }
+
+    function createDefaultUser() {
+      return new User({
+        _id: 'id1',
+        userName: 'EnoF'
+      });
     }
 
     function setupDirectiveTest() {

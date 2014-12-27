@@ -1,30 +1,30 @@
-(function challengesVMSpecsScope() {
+(function challengesWidgetSpecsScope(angular) {
   'use strict';
 
-  describe('challenges view model specs', function challengesVMSpecs() {
-    var testGlobals, $scope, $httpBackend, Game, defaultGames, defaultUser;
+  describe('<challenges> specs', function challengesWidgetSpecs() {
+    var testGlobals, parentScope, $httpBackend, defaultGames, defaultUser, Game;
 
     beforeEach(module('imber-test'));
 
-    beforeEach(inject(function setupTest(testSetup, _Game_, User) {
-      testGlobals = testSetup.setupControllerTest('challengesVM');
-      $scope = testGlobals.$scope;
+    beforeEach(inject(function setupTest(testSetup, _Game_) {
+      testGlobals = testSetup.setupDirectiveTest();
+      parentScope = testGlobals.parentScope;
       $httpBackend = testGlobals.$httpBackend;
-      Game = _Game_;
       defaultUser = testGlobals.createDefaultUser();
       defaultGames = testGlobals.createDefaultGamesResponse();
+      Game = _Game_;
     }));
 
-    it('should retrieve all latest challenges from any user', function anyUser() {
+    it('should initialize with latest games of any user', function anyUser() {
       // given
-      expect($scope.challenges).to.be.empty;
+      var directive = angular.element('<challenges></challenges>');
 
       // predict
       $httpBackend.expect('GET', '/api/games')
         .respond(200, defaultGames);
 
       // when
-      $scope.load();
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
       $httpBackend.flush();
 
       // then
@@ -34,16 +34,17 @@
       expect($scope.challenges[1].getId()).to.equal('game2');
     });
 
-    it('should retrieve all latest challenges where a user is involved', function involvedUser() {
+    it('should initialize with latest games with user', function withUser() {
       // given
-      $scope.user = defaultUser;
+      parentScope.user = defaultUser;
+      var directive = angular.element('<challenges user="user"></challenges>');
 
       // predict
       $httpBackend.expect('GET', '/api/games?user=' + defaultUser.getId())
         .respond(200, defaultGames);
 
       // when
-      $scope.load();
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
       $httpBackend.flush();
 
       // then
@@ -53,16 +54,17 @@
       expect($scope.challenges[1].getId()).to.equal('game2');
     });
 
-    it('should retrieve all latest games of a user as challenger', function userAsChallenger() {
+    it('should initialize with latest games with challenger', function withChallenger() {
       // given
-      $scope.challenger = defaultUser;
+      parentScope.user = defaultUser;
+      var directive = angular.element('<challenges challenger="user"></challenges>');
 
       // predict
       $httpBackend.expect('GET', '/api/games?challenger=' + defaultUser.getId())
         .respond(200, defaultGames);
 
       // when
-      $scope.load();
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
       $httpBackend.flush();
 
       // then
@@ -72,16 +74,17 @@
       expect($scope.challenges[1].getId()).to.equal('game2');
     });
 
-    it('should retrieve all latest games of a user as opponent', function userAsOpponent() {
+    it('should initialize with latest games with opponent', function withOpponent() {
       // given
-      $scope.opponent = defaultUser;
+      parentScope.user = defaultUser;
+      var directive = angular.element('<challenges opponent="user"></challenges>');
 
       // predict
       $httpBackend.expect('GET', '/api/games?opponent=' + defaultUser.getId())
         .respond(200, defaultGames);
 
       // when
-      $scope.load();
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
       $httpBackend.flush();
 
       // then
@@ -91,4 +94,4 @@
       expect($scope.challenges[1].getId()).to.equal('game2');
     });
   });
-}());
+}(window.angular));

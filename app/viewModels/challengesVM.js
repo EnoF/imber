@@ -5,9 +5,9 @@
 
   app.controller('challengesVM', function challengesVM($scope, gameDAO) {
     $scope.challenges = [];
-    $scope.user = null;
-    $scope.challenger = null;
-    $scope.opponent = null;
+    $scope.user = $scope.user || null;
+    $scope.challenger = $scope.challenger || null;
+    $scope.opponent = $scope.opponent || null;
 
     $scope.load = function load() {
       var promise;
