@@ -112,12 +112,19 @@
           .when(game.getLatestGames)
           .then(function assert(response) {
             expect(response).to.be.instanceof(Array);
-            expect(response.length).to.equal(1);
-          })
+            expect(response).to.have.length.above(1);
+          });
       });
 
-      it('should return the last 100 active games of a given user', function gamesOfUser() {
-
+      it('should return the last 100 active games of a given user', function gamesOfUser(done) {
+        test(done)
+          .given({
+            user: '545726928469e940235ce769'
+          })
+          .when(game.getLatestGames)
+          .then(function assert(response) {
+            expect(response).to.containUser('545726928469e940235ce769');
+          });
       });
 
       it('should return the last 100 active games of a given user as challenger', function gamesAsChallenger() {

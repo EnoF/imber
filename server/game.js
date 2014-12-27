@@ -51,15 +51,26 @@
 
   function getLatestGames(req, res) {
     var deferred = queue.defer();
-    Game.find()
+    var findQuery = Game.find()
       .populate('challenger')
       .populate('opponent')
-      .limit(100)
-      .exec(deferred.makeNodeResolver());
+      .limit(100);
+    addSearchCriteria(req, findQuery);
+    findQuery.exec(deferred.makeNodeResolver());
     deferred.promise.then(function resolveWithGames(games) {
       res.send(games);
     });
     return deferred.promise;
+  }
+
+  function addSearchCriteria(req, query) {
+    if (req.query.user) {
+      query.or([{
+        challenger: mongoose.Types.ObjectId(req.query.user)
+      }, {
+        opponent: mongoose.Types.ObjectId(req.query.user)
+      }]);
+    }
   }
 
   function resolveWithOk(res) {
