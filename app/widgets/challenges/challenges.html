@@ -1,5 +1,9 @@
-<section>
+<section layout="row"
+         layout-sm="column"
+         layout-wrap>
   <challenge ng-repeat="challenge in challenges"
+             flex-gt-sm="50"
+             layout-fill
              game="challenge">
   </challenge>
 </section>

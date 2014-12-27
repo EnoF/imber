@@ -12,7 +12,6 @@
       $httpBackend = testGlobals.$httpBackend;
       $q = _$q_;
       User = _User_;
-      testGlobals.loginDefaultUser();
       events = testGlobals.events;
     }));
 

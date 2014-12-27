@@ -111,6 +111,7 @@
 
     function setupControllerTest(controllerName) {
       var testGlobals = createDefaultTestGlobals();
+      loginDefaultUser();
 
       testGlobals.$scope = $rootScope.$new();
 

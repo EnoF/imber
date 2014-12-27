@@ -19,6 +19,10 @@
       $scope.getNavigation().close();
     };
 
+    $scope.getLoggedInUser = function getLoggedInUserProxy() {
+      return userDAO.getCurrentUser();
+    };
+
     $scope.isLoggedIn = function isLoggedInProxy() {
       return userDAO.loggedIn();
     };
