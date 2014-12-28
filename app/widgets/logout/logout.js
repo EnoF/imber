@@ -8,7 +8,7 @@
       restrict: 'E',
       scope: {},
       templateUrl: 'logout',
-      controller: 'logoutVM',
+      controller: 'userAuthVM',
       link: function getUser(scope) {
         scope.user = userDAO.getCurrentUser();
       }

@@ -105,5 +105,33 @@
         expect($mdToast.show).to.have.been.called;
       });
     });
+
+    describe('logout the current user', function logoutCurrentUser() {
+      it('logout the current user', logoutCurrentUser);
+
+      function logoutCurrentUser() {
+        // given
+        ipCookie('authToken', 'someauthtoken');
+        $scope.user = {};
+
+        // when
+        $scope.logout();
+
+        // then
+        expect(ipCookie('authToken')).to.be.undefined;
+        expect($scope.user).to.be.null;
+      }
+
+      it('should notify the parent the user has been logged out', function notifyLogout() {
+        // given
+        sinon.spy($scope, '$emit');
+
+        // when
+        logoutCurrentUser();
+
+        // then
+        expect($scope.$emit).to.have.been.calledWith(events.LOGGED_OUT);
+      });
+    });
   });
 }(window.sinon));
