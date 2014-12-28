@@ -31,6 +31,7 @@
 
       // then
       expect($scope.game).to.be.instanceof(Game);
+      expect($scope.game.getId()).to.equal('gameId1');
       expect($scope.game.getChallenger().getId()).to.equal('userid1');
       expect($scope.game.getChallenger().getUserName()).to.equal('EnoF');
       expect($scope.game.getOpponent().getId()).to.equal('userid2');
@@ -69,7 +70,7 @@
       $scope.$emit = sinon.spy();
 
       // predict
-      $httpBackend.expect('POST', '/api/games/a1b2c3d4e5f6g7/accept')
+      $httpBackend.expect('POST', '/api/games/gameId1/accept')
         .respond(200, 'ok');
 
       // when

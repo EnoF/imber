@@ -57,6 +57,7 @@
 
     function createDefaultGameResponse() {
       return {
+        _id: 'gameId1',
         challenger: {
           _id: 'userid1',
           userName: 'EnoF'

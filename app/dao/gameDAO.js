@@ -18,8 +18,12 @@
       }
 
       this.public = {
-        accept: function accept(id) {
-          return $http.post('/api/games/' + id + '/accept');
+        accept: function accept(game) {
+          var promise = $http.post('/api/games/' + game.getId() + '/accept');
+          promise.then(function updateModel() {
+            game.setStarted(true);
+          });
+          return promise;
         },
         challenge: function challenge(opponent) {
           var currentUser = userDAO.getCurrentUser();
