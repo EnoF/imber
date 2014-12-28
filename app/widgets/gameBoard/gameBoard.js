@@ -6,9 +6,19 @@
   app.directive('gameBoard', function gameBoardDirective() {
     return {
       restrict: 'E',
-      scope: {},
+      scope: {
+        id: '=?id',
+        game: '=?game'
+      },
       controller: 'gameVM',
-      templateUrl: 'gameBoard'
+      templateUrl: 'gameBoard',
+      link: function gameBoardConstructor(scope) {
+        if (!!scope.id) {
+          scope.load();
+        } else {
+          scope.id = scope.game.getId();
+        }
+      }
     };
   });
 }(window.angular));
