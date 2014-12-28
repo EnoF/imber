@@ -28,10 +28,10 @@
       $httpBackend.flush();
 
       // then
-      expect($scope.challenges[0]).to.be.instanceof(Game);
-      expect($scope.challenges[0].getId()).to.equal('game1');
-      expect($scope.challenges[1]).to.be.instanceof(Game);
-      expect($scope.challenges[1].getId()).to.equal('game2');
+      expect($scope.games[0]).to.be.instanceof(Game);
+      expect($scope.games[0].getId()).to.equal('game1');
+      expect($scope.games[1]).to.be.instanceof(Game);
+      expect($scope.games[1].getId()).to.equal('game2');
     });
 
     it('should initialize with latest games with user', function withUser() {
@@ -48,10 +48,10 @@
       $httpBackend.flush();
 
       // then
-      expect($scope.challenges[0]).to.be.instanceof(Game);
-      expect($scope.challenges[0].getId()).to.equal('game1');
-      expect($scope.challenges[1]).to.be.instanceof(Game);
-      expect($scope.challenges[1].getId()).to.equal('game2');
+      expect($scope.games[0]).to.be.instanceof(Game);
+      expect($scope.games[0].getId()).to.equal('game1');
+      expect($scope.games[1]).to.be.instanceof(Game);
+      expect($scope.games[1].getId()).to.equal('game2');
     });
 
     it('should initialize with latest games with challenger', function withChallenger() {
@@ -68,10 +68,10 @@
       $httpBackend.flush();
 
       // then
-      expect($scope.challenges[0]).to.be.instanceof(Game);
-      expect($scope.challenges[0].getId()).to.equal('game1');
-      expect($scope.challenges[1]).to.be.instanceof(Game);
-      expect($scope.challenges[1].getId()).to.equal('game2');
+      expect($scope.games[0]).to.be.instanceof(Game);
+      expect($scope.games[0].getId()).to.equal('game1');
+      expect($scope.games[1]).to.be.instanceof(Game);
+      expect($scope.games[1].getId()).to.equal('game2');
     });
 
     it('should initialize with latest games with opponent', function withOpponent() {
@@ -88,10 +88,10 @@
       $httpBackend.flush();
 
       // then
-      expect($scope.challenges[0]).to.be.instanceof(Game);
-      expect($scope.challenges[0].getId()).to.equal('game1');
-      expect($scope.challenges[1]).to.be.instanceof(Game);
-      expect($scope.challenges[1].getId()).to.equal('game2');
+      expect($scope.games[0]).to.be.instanceof(Game);
+      expect($scope.games[0].getId()).to.equal('game1');
+      expect($scope.games[1]).to.be.instanceof(Game);
+      expect($scope.games[1].getId()).to.equal('game2');
     });
   });
 }(window.angular));

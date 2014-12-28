@@ -1,10 +1,10 @@
-(function challengesVMScope(angular) {
+(function gamesVMScope(angular) {
   'use strict';
 
   var app = angular.module('imber');
 
-  app.controller('challengesVM', function challengesVM($scope, gameDAO) {
-    $scope.challenges = [];
+  app.controller('gamesVM', function gamesVM($scope, gameDAO) {
+    $scope.games = [];
     $scope.user = $scope.user || null;
     $scope.challenger = $scope.challenger || null;
     $scope.opponent = $scope.opponent || null;
@@ -20,8 +20,8 @@
       } else {
         promise = gameDAO.getGames();
       }
-      promise.then(function setChallenges(challenges) {
-        $scope.challenges = challenges;
+      promise.then(function setGames(games) {
+        $scope.games = games;
       });
     };
   });

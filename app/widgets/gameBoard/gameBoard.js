@@ -7,7 +7,7 @@
     return {
       restrict: 'E',
       scope: {},
-      controller: 'gameBoardVM',
+      controller: 'gameVM',
       templateUrl: 'gameBoard'
     };
   });

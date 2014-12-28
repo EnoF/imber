@@ -1,9 +1,9 @@
-(function challengeVMScope(angular) {
+(function gameVMScope(angular) {
   'use strict';
 
   var app = angular.module('imber');
 
-  app.controller('challengeVM', function challengeVM($scope, events, userDAO, gameDAO) {
+  app.controller('gameVM', function gameVM($scope, events, userDAO, gameDAO) {
     $scope.id = $scope.id || null;
     $scope.game = $scope.game || null;
     $scope.loggedInId = userDAO.getCurrentUser().getId();

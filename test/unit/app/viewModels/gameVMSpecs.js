@@ -1,22 +1,22 @@
-(function challengeVMSpecsScope(sinon) {
+(function gameVMSpecsScope(sinon) {
   'use strict';
 
-  describe('challenge view model specs', function challengeVMSpecs() {
+  describe('game view model specs', function gameVMSpecs() {
     var testGlobals, $scope, $httpBackend, Game, events;
 
     beforeEach(module('imber-test'));
 
     beforeEach(inject(function setupTest(testSetup, _Game_) {
-      testGlobals = testSetup.setupControllerTest('challengeVM');
+      testGlobals = testSetup.setupControllerTest('gameVM');
       $scope = testGlobals.$scope;
       $httpBackend = testGlobals.$httpBackend;
       events = testGlobals.events;
       Game = _Game_;
     }));
 
-    it('should load the challenge details', loadChallengeDetails);
+    it('should load the game details', loadGameDetails);
 
-    function loadChallengeDetails() {
+    function loadGameDetails() {
       // given
       $scope.id = 'a1b2c3d4e5f6g7';
       var response = testGlobals.createDefaultGameResponse();
@@ -39,7 +39,7 @@
         false);
     }
 
-    it('should load a started challenge', function loadChallengeDetails() {
+    it('should load a started game', function loadGameDetails() {
       // given
       $scope.id = 'a1b2c3d4e5f6g7';
       var response = testGlobals.createDefaultGameResponse();
@@ -62,9 +62,9 @@
       expect($scope.game.isStarted()).to.equal(true);
     });
 
-    it('should accept the challenge', function acceptChallenge() {
+    it('should accept the game', function acceptChallenge() {
       // given
-      loadChallengeDetails();
+      loadGameDetails();
       expect($scope.game.isStarted()).to.equal(false);
       $scope.$emit = sinon.spy();
 
