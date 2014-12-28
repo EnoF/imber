@@ -8,6 +8,7 @@
 
     beforeEach(inject(function setupTest(testSetup, Game) {
       testGlobals = testSetup.setupDirectiveTest();
+      testGlobals.loginDefaultUser();
       parentScope = testGlobals.parentScope;
       $httpBackend = testGlobals.$httpBackend;
       defaultGameResponse = testGlobals.createDefaultGamesResponse()[0];

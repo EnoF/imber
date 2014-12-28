@@ -1,10 +1,11 @@
-(function loginVMScope(angular) {
+(function userAuthVMScope(angular) {
   'use strict';
 
   var app = angular.module('imber');
 
-  app.controller('loginVM',
-    function loginVMScope($scope, userDAO, ipCookie, events, $q, $mdToast) {
+  // The `userAuthVM` is to access all authorizations possibilities of an user.
+  app.controller('userAuthVM',
+    function userAuthVMScope($scope, userDAO, ipCookie, events, $q, $mdToast) {
       $scope.userName = null;
       $scope.password = null;
 
