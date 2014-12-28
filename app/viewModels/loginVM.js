@@ -10,7 +10,7 @@
 
       $scope.login = function login() {
         var promise;
-        if ($scope.userName && $scope.password) {
+        if (!!$scope.userName && !!$scope.password) {
           promise = userDAO.login($scope.userName, $scope.password);
         } else if (ipCookie('authToken')) {
           promise = userDAO.reauthenticate(ipCookie('authToken'));

@@ -44,6 +44,7 @@
         // given
         expect($scope.userName).to.be.null;
         expect($scope.password).to.be.null;
+        ipCookie.remove('authToken');
         sinon.spy(userDAO, 'login');
 
         // when

@@ -3,14 +3,15 @@
 
   describe('navigationVMSpecs', function navigationVMSpecs() {
 
-    var $scope, $httpBackend, events, testGlobals, $mdSidenav, userDAO, $cookies;
+    var $scope, $httpBackend, events, testGlobals, $mdSidenav, userDAO;
     beforeEach(module('imber-test'));
 
-    beforeEach(inject(function (testSetup) {
+    beforeEach(inject(function(testSetup, _userDAO_) {
       testGlobals = testSetup.setupControllerTest('navigationVM');
       $scope = testGlobals.$scope;
       $httpBackend = testGlobals.$httpBackend;
       events = testGlobals.events;
+      userDAO = _userDAO_;
     }));
 
     it('should open the navigation', function openNavigation() {
@@ -35,6 +36,20 @@
 
       // then
       expect($scope.navigation.close).to.have.been.called;
-    })
+    });
+
+    it('should proxy the userDAO functions', function proxyUserDAO() {
+      // given
+      sinon.spy(userDAO, 'getCurrentUser');
+      sinon.spy(userDAO, 'loggedIn');
+
+      // when
+      $scope.getLoggedInUser();
+      $scope.isLoggedIn();
+
+      // then
+      expect(userDAO.getCurrentUser).to.have.been.called;
+      expect(userDAO.loggedIn).to.have.been.called;
+    });
   });
 }(window.sinon));
