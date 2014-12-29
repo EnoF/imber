@@ -12,6 +12,8 @@
     // The `loggedInId` can be used in the `view` to show actions specific for
     // a challenger or the challenged player.
     $scope.loggedInId = userDAO.getCurrentUser().getId();
+    // A simple representation of the board.
+    $scope.board = null;
 
     $scope.accept = function accept() {
       gameDAO.accept($scope.game)
@@ -22,11 +24,12 @@
     };
 
     $scope.load = function load() {
-      gameDAO.getGame($scope.id)
-        .then(function setGame(game) {
-          // Load the game onto the scope, so that we can use it in the view.
-          $scope.game = game;
-        });
+      var promise = gameDAO.getGame($scope.id);
+      promise.then(function setGame(game) {
+        // Load the game onto the scope, so that we can use it in the view.
+        $scope.game = game;
+      });
+      return promise;
     };
   });
 }(window.angular));

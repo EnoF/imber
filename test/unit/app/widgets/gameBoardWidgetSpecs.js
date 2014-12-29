@@ -33,7 +33,9 @@
       expect($scope.game.getId()).to.equal(parentScope.id);
     });
 
-    it('should load with provided model', function providedModel() {
+    it('should load with provided model', providedModel);
+
+    function providedModel() {
       // given
       parentScope.game = new Game(defaultGameResponse);
       var directive = angular.element('<game-board game="game"></game-board>');
@@ -44,6 +46,20 @@
       // then
       expect($scope.game).to.be.instanceof(Game);
       expect($scope.id).to.equal(defaultGameResponse._id);
+      return $scope;
+    }
+
+    it('should create a gameboard on initialization', function initializeBoard() {
+      // given
+      expect(defaultGameResponse.board.x).to.equal(10);
+      expect(defaultGameResponse.board.y).to.equal(10);
+
+      // when
+      var $scope = providedModel();
+
+      // then
+      expect($scope.board.length).to.equal(10);
+      expect($scope.board[0].length).to.equal(10);
     });
   });
 }(window.angular));

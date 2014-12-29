@@ -4,6 +4,11 @@
   var Schema = mongoose.Schema;
 
   var gameSchema = new Schema({
+    board: {
+      type: Number,
+      ref: 'Board',
+      default: 0
+    },
     challenger: {
       type: Schema.Types.ObjectId,
       ref: 'User'
@@ -16,6 +21,14 @@
       type: Boolean,
       default: false
     }
+  });
+
+  gameSchema.pre('init', function defaultBoard(next) {
+    // Make sure board is set.
+    if (isNaN(this.board)) {
+      this.board = 0;
+    }
+    next();
   });
 
   var Game = mongoose.model('Game', gameSchema);

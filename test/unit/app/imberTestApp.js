@@ -58,6 +58,11 @@
     function createDefaultGameResponse() {
       return {
         _id: 'gameId1',
+        board: {
+          _id: 0,
+          x: 10,
+          y: 10
+        },
         challenger: {
           _id: 'userid1',
           userName: 'EnoF'
@@ -73,6 +78,11 @@
     function createDefaultGamesResponse() {
       return [{
         _id: 'game1',
+        board: {
+          _id: 0,
+          x: 10,
+          y: 10
+        },
         challenger: {
           _id: 'id1',
           userName: 'EnoF'
@@ -83,6 +93,11 @@
         }
       }, {
         _id: 'game2',
+        board: {
+          _id: 0,
+          x: 10,
+          y: 10
+        },
         challenger: {
           _id: 'id1',
           userName: 'EnoF'
