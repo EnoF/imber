@@ -1,0 +1,6 @@
+{
+  "imber": {
+    "host": "localhost",
+    "db": "imber"
+  }
+}
