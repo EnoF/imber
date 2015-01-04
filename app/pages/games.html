@@ -1,2 +1,7 @@
-<h1>Games</h1>
-<challenges></challenges>
+<section ng-if="!$routeParams.gameId">
+  <h1>Games</h1>
+  <challenges></challenges>
+</section>
+<section ng-if="!!$routeParams.gameId">
+  <game-board id="$routeParams.gameId"></game-board>
+</section>
