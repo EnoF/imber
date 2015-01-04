@@ -14,9 +14,9 @@
         },
         createLocations: function createLocations(x, y) {
           var locations = [];
-          for (var i = 0; i < x; i++) {
+          for (var i = 0; i < y; i++) {
             locations[i] = [];
-            for (var j = 0; j < y; j++) {
+            for (var j = 0; j < x; j++) {
               locations[i][j] = new Location(i, j);
             }
           }
