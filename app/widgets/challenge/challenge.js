@@ -10,7 +10,7 @@
         id: '=?id',
         game: '=?game'
       },
-      controller: 'challengeVM',
+      controller: 'gameVM',
       templateUrl: 'challenge',
       link: function challengeConstructor(scope) {
         if (!!scope.game) {

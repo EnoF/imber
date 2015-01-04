@@ -3,8 +3,9 @@
 
   var app = angular.module('imber');
 
-  app.controller('navigationVM', function navigationVMScope($scope, $mdSidenav, sitemap, userDAO) {
+  app.controller('navigationVM', function navigationVMScope($scope, $mdSidenav, $routeParams, sitemap, userDAO) {
     $scope.menu = sitemap;
+    $scope.$routeParams = $routeParams;
 
     $scope.getNavigation = function getNavigation() {
       $scope.navigation = $scope.navigation || $mdSidenav('navigation');

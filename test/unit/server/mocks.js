@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function apiMocksScope(mongoose, user, queue, HMAC) {
+(function apiMocksScope(mongoose, queue, HMAC) {
   'use strict';
 
   var users = [{
@@ -46,6 +46,12 @@
     opponent: '545726928469e940235ce769'
   }];
 
+  var boards = [{
+    _id: 0,
+    x: 10,
+    y: 10
+  }];
+
   function createPassword(password) {
     return HMAC(password,
       process.env.IMBER_HMAC_KEY).toString();
@@ -54,7 +60,8 @@
   function mocks(done) {
     var allMocks = [
       createMocks('User', users),
-      createMocks('Game', games)
+      createMocks('Game', games),
+      createMocks('Board', boards)
     ];
 
     queue.all(allMocks)
@@ -87,5 +94,4 @@
   }
 
   module.exports = mocks;
-}(require('mongoose'), require('../../../server/user.js'), require('q'),
-  require('crypto-js/hmac-sha256')));
+}(require('mongoose'), require('q'), require('crypto-js/hmac-sha256')));

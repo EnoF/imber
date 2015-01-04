@@ -4,6 +4,11 @@
   var Schema = mongoose.Schema;
 
   var gameSchema = new Schema({
+    board: {
+      type: Number,
+      ref: 'Board',
+      default: 0
+    },
     challenger: {
       type: Schema.Types.ObjectId,
       ref: 'User'

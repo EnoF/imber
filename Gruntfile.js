@@ -151,6 +151,15 @@ module.exports = function(grunt) {
         }
       }
     },
+    'mongo-migrate': {
+      create: '',
+      up: '',
+      down: '',
+      options: {
+        config: './config.json',
+        dbPropName: 'imber'
+      }
+    },
     ngAnnotate: {
       dist: {
         expand: true,

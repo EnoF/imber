@@ -2,6 +2,8 @@
   'use strict';
 
   var Game = require('./resources/Game');
+  // Required so the schema is defined.
+  require('./resources/Board');
 
   function accept(req, res) {
     var deferred = queue.defer();
@@ -40,6 +42,7 @@
     Game.findOne({
         _id: mongoose.Types.ObjectId(req.params.id)
       })
+      .populate('board')
       .populate('challenger', '_id userName')
       .populate('opponent', '_id userName')
       .exec(deferred.makeNodeResolver());
@@ -52,6 +55,7 @@
   function getLatestGames(req, res) {
     var deferred = queue.defer();
     var findQuery = Game.find()
+      .populate('board')
       .populate('challenger', '_id userName')
       .populate('opponent', '_id userName')
       .limit(100);

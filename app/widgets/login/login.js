@@ -5,7 +5,7 @@
 
   app.directive('login', function loginDirective() {
     return {
-      controller: 'loginVM',
+      controller: 'userAuthVM',
       restrict: 'E',
       scope: {},
       templateUrl: 'login'

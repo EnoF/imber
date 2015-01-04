@@ -11,7 +11,7 @@
         challenger: '=?challenger',
         opponent: '=?opponent'
       },
-      controller: 'challengesVM',
+      controller: 'gamesVM',
       templateUrl: 'challenges',
       link: function challengesConstructor(scope) {
         // load the challenges.

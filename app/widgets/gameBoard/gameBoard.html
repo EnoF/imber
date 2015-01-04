@@ -1,0 +1,7 @@
+<h2>Game Board</h2>
+<section flex
+         ng-repeat="row in board"
+         layout="row">
+  <game-square ng-repeat="square in row"
+               flex></game-square>
+</section>

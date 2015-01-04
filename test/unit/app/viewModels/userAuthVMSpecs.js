@@ -1,13 +1,13 @@
-(function loginVMSpecsScope(sinon) {
+(function userAuthVMSpecsScope(sinon) {
   'use strict';
 
-  describe('loginVMSpecs', function loginVMSpecs() {
+  describe('userAuthVMSpecs', function userAuthVMSpecs() {
 
     var $scope, $httpBackend, testGlobals, userDAO, ipCookie, events, $mdToast;
     beforeEach(module('imber-test'));
 
     beforeEach(inject(function injector(testSetup, _userDAO_, _ipCookie_, _$mdToast_) {
-      testGlobals = testSetup.setupControllerTest('loginVM');
+      testGlobals = testSetup.setupControllerTest('userAuthVM');
       $scope = testGlobals.$scope;
       $httpBackend = testGlobals.$httpBackend;
       events = testGlobals.events;
@@ -44,6 +44,7 @@
         // given
         expect($scope.userName).to.be.null;
         expect($scope.password).to.be.null;
+        ipCookie.remove('authToken');
         sinon.spy(userDAO, 'login');
 
         // when
@@ -102,6 +103,34 @@
 
         // then
         expect($mdToast.show).to.have.been.called;
+      });
+    });
+
+    describe('logout the current user', function logoutCurrentUser() {
+      it('logout the current user', logoutCurrentUser);
+
+      function logoutCurrentUser() {
+        // given
+        ipCookie('authToken', 'someauthtoken');
+        $scope.user = {};
+
+        // when
+        $scope.logout();
+
+        // then
+        expect(ipCookie('authToken')).to.be.undefined;
+        expect($scope.user).to.be.null;
+      }
+
+      it('should notify the parent the user has been logged out', function notifyLogout() {
+        // given
+        sinon.spy($scope, '$emit');
+
+        // when
+        logoutCurrentUser();
+
+        // then
+        expect($scope.$emit).to.have.been.calledWith(events.LOGGED_OUT);
       });
     });
   });

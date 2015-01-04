@@ -1,13 +1,13 @@
-(function challengesVMSpecsScope() {
+(function gamesVMSpecsScope() {
   'use strict';
 
-  describe('challenges view model specs', function challengesVMSpecs() {
+  describe('challenges view model specs', function gamesVMSpecs() {
     var testGlobals, $scope, $httpBackend, Game, defaultGames, defaultUser;
 
     beforeEach(module('imber-test'));
 
     beforeEach(inject(function setupTest(testSetup, _Game_, User) {
-      testGlobals = testSetup.setupControllerTest('challengesVM');
+      testGlobals = testSetup.setupControllerTest('gamesVM');
       $scope = testGlobals.$scope;
       $httpBackend = testGlobals.$httpBackend;
       Game = _Game_;
@@ -17,7 +17,7 @@
 
     it('should retrieve all latest challenges from any user', function anyUser() {
       // given
-      expect($scope.challenges).to.be.empty;
+      expect($scope.games).to.be.empty;
 
       // predict
       $httpBackend.expect('GET', '/api/games')
@@ -28,10 +28,10 @@
       $httpBackend.flush();
 
       // then
-      expect($scope.challenges[0]).to.be.instanceof(Game);
-      expect($scope.challenges[0].getId()).to.equal('game1');
-      expect($scope.challenges[1]).to.be.instanceof(Game);
-      expect($scope.challenges[1].getId()).to.equal('game2');
+      expect($scope.games[0]).to.be.instanceof(Game);
+      expect($scope.games[0].getId()).to.equal('game1');
+      expect($scope.games[1]).to.be.instanceof(Game);
+      expect($scope.games[1].getId()).to.equal('game2');
     });
 
     it('should retrieve all latest challenges where a user is involved', function involvedUser() {
@@ -47,10 +47,10 @@
       $httpBackend.flush();
 
       // then
-      expect($scope.challenges[0]).to.be.instanceof(Game);
-      expect($scope.challenges[0].getId()).to.equal('game1');
-      expect($scope.challenges[1]).to.be.instanceof(Game);
-      expect($scope.challenges[1].getId()).to.equal('game2');
+      expect($scope.games[0]).to.be.instanceof(Game);
+      expect($scope.games[0].getId()).to.equal('game1');
+      expect($scope.games[1]).to.be.instanceof(Game);
+      expect($scope.games[1].getId()).to.equal('game2');
     });
 
     it('should retrieve all latest games of a user as challenger', function userAsChallenger() {
@@ -66,10 +66,10 @@
       $httpBackend.flush();
 
       // then
-      expect($scope.challenges[0]).to.be.instanceof(Game);
-      expect($scope.challenges[0].getId()).to.equal('game1');
-      expect($scope.challenges[1]).to.be.instanceof(Game);
-      expect($scope.challenges[1].getId()).to.equal('game2');
+      expect($scope.games[0]).to.be.instanceof(Game);
+      expect($scope.games[0].getId()).to.equal('game1');
+      expect($scope.games[1]).to.be.instanceof(Game);
+      expect($scope.games[1].getId()).to.equal('game2');
     });
 
     it('should retrieve all latest games of a user as opponent', function userAsOpponent() {
@@ -85,10 +85,10 @@
       $httpBackend.flush();
 
       // then
-      expect($scope.challenges[0]).to.be.instanceof(Game);
-      expect($scope.challenges[0].getId()).to.equal('game1');
-      expect($scope.challenges[1]).to.be.instanceof(Game);
-      expect($scope.challenges[1].getId()).to.equal('game2');
+      expect($scope.games[0]).to.be.instanceof(Game);
+      expect($scope.games[0].getId()).to.equal('game1');
+      expect($scope.games[1]).to.be.instanceof(Game);
+      expect($scope.games[1].getId()).to.equal('game2');
     });
   });
 }());
