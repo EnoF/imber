@@ -156,7 +156,7 @@ module.exports = function(grunt) {
       up: '',
       down: '',
       options: {
-        config: './config.json',
+        config: '<%= app.tmp %>/config.json',
         dbPropName: 'imber'
       }
     },
@@ -245,7 +245,7 @@ module.exports = function(grunt) {
         compress: {
           /* jshint ignore:start */
           global_defs: {
-            "DEBUG": false
+            'DEBUG': false
           },
           dead_code: true
             /* jshint ignore:end */
@@ -346,6 +346,26 @@ module.exports = function(grunt) {
     'ngtemplates:dev',
     'preprocess:develop'
   ]);
+
+  grunt.registerTask('migration-config', function createMigrationConfig() {
+    var fs = require('fs');
+    var config = {
+      imber: {
+        host: process.env.IMBER_MONGO_URL || 'localhost',
+        db: 'imber',
+        username: process.env.IMBER_MONGO_USER,
+        password: process.env.IMBER_MONGO_PASSWORD,
+        port: process.env.IMBER_MONGO_PORT || 27017
+      }
+    };
+    var content = JSON.stringify(config);
+    var done = this.async();
+    fs.writeFile('.tmp/config.json', content, done);
+  });
+
+  grunt.registerTask('migrate', function migrate(target) {
+    grunt.task.run(['migration-config', 'mongo-migrate:' + target]);
+  });
 
   grunt.registerTask('setupEnv', [
     'build',

@@ -1,7 +1,7 @@
 {
   "name": "imber",
   "subdomain": "imber",
-  "version": "0.0.1",
+  "version": "9.1.0",
   "description": "Imber the strategy game",
   "authors": [
     "Andy Tang (EnoF)<andyt@live.nl>"
