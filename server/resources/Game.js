@@ -23,14 +23,6 @@
     }
   });
 
-  gameSchema.pre('init', function defaultBoard(next) {
-    // Make sure board is set.
-    if (isNaN(this.board)) {
-      this.board = 0;
-    }
-    next();
-  });
-
   var Game = mongoose.model('Game', gameSchema);
 
   module.exports = Game;
