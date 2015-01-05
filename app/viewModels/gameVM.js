@@ -31,5 +31,9 @@
       });
       return promise;
     };
+
+    $scope.requestGame = function requestGame() {
+      $scope.$emit(events.REQUEST_GAME, $scope.id);
+    };
   });
 }(window.angular));
