@@ -9,6 +9,7 @@
       CHALLENGED: 'challenged',
       LOGGED_IN: 'loggedIn',
       LOGGED_OUT: 'loggedOut',
+      REQUEST_GAME: 'requestGame',
       USER_NOT_FOUND: 'userNotFound',
       USER_SELECTED: 'userSelected'
     };

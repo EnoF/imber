@@ -2,7 +2,7 @@
   'use strict';
 
   describe('<challenge> specs', function challengeWidgetSpecs() {
-    var testGlobals, parentScope, defaultGame, defaultGameResponse, $httpBackend;
+    var testGlobals, parentScope, defaultGame, defaultGameResponse, $httpBackend, events;
 
     beforeEach(module('imber-test'));
 
@@ -13,6 +13,7 @@
       $httpBackend = testGlobals.$httpBackend;
       defaultGameResponse = testGlobals.createDefaultGamesResponse()[0];
       defaultGame = new Game(defaultGameResponse);
+      events = testGlobals.events;
     }));
 
     it('should initialize with a provided id', function providedId() {
@@ -33,7 +34,9 @@
       expect($scope.game.getId()).to.equal($scope.id);
     });
 
-    it('should initialize with a provided model', function providedModel() {
+    it('should initialize with a provided model', providedModel);
+
+    function providedModel() {
       // given
       parentScope.game = defaultGame;
       var directive = angular.element('<challenge game="game"></challenge>');
@@ -44,6 +47,19 @@
       // then
       expect($scope.game).to.equal(parentScope.game);
       expect($scope.id).to.equal(parentScope.game.getId());
+      return $scope;
+    }
+
+    it('should request to open games view with given id', function requestGameView() {
+      // given
+      var $scope = providedModel();
+      sinon.spy($scope, '$emit');
+
+      // when
+      $scope.requestGame();
+
+      // then
+      expect($scope.$emit).to.have.been.calledWith(events.REQUEST_GAME, $scope.id);
     });
   });
 }(window.angular));

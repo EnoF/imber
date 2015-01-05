@@ -3,7 +3,8 @@
 
   var app = angular.module('imber');
 
-  app.controller('navigationVM', function navigationVMScope($scope, $mdSidenav, $routeParams, sitemap, userDAO) {
+  app.controller('navigationVM', function navigationVMScope($scope, $mdSidenav, $routeParams, $location, sitemap,
+    userDAO, events) {
     $scope.menu = sitemap;
     $scope.$routeParams = $routeParams;
 
@@ -27,5 +28,10 @@
     $scope.isLoggedIn = function isLoggedInProxy() {
       return userDAO.loggedIn();
     };
+
+    $scope.$on(events.REQUEST_GAME, function navigateToGame(event, id) {
+      event.stopPropagation();
+      $location.url('/games?gameId=' + id);
+    });
   });
 }(window.angular));
