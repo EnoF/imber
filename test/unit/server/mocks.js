@@ -46,10 +46,45 @@
     opponent: '545726928469e940235ce769'
   }];
 
+  var characters = [{
+    _id: '548726928469e940555ce987',
+    game: '548726928469e940235ce769',
+    player: '545726928469e940235ce769',
+    type: 0
+  }, {
+    _id: '543216928469e940555ce987',
+    game: '548726928469e940235ce769',
+    player: '545726928469e940235ce853',
+    type: 0
+  }];
+
   var boards = [{
     _id: 0,
     x: 10,
     y: 10
+  }];
+
+  var types = [{
+    _id: 0,
+    name: 'Soldier'
+  }, {
+    _id: 1,
+    name: 'Knight'
+  }, {
+    _id: 2,
+    name: 'Mage'
+  }, {
+    _id: 3,
+    name: 'Archer'
+  }, {
+    _id: 4,
+    name: 'Lancer'
+  }, {
+    _id: 5,
+    name: 'Hero'
+  }, {
+    _id: 6,
+    name: 'Sage'
   }];
 
   function createPassword(password) {
@@ -60,6 +95,8 @@
   function mocks(done) {
     var allMocks = [
       createMocks('User', users),
+      createMocks('CharacterType', types),
+      createMocks('Character', characters),
       createMocks('Game', games),
       createMocks('Board', boards)
     ];

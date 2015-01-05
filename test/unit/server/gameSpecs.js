@@ -91,6 +91,18 @@
           });
       });
 
+      it('should receive the teams present in a game', function getPlayersInGame(done) {
+        test(done)
+          .givenParams({
+            id: '548726928469e940235ce769'
+          })
+          .when(game.getGame)
+          .then(function assert(response) {
+            expect(response.challenger.team).to.be.instanceof(Array);
+            expect(response.opponent.team).to.be.instanceof(Array);
+          });
+      });
+
       it('should be able to accept a challenge', function acceptChallenge(done) {
         test(done)
           .givenParams({

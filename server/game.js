@@ -2,8 +2,11 @@
   'use strict';
 
   var Game = require('./resources/Game');
+  var Character = require('./resources/Character');
   // Required so the schema is defined.
   require('./resources/Board');
+  require('./resources/CharacterType');
+  require('./resources/Character');
 
   function accept(req, res) {
     var deferred = queue.defer();
@@ -45,10 +48,36 @@
       .populate('board')
       .populate('challenger', '_id userName')
       .populate('opponent', '_id userName')
-      .exec(deferred.makeNodeResolver());
-    deferred.promise.then(function resolveWithGame(game) {
-      res.send(game);
-    });
+      .exec()
+      .then(populateTeams)
+      .then(function resolveGame(game) {
+        res.send(game);
+        deferred.resolve(game);
+      });
+    return deferred.promise;
+  }
+
+  function populateTeams(game) {
+    game = game.toObject();
+    var challenger = Character.find({
+        game: game._id,
+        player: game.challenger._id
+      })
+      .populate('type')
+      .exec();
+    var opponent = Character.find({
+        game: game._id,
+        player: game.opponent._id
+      })
+      .populate('type')
+      .exec();
+    var deferred = queue.defer();
+    queue.all([challenger, opponent])
+      .then(function populate(responses) {
+        game.challenger.team = responses[0];
+        game.opponent.team = responses[1];
+        deferred.resolve(game);
+      });
     return deferred.promise;
   }
 

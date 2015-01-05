@@ -5,11 +5,19 @@
 
   var characterTypeSchema = new Schema({
     _id: Number,
-    x: Number,
-    y: Number
+    name: String
   });
 
   var CharacterType = mongoose.model('CharacterType', characterTypeSchema);
+  CharacterType.CharacterTypes = {
+    SOLDIER: 0,
+    KNIGHT: 1,
+    MAGE: 2,
+    ARCHER: 3,
+    LANCER: 4,
+    HERO: 5,
+    SAGE: 6
+  };
 
   module.exports = CharacterType;
 }(require('mongoose')));
