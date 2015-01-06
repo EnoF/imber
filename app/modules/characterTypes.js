@@ -1,4 +1,4 @@
-(function characterTypesModuleScope(angular, clazz) {
+(function characterTypesModuleScope(angular) {
   'use strict';
 
   var app = angular.module('imber');
@@ -14,4 +14,4 @@
       SAGE: 6
     };
   });
-}(window.angular, window.enofjs.clazz));
+}(window.angular));

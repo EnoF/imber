@@ -26,9 +26,17 @@
     }
   });
 
-  function createDefaultTeam(gameId, playerId, isChallenger) {
+  function createChallengerTeam(gameId, playerId) {
     var team = [];
     addSoldiers(team, gameId, playerId, 1, 1, 8);
+    addSymetric(team, gameId, playerId, 2, 0, CharacterTypes.KNIGHT);
+    return team;
+  }
+
+  function createOpponentTeam(gameId, playerId) {
+    var team = [];
+    addSoldiers(team, gameId, playerId, 1, 8, 8);
+    addSymetric(team, gameId, playerId, 2, 9, CharacterTypes.KNIGHT);
     return team;
   }
 
@@ -51,13 +59,28 @@
     }
   }
 
+  function addSymetric(team, gameId, playerId, x, y, type) {
+    var character = addNewCharacter(team, gameId, playerId, type);
+    character.position = {
+      x: x,
+      y: y
+    };
+    team.push(character);
+    var symetricCharacter = addNewCharacter(team, gameId, playerId, type);
+    symetricCharacter.position = {
+      x: 9 - x,
+      y: y
+    };
+    team.push(symetricCharacter);
+  }
+
   gameSchema.pre('save', function(next) {
     var challengerDeferred = queue.defer();
     var opponentDeferred = queue.defer();
     if (this.isNew) {
-      Character.create(createDefaultTeam(this._id, this.challenger, true),
+      Character.create(createChallengerTeam(this._id, this.challenger),
         challengerDeferred.makeNodeResolver());
-      Character.create(createDefaultTeam(this._id, this.opponent, false),
+      Character.create(createOpponentTeam(this._id, this.opponent),
         opponentDeferred.makeNodeResolver());
       queue.all([challengerDeferred.promise, opponentDeferred.promise])
         .then(function finishedCreation() {

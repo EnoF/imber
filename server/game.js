@@ -21,7 +21,6 @@
 
   function challenge(req, res) {
     var deferred = queue.defer();
-    var game = new Game(req.body);
     var challengerName = auth.extractUserName(req.header('authorization'));
     user.getUserById(req.body.challenger)
       .then(function playerFound(user) {
