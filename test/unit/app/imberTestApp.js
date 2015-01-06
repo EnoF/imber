@@ -65,11 +65,27 @@
         },
         challenger: {
           _id: 'userid1',
-          userName: 'EnoF'
+          userName: 'EnoF',
+          team: [{
+            _id: 'charid11',
+            player: 'userid1',
+            type: {
+              _id: 0,
+              name: 'Soldier'
+            }
+          }]
         },
         opponent: {
           _id: 'userid2',
-          userName: 'Rina'
+          userName: 'Rina',
+          team: [{
+            _id: 'charid21',
+            player: 'userid2',
+            type: {
+              _id: 0,
+              name: 'Soldier'
+            }
+          }]
         },
         started: false
       };
