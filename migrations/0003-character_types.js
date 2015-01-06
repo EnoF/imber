@@ -24,16 +24,16 @@ var types = [{
 }];
 
 exports.up = function(db, next) {
-  var characterTypes = mongodb.Collection(db, 'characterType');
+  var characterTypes = mongodb.Collection(db, 'characterTypes');
   var bulk = characterTypes.initializeUnorderedBulkOp();
   types.forEach(function insertType(type) {
     bulk.insert(type);
   });
-  bulk.execute(next)
+  bulk.execute(next);
 };
 
 exports.down = function(db, next) {
-  var characterTypes = mongodb.Collection(db, 'characterType');
+  var characterTypes = mongodb.Collection(db, 'characterTypes');
   var bulk = characterTypes.initializeUnorderedBulkOp();
   types.forEach(function removeType(type) {
     bulk.find(type).remove();
