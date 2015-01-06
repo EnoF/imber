@@ -26,7 +26,7 @@
     user.getUserById(req.body.challenger)
       .then(function playerFound(user) {
         if (challengerName === user.userName) {
-          game.save(deferred.makeNodeResolver());
+          Game.create(req.body, deferred.makeNodeResolver());
         } else {
           res.status(403).send('not authorized');
           deferred.reject();

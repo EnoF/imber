@@ -16,6 +16,10 @@
       type: Number,
       ref: 'CharacterType'
     },
+    position: {
+      x: Number,
+      y: Number
+    }
   });
 
   var Character = mongoose.model('Character', characterScheme);

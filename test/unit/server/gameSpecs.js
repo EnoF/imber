@@ -19,6 +19,8 @@
     var game = require('../../../server/game');
     var AES = require('crypto-js/aes');
     var CryptoJS = require('crypto-js');
+    var Character = require('../../../server/resources/Character');
+    var CharacterTypes = require('../../../server/resources/CharacterType').CharacterTypes;
 
     beforeEach(function resetMongo(done) {
       mockgoose.reset();
@@ -36,9 +38,71 @@
             authorization: createAuthToken('EnoF')
           })
           .when(game.challenge)
-          .then(function assert(response) {
+          .then(function assert(response, next, data) {
+            var deferred = queue.defer();
             expect(response).to.equal('ok');
           });
+      });
+
+      describe('character position', function characterPositionSpecs() {
+        describe('soldiers', function soldiersSpecs() {
+          it('should create 8 soldiers', function registerNewGame(done) {
+            test(done)
+              .given({
+                challenger: '545726928469e940235ce769',
+                opponent: '545726928469e940235ce853'
+              })
+              .givenHeader({
+                authorization: createAuthToken('EnoF')
+              })
+              .when(game.challenge)
+              .then(function assert(response, next, data) {
+                var deferred = queue.defer();
+                expect(response).to.equal('ok');
+                Character.find({
+                    game: data._id,
+                    player: data.challenger
+                  })
+                  .exec()
+                  .then(function checkPosition(characters) {
+                    for (var i = 0; i < 8; i++) {
+                      expect(characters[i].type).to.equal(CharacterTypes.SOLDIER);
+                    }
+                    deferred.resolve();
+                  });
+                return deferred.promise;
+              });
+          });
+
+          it('should position them on the 2nd row', function registerNewGame(done) {
+            test(done)
+              .given({
+                challenger: '545726928469e940235ce769',
+                opponent: '545726928469e940235ce853'
+              })
+              .givenHeader({
+                authorization: createAuthToken('EnoF')
+              })
+              .when(game.challenge)
+              .then(function assert(response, next, data) {
+                var deferred = queue.defer();
+                expect(response).to.equal('ok');
+                Character.find({
+                    game: data._id,
+                    player: data.challenger
+                  })
+                  .exec()
+                  .then(function checkPosition(characters) {
+                    for (var i = 0; i < 8; i++) {
+                      expect(characters[i].position.x).to.equal(1 + i);
+                      expect(characters[i].position.y).to.equal(1);
+                    }
+                    deferred.resolve();
+                  });
+                return deferred.promise;
+              });
+          });
+        });
       });
 
       it('should reject a challenge when the challenger can not be found', function challengerNotFound(done) {
