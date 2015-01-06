@@ -162,7 +162,8 @@
         });
 
         describe('knights', function knightsSpecs() {
-          it('should create 2 knights for the challenger', function create2Knights(done) {
+          var characters
+          before(function beforeEach(done) {
             test(done)
               .given({
                 challenger: '545726928469e940235ce769',
@@ -179,17 +180,34 @@
                     player: data.challenger
                   })
                   .exec()
-                  .then(function checkPosition(characters) {
-                    for (var i = 8; i < 8 + 2; i++) {
-                      expect(characters[i].type).to.equal(CharacterTypes.KNIGHT);
-                    }
+                  .then(function checkPosition(foundCharacters) {
+                    characters = foundCharacters;
                     deferred.resolve();
                   });
                 return deferred.promise;
               });
           });
 
-          it('should create 2 knights for the opponent', function create2Knights(done) {
+          it('should create 2 knights for the challenger', function create2Knights() {
+            for (var i = 8; i < 8 + 2; i++) {
+              expect(characters[i].type).to.equal(CharacterTypes.KNIGHT);
+            }
+          });
+
+          it('should create 2 knights for the opponent', function create2Knights() {
+            for (var i = 8; i < 8 + 2; i++) {
+              expect(characters[i].type).to.equal(CharacterTypes.KNIGHT);
+            }
+          });
+
+          it('should create 2 knights for the challenger asymetricly', function create2Knights() {
+            expect(characters[8].position.x).to.equal(2);
+            expect(characters[8].position.y).to.equal(0);
+            expect(characters[9].position.x).to.equal(7);
+            expect(characters[9].position.y).to.equal(0);
+          });
+
+          it('should create 2 knights for the opponent asymetricly', function create2Knights(done) {
             test(done)
               .given({
                 challenger: '545726928469e940235ce769',
@@ -207,108 +225,71 @@
                   })
                   .exec()
                   .then(function checkPosition(characters) {
-                    for (var i = 8; i < 8 + 2; i++) {
-                      expect(characters[i].type).to.equal(CharacterTypes.KNIGHT);
-                    }
+                    expect(characters[8].position.x).to.equal(2);
+                    expect(characters[8].position.y).to.equal(9);
+                    expect(characters[9].position.x).to.equal(7);
+                    expect(characters[9].position.y).to.equal(9);
                     deferred.resolve();
                   });
                 return deferred.promise;
               });
-
           });
-
-          it('should create 2 knights for the challenger asymetricly',
-            function create2Knights(done) {
-              test(done)
-                .given({
-                  challenger: '545726928469e940235ce769',
-                  opponent: '545726928469e940235ce853'
-                })
-                .givenHeader({
-                  authorization: createAuthToken('EnoF')
-                })
-                .when(game.challenge)
-                .then(function assert(response, next, data) {
-                  var deferred = queue.defer();
-                  Character.find({
-                      game: data._id,
-                      player: data.challenger
-                    })
-                    .exec()
-                    .then(function checkPosition(characters) {
-                      expect(characters[8].position.x).to.equal(2);
-                      expect(characters[8].position.y).to.equal(0);
-                      expect(characters[9].position.x).to.equal(7);
-                      expect(characters[9].position.y).to.equal(0);
-                      deferred.resolve();
-                    });
-                  return deferred.promise;
-                });
-            });
-
-          it('should create 2 knights for the opponent asymetricly',
-            function create2Knights(done) {
-              test(done)
-                .given({
-                  challenger: '545726928469e940235ce769',
-                  opponent: '545726928469e940235ce853'
-                })
-                .givenHeader({
-                  authorization: createAuthToken('EnoF')
-                })
-                .when(game.challenge)
-                .then(function assert(response, next, data) {
-                  var deferred = queue.defer();
-                  Character.find({
-                      game: data._id,
-                      player: data.opponent
-                    })
-                    .exec()
-                    .then(function checkPosition(characters) {
-                      expect(characters[8].position.x).to.equal(2);
-                      expect(characters[8].position.y).to.equal(9);
-                      expect(characters[9].position.x).to.equal(7);
-                      expect(characters[9].position.y).to.equal(9);
-                      deferred.resolve();
-                    });
-                  return deferred.promise;
-                });
-            });
         });
       });
 
-      it('should reject a challenge when the challenger can not be found', function challengerNotFound(done) {
-        test(done)
-          .given({
-            challenger: '000000000000e000035ce769',
-            opponent: '545726928469e940235ce853'
-          })
-          .givenHeader({
-            authorization: createAuthToken('EnoF')
-          })
-          .when(game.challenge)
-          .then(function assert(response, status) {
-            expect(response).to.equal('challenger not found');
-            expect(status).to.equal(404);
-          });
+      describe('mages', function magesSpecs() {
+        it('should create 2 mages for the challenger', function create2Mages() {
+
+        });
+
+        it('should create 2 mages for the opponent', function create2Mages() {
+
+        });
+
+        it('should position the mages for the challenger', function position2Mages() {
+
+        });
+
+        it('should position the mages for the opponent', function position2Mages() {
+
+        });
       });
 
-      it('should reject a challenge when the challenger and auth token mismatch',
-        function authTokenMisMatch(done) {
+      describe('challenge', function challengeSpecs() {
+        it('should reject a challenge when the challenger can not be found', function challengerNotFound(
+          done) {
           test(done)
             .given({
-              challenger: '545726928469e940235ce769',
+              challenger: '000000000000e000035ce769',
               opponent: '545726928469e940235ce853'
             })
             .givenHeader({
-              authorization: createAuthToken('Rina')
+              authorization: createAuthToken('EnoF')
             })
             .when(game.challenge)
             .then(function assert(response, status) {
-              expect(response).to.equal('not authorized');
-              expect(status).to.equal(403);
+              expect(response).to.equal('challenger not found');
+              expect(status).to.equal(404);
             });
         });
+
+        it('should reject a challenge when the challenger and auth token mismatch',
+          function authTokenMisMatch(done) {
+            test(done)
+              .given({
+                challenger: '545726928469e940235ce769',
+                opponent: '545726928469e940235ce853'
+              })
+              .givenHeader({
+                authorization: createAuthToken('Rina')
+              })
+              .when(game.challenge)
+              .then(function assert(response, status) {
+                expect(response).to.equal('not authorized');
+                expect(status).to.equal(403);
+              });
+          });
+      });
     });
 
     describe('game acceptance', function gameAcceptanceSpecs() {
