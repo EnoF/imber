@@ -2,11 +2,11 @@
   'use strict';
 
   describe('game view model specs', function gameVMSpecs() {
-    var testGlobals, $scope, $httpBackend, Game, Team, Character, events;
+    var testGlobals, $scope, $httpBackend, Game, Team, Character, characterTypes, events;
 
     beforeEach(module('imber-test'));
 
-    beforeEach(inject(function setupTest(testSetup, _Game_, _Team_, _Character_) {
+    beforeEach(inject(function setupTest(testSetup, _Game_, _Team_, _Character_, _characterTypes_) {
       testGlobals = testSetup.setupControllerTest('gameVM');
       $scope = testGlobals.$scope;
       $httpBackend = testGlobals.$httpBackend;
@@ -14,6 +14,7 @@
       Game = _Game_;
       Team = _Team_;
       Character = _Character_;
+      characterTypes = _characterTypes_;
     }));
 
     it('should load the game details', loadGameDetails);
@@ -53,6 +54,10 @@
       // then
       expect(teamChallenger).to.be.an.instanceof(Team);
       expect(teamChallenger.get(0)).to.be.an.instanceof(Character);
+      var character = teamChallenger.get(0);
+      expect(character.getId()).to.equal('charid11');
+      expect(character.getName()).to.equal('Soldier');
+      expect(character.getType()).to.equal(characterTypes.SOLDIER);
     });
 
     it('should load a started game', function loadGameDetails() {
