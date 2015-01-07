@@ -136,16 +136,16 @@
           });
 
           it('should create 2 knights for the challenger asymetricly', function create2Knights() {
-            expect(challengerTeam[10].position.x).to.equal(2);
+            expect(challengerTeam[10].position.x).to.equal(1);
             expect(challengerTeam[10].position.y).to.equal(0);
-            expect(challengerTeam[11].position.x).to.equal(7);
+            expect(challengerTeam[11].position.x).to.equal(8);
             expect(challengerTeam[11].position.y).to.equal(0);
           });
 
           it('should create 2 knights for the opponent asymetricly', function create2Knights() {
-            expect(opponentTeam[10].position.x).to.equal(2);
+            expect(opponentTeam[10].position.x).to.equal(1);
             expect(opponentTeam[10].position.y).to.equal(9);
-            expect(opponentTeam[11].position.x).to.equal(7);
+            expect(opponentTeam[11].position.x).to.equal(8);
             expect(opponentTeam[11].position.y).to.equal(9);
           });
         });
