@@ -12,8 +12,8 @@
   CharacterType.CharacterTypes = {
     SOLDIER: 0,
     KNIGHT: 1,
-    MAGE: 2,
-    ARCHER: 3,
+    ARCHER: 2,
+    MAGE: 3,
     LANCER: 4,
     HERO: 5,
     SAGE: 6

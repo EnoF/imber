@@ -30,6 +30,8 @@
     var team = [];
     addSoldiers(team, gameId, playerId, 0, 1, 10);
     addSymetric(team, gameId, playerId, 1, 0, CharacterTypes.KNIGHT);
+    addSymetric(team, gameId, playerId, 2, 0, CharacterTypes.ARCHER);
+    addSymetric(team, gameId, playerId, 3, 0, CharacterTypes.MAGE);
     return team;
   }
 
@@ -37,6 +39,8 @@
     var team = [];
     addSoldiers(team, gameId, playerId, 0, 8, 10);
     addSymetric(team, gameId, playerId, 1, 9, CharacterTypes.KNIGHT);
+    addSymetric(team, gameId, playerId, 2, 9, CharacterTypes.ARCHER);
+    addSymetric(team, gameId, playerId, 3, 9, CharacterTypes.MAGE);
     return team;
   }
 
