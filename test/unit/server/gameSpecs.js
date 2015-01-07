@@ -45,194 +45,95 @@
       });
 
       describe('character position', function characterPositionSpecs() {
+        var challengerTeam, opponentTeam;
+
+        before(function beforeExecution(done) {
+          test(done)
+            .given({
+              challenger: '545726928469e940235ce769',
+              opponent: '545726928469e940235ce853'
+            })
+            .givenHeader({
+              authorization: createAuthToken('EnoF')
+            })
+            .when(game.challenge)
+            .then(function assert(response, next, data) {
+              var deferred = queue.defer();
+              Character.find({
+                  game: data._id,
+                  player: data.challenger
+                })
+                .exec()
+                .then(function setChallengerTeam(foundCharacters) {
+                  challengerTeam = foundCharacters;
+                  return Character.find({
+                    game: data._id,
+                    player: data.opponent
+                  }).exec();
+                })
+                .then(function setOpponentTeam(foundCharacters) {
+                  opponentTeam = foundCharacters;
+                  deferred.resolve();
+                });
+              return deferred.promise;
+            });
+        });
+
         describe('soldiers', function soldiersSpecs() {
-          it('should create 8 soldiers for the challenger', function registerNewGame(done) {
-            test(done)
-              .given({
-                challenger: '545726928469e940235ce769',
-                opponent: '545726928469e940235ce853'
-              })
-              .givenHeader({
-                authorization: createAuthToken('EnoF')
-              })
-              .when(game.challenge)
-              .then(function assert(response, next, data) {
-                var deferred = queue.defer();
-                expect(response).to.equal('ok');
-                Character.find({
-                    game: data._id,
-                    player: data.challenger
-                  })
-                  .exec()
-                  .then(function checkPosition(characters) {
-                    for (var i = 0; i < 8; i++) {
-                      expect(characters[i].type).to.equal(CharacterTypes.SOLDIER);
-                    }
-                    deferred.resolve();
-                  });
-                return deferred.promise;
-              });
+          var amountOfSoldiers = 8;
+
+          it('should create 8 soldiers for the challenger', function registerNewGame() {
+            for (var i = 0; i < amountOfSoldiers; i++) {
+              expect(challengerTeam[i].type).to.equal(CharacterTypes.SOLDIER);
+            }
           });
 
-          it('should create 8 soldiers for the opponent', function registerNewGame(done) {
-            test(done)
-              .given({
-                challenger: '545726928469e940235ce769',
-                opponent: '545726928469e940235ce853'
-              })
-              .givenHeader({
-                authorization: createAuthToken('EnoF')
-              })
-              .when(game.challenge)
-              .then(function assert(response, next, data) {
-                var deferred = queue.defer();
-                expect(response).to.equal('ok');
-                Character.find({
-                    game: data._id,
-                    player: data.opponent
-                  })
-                  .exec()
-                  .then(function checkPosition(characters) {
-                    for (var i = 0; i < 8; i++) {
-                      expect(characters[i].type).to.equal(CharacterTypes.SOLDIER);
-                    }
-                    deferred.resolve();
-                  });
-                return deferred.promise;
-              });
+          it('should create 8 soldiers for the opponent', function registerNewGame() {
+            for (var i = 0; i < amountOfSoldiers; i++) {
+              expect(opponentTeam[i].type).to.equal(CharacterTypes.SOLDIER);
+            }
           });
 
-          it('should position them on the 2nd row', function registerNewGame(done) {
-            test(done)
-              .given({
-                challenger: '545726928469e940235ce769',
-                opponent: '545726928469e940235ce853'
-              })
-              .givenHeader({
-                authorization: createAuthToken('EnoF')
-              })
-              .when(game.challenge)
-              .then(function assert(response, next, data) {
-                var deferred = queue.defer();
-                expect(response).to.equal('ok');
-                Character.find({
-                    game: data._id,
-                    player: data.challenger
-                  })
-                  .exec()
-                  .then(function checkPosition(characters) {
-                    for (var i = 0; i < 8; i++) {
-                      expect(characters[i].position.x).to.equal(1 + i);
-                      expect(characters[i].position.y).to.equal(1);
-                    }
-                    deferred.resolve();
-                  });
-                return deferred.promise;
-              });
+          it('should position them on the 2nd row', function registerNewGame() {
+            for (var i = 0; i < amountOfSoldiers; i++) {
+              expect(challengerTeam[i].position.x).to.equal(1 + i);
+              expect(challengerTeam[i].position.y).to.equal(1);
+            }
           });
 
-          it('should position the opponent soldiers', function opponentSoldiers(done) {
-            test(done)
-              .given({
-                challenger: '545726928469e940235ce769',
-                opponent: '545726928469e940235ce853'
-              })
-              .givenHeader({
-                authorization: createAuthToken('EnoF')
-              })
-              .when(game.challenge)
-              .then(function assert(response, next, data) {
-                var deferred = queue.defer();
-                expect(response).to.equal('ok');
-                Character.find({
-                    game: data._id,
-                    player: data.opponent
-                  })
-                  .exec()
-                  .then(function checkPosition(characters) {
-                    for (var i = 0; i < 8; i++) {
-                      expect(characters[i].position.x).to.equal(1 + i);
-                      expect(characters[i].position.y).to.equal(8);
-                    }
-                    deferred.resolve();
-                  });
-                return deferred.promise;
-              });
+          it('should position the opponent soldiers', function opponentSoldiers() {
+            for (var i = 0; i < amountOfSoldiers; i++) {
+              expect(opponentTeam[i].position.x).to.equal(1 + i);
+              expect(opponentTeam[i].position.y).to.equal(8);
+            }
           });
         });
 
         describe('knights', function knightsSpecs() {
-          var characters
-          before(function beforeEach(done) {
-            test(done)
-              .given({
-                challenger: '545726928469e940235ce769',
-                opponent: '545726928469e940235ce853'
-              })
-              .givenHeader({
-                authorization: createAuthToken('EnoF')
-              })
-              .when(game.challenge)
-              .then(function assert(response, next, data) {
-                var deferred = queue.defer();
-                Character.find({
-                    game: data._id,
-                    player: data.challenger
-                  })
-                  .exec()
-                  .then(function checkPosition(foundCharacters) {
-                    characters = foundCharacters;
-                    deferred.resolve();
-                  });
-                return deferred.promise;
-              });
-          });
-
           it('should create 2 knights for the challenger', function create2Knights() {
             for (var i = 8; i < 8 + 2; i++) {
-              expect(characters[i].type).to.equal(CharacterTypes.KNIGHT);
+              expect(challengerTeam[i].type).to.equal(CharacterTypes.KNIGHT);
             }
           });
 
           it('should create 2 knights for the opponent', function create2Knights() {
             for (var i = 8; i < 8 + 2; i++) {
-              expect(characters[i].type).to.equal(CharacterTypes.KNIGHT);
+              expect(opponentTeam[i].type).to.equal(CharacterTypes.KNIGHT);
             }
           });
 
           it('should create 2 knights for the challenger asymetricly', function create2Knights() {
-            expect(characters[8].position.x).to.equal(2);
-            expect(characters[8].position.y).to.equal(0);
-            expect(characters[9].position.x).to.equal(7);
-            expect(characters[9].position.y).to.equal(0);
+            expect(challengerTeam[8].position.x).to.equal(2);
+            expect(challengerTeam[8].position.y).to.equal(0);
+            expect(challengerTeam[9].position.x).to.equal(7);
+            expect(challengerTeam[9].position.y).to.equal(0);
           });
 
-          it('should create 2 knights for the opponent asymetricly', function create2Knights(done) {
-            test(done)
-              .given({
-                challenger: '545726928469e940235ce769',
-                opponent: '545726928469e940235ce853'
-              })
-              .givenHeader({
-                authorization: createAuthToken('EnoF')
-              })
-              .when(game.challenge)
-              .then(function assert(response, next, data) {
-                var deferred = queue.defer();
-                Character.find({
-                    game: data._id,
-                    player: data.opponent
-                  })
-                  .exec()
-                  .then(function checkPosition(characters) {
-                    expect(characters[8].position.x).to.equal(2);
-                    expect(characters[8].position.y).to.equal(9);
-                    expect(characters[9].position.x).to.equal(7);
-                    expect(characters[9].position.y).to.equal(9);
-                    deferred.resolve();
-                  });
-                return deferred.promise;
-              });
+          it('should create 2 knights for the opponent asymetricly', function create2Knights() {
+            expect(opponentTeam[8].position.x).to.equal(2);
+            expect(opponentTeam[8].position.y).to.equal(9);
+            expect(opponentTeam[9].position.x).to.equal(7);
+            expect(opponentTeam[9].position.y).to.equal(9);
           });
         });
       });
