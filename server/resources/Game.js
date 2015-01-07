@@ -28,14 +28,14 @@
 
   function createChallengerTeam(gameId, playerId) {
     var team = [];
-    addSoldiers(team, gameId, playerId, 1, 1, 8);
+    addSoldiers(team, gameId, playerId, 0, 1, 10);
     addSymetric(team, gameId, playerId, 2, 0, CharacterTypes.KNIGHT);
     return team;
   }
 
   function createOpponentTeam(gameId, playerId) {
     var team = [];
-    addSoldiers(team, gameId, playerId, 1, 8, 8);
+    addSoldiers(team, gameId, playerId, 0, 8, 10);
     addSymetric(team, gameId, playerId, 2, 9, CharacterTypes.KNIGHT);
     return team;
   }

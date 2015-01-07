@@ -47,6 +47,19 @@
       describe('character position', function characterPositionSpecs() {
         var challengerTeam, opponentTeam;
 
+        // Board representation:
+        // [l][k][a][m][h][s][m][a][k][l]
+        // [s][s][s][s][s][s][s][s][s][s]
+        // [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        // [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        // [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        // [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        // [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        // [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        // [ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+        // [s][s][s][s][s][s][s][s][s][s]
+        // [l][k][a][m][h][s][m][a][k][l]
+
         before(function beforeExecution(done) {
           test(done)
             .given({
@@ -80,15 +93,15 @@
         });
 
         describe('soldiers', function soldiersSpecs() {
-          var amountOfSoldiers = 8;
+          var amountOfSoldiers = 10;
 
-          it('should create 8 soldiers for the challenger', function registerNewGame() {
+          it('should create 10 soldiers for the challenger', function registerNewGame() {
             for (var i = 0; i < amountOfSoldiers; i++) {
               expect(challengerTeam[i].type).to.equal(CharacterTypes.SOLDIER);
             }
           });
 
-          it('should create 8 soldiers for the opponent', function registerNewGame() {
+          it('should create 10 soldiers for the opponent', function registerNewGame() {
             for (var i = 0; i < amountOfSoldiers; i++) {
               expect(opponentTeam[i].type).to.equal(CharacterTypes.SOLDIER);
             }
@@ -96,14 +109,14 @@
 
           it('should position them on the 2nd row', function registerNewGame() {
             for (var i = 0; i < amountOfSoldiers; i++) {
-              expect(challengerTeam[i].position.x).to.equal(1 + i);
+              expect(challengerTeam[i].position.x).to.equal(i);
               expect(challengerTeam[i].position.y).to.equal(1);
             }
           });
 
           it('should position the opponent soldiers', function opponentSoldiers() {
             for (var i = 0; i < amountOfSoldiers; i++) {
-              expect(opponentTeam[i].position.x).to.equal(1 + i);
+              expect(opponentTeam[i].position.x).to.equal(i);
               expect(opponentTeam[i].position.y).to.equal(8);
             }
           });
@@ -111,30 +124,48 @@
 
         describe('knights', function knightsSpecs() {
           it('should create 2 knights for the challenger', function create2Knights() {
-            for (var i = 8; i < 8 + 2; i++) {
+            for (var i = 10; i < 10 + 2; i++) {
               expect(challengerTeam[i].type).to.equal(CharacterTypes.KNIGHT);
             }
           });
 
           it('should create 2 knights for the opponent', function create2Knights() {
-            for (var i = 8; i < 8 + 2; i++) {
+            for (var i = 10; i < 10 + 2; i++) {
               expect(opponentTeam[i].type).to.equal(CharacterTypes.KNIGHT);
             }
           });
 
           it('should create 2 knights for the challenger asymetricly', function create2Knights() {
-            expect(challengerTeam[8].position.x).to.equal(2);
-            expect(challengerTeam[8].position.y).to.equal(0);
-            expect(challengerTeam[9].position.x).to.equal(7);
-            expect(challengerTeam[9].position.y).to.equal(0);
+            expect(challengerTeam[10].position.x).to.equal(2);
+            expect(challengerTeam[10].position.y).to.equal(0);
+            expect(challengerTeam[11].position.x).to.equal(7);
+            expect(challengerTeam[11].position.y).to.equal(0);
           });
 
           it('should create 2 knights for the opponent asymetricly', function create2Knights() {
-            expect(opponentTeam[8].position.x).to.equal(2);
-            expect(opponentTeam[8].position.y).to.equal(9);
-            expect(opponentTeam[9].position.x).to.equal(7);
-            expect(opponentTeam[9].position.y).to.equal(9);
+            expect(opponentTeam[10].position.x).to.equal(2);
+            expect(opponentTeam[10].position.y).to.equal(9);
+            expect(opponentTeam[11].position.x).to.equal(7);
+            expect(opponentTeam[11].position.y).to.equal(9);
           });
+        });
+      });
+
+      describe('archers', function archersSpecs() {
+        it('should create 2 archers for the challenger', function create2Archers() {
+
+        });
+
+        it('should create 2 archers for the opponent', function create2Archers() {
+
+        });
+
+        it('should position the archers for the challenger', function position2Archers() {
+
+        });
+
+        it('should position the archers for the opponent', function position2Archers() {
+
         });
       });
 
