@@ -11,10 +11,10 @@
   var CharacterType = mongoose.model('CharacterType', characterTypeSchema);
   CharacterType.CharacterTypes = {
     SOLDIER: 0,
-    KNIGHT: 1,
-    ARCHER: 2,
-    MAGE: 3,
-    LANCER: 4,
+    LANCER: 1,
+    KNIGHT: 2,
+    ARCHER: 3,
+    MAGE: 4,
     HERO: 5,
     SAGE: 6
   };

@@ -233,6 +233,46 @@
             expect(opponentTeam[17].position.y).to.equal(9);
           });
         });
+
+        describe('hero', function heroSpecs() {
+          it('should create hero for the challenger', function createHero() {
+            expect(challengerTeam[18].type).to.equal(CharacterTypes.HERO);
+          });
+
+          it('should create hero for the opponent', function createHero() {
+            expect(opponentTeam[18].type).to.equal(CharacterTypes.HERO);
+          });
+
+          it('should position the hero for the challenger', function positionHero() {
+            expect(challengerTeam[18].position.x).to.equal(4);
+            expect(challengerTeam[18].position.y).to.equal(0);
+          });
+
+          it('should position the hero for the opponent', function positionHero() {
+            expect(opponentTeam[18].position.x).to.equal(4);
+            expect(opponentTeam[18].position.y).to.equal(9);
+          });
+        });
+
+        describe('sage', function sageSpecs() {
+          it('should create sage for the challenger', function createSage() {
+            expect(challengerTeam[19].type).to.equal(CharacterTypes.SAGE);
+          });
+
+          it('should create sage for the opponent', function createSage() {
+            expect(opponentTeam[19].type).to.equal(CharacterTypes.SAGE);
+          });
+
+          it('should position the sage for the challenger', function positionSage() {
+            expect(challengerTeam[19].position.x).to.equal(5);
+            expect(challengerTeam[19].position.y).to.equal(0);
+          });
+
+          it('should position the sage for the opponent', function positionSage() {
+            expect(opponentTeam[19].position.x).to.equal(5);
+            expect(opponentTeam[19].position.y).to.equal(9);
+          });
+        });
       });
 
       describe('challenge', function challengeSpecs() {
