@@ -1,0 +1,38 @@
+box: wercker/nodejs
+services:
+  - dfurnes/grunt@0.0.4
+# Build definition
+build:
+  # The steps that will be executed on build
+  steps:
+    # A step that executes `npm install` command
+    - npm-install
+    # Install bower components
+    - plasticine/bower-install@0.0.4
+
+    # A custom script step, name value is used in the UI
+    # and the code value contains the command that get executed
+    - script:
+        name: echo version information
+        code: |
+          echo "node version $(node -v) running"
+          echo "npm version $(npm -v) running"
+          echo "building $WERCKER_GIT_REPOSITORY"
+
+    - grunt:
+        tasks: test
+
+    - script:
+        name: update groc
+        code: |
+          chmod +x ./scripts/groc.sh
+          ./scripts/groc.sh
+
+deploy:
+  steps:
+    # Execute the heroku-deploy, heroku details can be edited
+    # online at http://app.wercker.com/
+    - heroku-deploy
+
+    - grunt:
+        tasks: migrate:up
