@@ -1,9 +1,13 @@
 (function characterVMVMScope(angular) {
-	'use strict';
+  'use strict';
 
-	var app = angular.module('imber');
+  var app = angular.module('imber');
 
-	app.controller('characterVM', function characterVM($scope) {
-		$scope.character = $scope.character || null;
-	});
+  app.controller('characterVM', function characterVM($scope, events) {
+    $scope.character = $scope.character || null;
+
+    $scope.openActionPanel = function openActionPanel() {
+      $scope.$emit(events.REQUEST_OPEN_ACTIONS, $scope.character);
+    };
+  });
 }(window.angular));
