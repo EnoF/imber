@@ -52,17 +52,5 @@
 			expect(userDAO.getCurrentUser).to.have.been.called;
 			expect(userDAO.loggedIn).to.have.been.called;
 		});
-
-		it('should navigate to the games with provided id', function navigateToGames() {
-			// given
-			var id = 'gameId1';
-			sinon.spy($location, 'url');
-
-			// when
-			$scope.$emit(events.REQUEST_GAME, id);
-
-			// then
-			expect($location.url).to.have.been.calledWith('/games?gameId=' + id);
-		});
 	});
 }(window.sinon));

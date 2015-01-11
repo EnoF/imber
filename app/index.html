@@ -34,14 +34,10 @@
               layout-align="end"></logout>
     </div>
   </md-toolbar>
-  <div class="content-container"
-       layout="rows"
-       layout-fill>
-    <menu-panel></menu-panel>
+  <navigable-content>
     <!-- imber content will be displayed here -->
-    <md-content scroll-y flex ng-view></md-content>
-    <action-panel></action-panel>
-  </div>
+    <md-content ng-view></md-content>
+  </navigable-content>
 </md-content>
 <!-- @if NODE_ENV='production' -->
 <script src="js/imber.min.js" type="text/javascript"></script>
@@ -94,6 +90,7 @@
 
 <!-- Widgets -->
 <script src="widgets/autoComplete/autoComplete.js" type="text/javascript"></script>
+<script src="widgets/actionPanel/actionPanel.js" type="text/javascript"></script>
 <script src="widgets/challenge/challenge.js" type="text/javascript"></script>
 <script src="widgets/challenges/challenges.js" type="text/javascript"></script>
 <script src="widgets/gameCreation/gameCreation.js" type="text/javascript"></script>
@@ -102,6 +99,7 @@
 <script src="widgets/login/login.js" type="text/javascript"></script>
 <script src="widgets/logout/logout.js" type="text/javascript"></script>
 <script src="widgets/menuPanel/menuPanel.js" type="text/javascript"></script>
+<script src="widgets/navigableContent/navigableContent.js" type="text/javascript"></script>
 <script src="widgets/playerSearch/playerSearch.js" type="text/javascript"></script>
 <script src="widgets/register/register.js" type="text/javascript"></script>
 
