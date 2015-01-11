@@ -6,7 +6,9 @@
   app.factory('Team', function TeamScope(Character) {
     function Team() {
       this.private = {
-        team: []
+        team: {
+          get: []
+        }
       };
 
       this.public = {
@@ -16,6 +18,8 @@
       };
 
       this.constructor = function constructor(team) {
+        // Make sure we aren't modifying the prototype instance array.
+        this.private.team = [];
         team = team || [];
         team.forEach(function addCharacter(character) {
           this.push(new Character(character));
