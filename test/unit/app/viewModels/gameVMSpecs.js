@@ -101,5 +101,44 @@
       expect($scope.game.isStarted()).to.equal(true);
       expect($scope.$emit).to.have.been.calledWith(events.ACCEPTED);
     });
+
+    describe('get characters from any team', function getCharacterSpecs() {
+      it('should return the character of the challenger', function characterOfChallenger() {
+        // given
+        loadGameDetails();
+
+        // when
+        var character = $scope.getCharacter(0, 1);
+
+        // then
+        expect(character).to.be.instanceof(Character);
+        expect(character.getX()).to.equal(0);
+        expect(character.getY()).to.equal(1);
+      });
+
+      it('should return the character of the opponent', function characterOfOppnent() {
+        // given
+        loadGameDetails();
+
+        // when
+        var character = $scope.getCharacter(0, 9);
+
+        // then
+        expect(character).to.be.instanceof(Character);
+        expect(character.getX()).to.equal(0);
+        expect(character.getY()).to.equal(9);
+      });
+
+      it('should return null when nothing is found', function nothingFound() {
+        // given
+        loadGameDetails();
+
+        // when
+        var character = $scope.getCharacter(5, 5);
+
+        // then
+        expect(character).to.equal(null);
+      });
+    });
   });
 }(window.sinon));
