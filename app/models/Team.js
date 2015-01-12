@@ -7,7 +7,7 @@
     function Team() {
       this.private = {
         team: {
-          get: []
+          get: {}
         }
       };
 
@@ -19,10 +19,11 @@
 
       this.constructor = function constructor(team) {
         // Make sure we aren't modifying the prototype instance array.
-        this.private.team = [];
+        this.private.team = {};
         team = team || [];
         team.forEach(function addCharacter(character) {
-          this.push(new Character(character));
+          var hash = 'x' + character.position.x + 'y' + character.position.y;
+          this[hash] = new Character(character);
         }, this.private.team);
       };
     }

@@ -53,8 +53,8 @@
 
       // then
       expect(teamChallenger).to.be.an.instanceof(Team);
-      expect(teamChallenger.get(0)).to.be.an.instanceof(Character);
-      var character = teamChallenger.get(0);
+      expect(teamChallenger.get('x0y1')).to.be.an.instanceof(Character);
+      var character = teamChallenger.get('x0y1');
       expect(character.getId()).to.equal('charid11');
       expect(character.getName()).to.equal('Soldier');
       expect(character.getType()).to.equal(characterTypes.SOLDIER);

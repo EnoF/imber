@@ -64,6 +64,10 @@
         type: {
           _id: 0,
           name: 'SOLDIER'
+        },
+        position: {
+          x: 0,
+          y: 1
         }
       };
     }
@@ -85,6 +89,10 @@
             type: {
               _id: 0,
               name: 'Soldier'
+            },
+            position: {
+              x: 0,
+              y: 1
             }
           }]
         },
@@ -97,6 +105,10 @@
             type: {
               _id: 0,
               name: 'Soldier'
+            },
+            position: {
+              x: 0,
+              y: 9
             }
           }]
         },

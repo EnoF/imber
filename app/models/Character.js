@@ -14,6 +14,12 @@
         },
         type: {
           get: null
+        },
+        x: {
+          getSet: null
+        },
+        y: {
+          getSet: null
         }
       };
 
@@ -21,6 +27,8 @@
         this.private.id = character._id;
         this.private.name = character.type.name;
         this.private.type = character.type._id;
+        this.private.x = character.position.x;
+        this.private.y = character.position.y;
       };
     }
 
