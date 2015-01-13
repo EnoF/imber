@@ -6,6 +6,7 @@
   app.directive('actionPanel', function actionPanelDirective(events) {
     return {
       restrict: 'E',
+      controller: 'actionPanelVM',
       scope: {
         character: '=character'
       },

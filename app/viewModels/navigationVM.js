@@ -19,7 +19,7 @@
     $scope.getActionPanel = function getActionPanel() {
       $scope.actionPanel = $scope.actionPanel || $mdSidenav('actionPanel');
       return $scope.actionPanel;
-    }
+    };
 
     $scope.showNavigation = function showNavigation() {
       $scope.getNavigation().open();
