@@ -2,10 +2,7 @@
 <section flex
          ng-repeat="row in board"
          layout="row">
-  <character ng-repeat="character in challengerTeam"
-             flex></character>
-  <character ng-repeat="character in opponentTeam"
-             flex></character>
   <game-square ng-repeat="square in row"
+               character="getCharacter($index, $parent.$index)"
                flex></game-square>
 </section>

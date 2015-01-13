@@ -1,45 +1,51 @@
 (function navigationVM(angular) {
-	'use strict';
+  'use strict';
 
-	var app = angular.module('imber');
+  var app = angular.module('imber');
 
-	app.controller('navigationVM', function navigationVMScope($scope, $mdSidenav, $routeParams, $location, sitemap,
-		userDAO, events) {
-		$scope.menu = sitemap;
-		$scope.$routeParams = $routeParams;
-		$scope.character = null;
-		$scope.navigation = null;
-		$scope.actionPanel = null;
+  app.controller('navigationVM', function navigationVMScope($scope, $mdSidenav, $routeParams, $location, sitemap,
+    userDAO, events) {
+    $scope.menu = sitemap;
+    $scope.$routeParams = $routeParams;
+    $scope.character = null;
+    $scope.navigation = null;
+    $scope.actionPanel = null;
 
-		$scope.getNavigation = function getNavigation() {
-			$scope.navigation = $scope.navigation || $mdSidenav('navigation');
-			return $scope.navigation;
-		};
+    $scope.getNavigation = function getNavigation() {
+      $scope.navigation = $scope.navigation || $mdSidenav('navigation');
+      return $scope.navigation;
+    };
 
-		$scope.showNavigation = function showNavigation() {
-			$scope.getNavigation().open();
-		};
+    $scope.getActionPanel = function getActionPanel() {
+      $scope.actionPanel = $scope.actionPanel || $mdSidenav('actionPanel');
+      return $scope.actionPanel;
+    }
 
-		$scope.hideNavigation = function hideNavigation() {
-			$scope.getNavigation().close();
-		};
+    $scope.showNavigation = function showNavigation() {
+      $scope.getNavigation().open();
+    };
 
-		$scope.getLoggedInUser = function getLoggedInUserProxy() {
-			return userDAO.getCurrentUser();
-		};
+    $scope.hideNavigation = function hideNavigation() {
+      $scope.getNavigation().close();
+    };
 
-		$scope.isLoggedIn = function isLoggedInProxy() {
-			return userDAO.loggedIn();
-		};
+    $scope.getLoggedInUser = function getLoggedInUserProxy() {
+      return userDAO.getCurrentUser();
+    };
 
-		$scope.openActionPanel = function openActionPanel(event, character) {
-			event.stopPropagation();
-			$scope.character = character;
-		};
+    $scope.isLoggedIn = function isLoggedInProxy() {
+      return userDAO.loggedIn();
+    };
 
-		$scope.$on(events.REQUEST_GAME, function navigateToGame(event, id) {
-			event.stopPropagation();
-			$location.url('/games?gameId=' + id);
-		});
-	});
+    $scope.openActionPanel = function openActionPanel(event, character) {
+      event.stopPropagation();
+      $scope.character = character;
+      $scope.getActionPanel().open();
+    };
+
+    $scope.$on(events.REQUEST_GAME, function navigateToGame(event, id) {
+      event.stopPropagation();
+      $location.url('/games?gameId=' + id);
+    });
+  });
 }(window.angular));

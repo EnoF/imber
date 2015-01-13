@@ -6,8 +6,10 @@
   app.directive('gameSquare', function gameSquareDirective() {
     return {
       restrict: 'E',
-      require: '^gameBoard',
       templateUrl: 'gameSquare',
+      scope: {
+        character: '=character'
+      },
       link: function gameSquareConstructor(scope) {
         scope.x = scope.$index;
         scope.y = scope.$parent.$index;
