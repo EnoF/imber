@@ -3,5 +3,6 @@
          ng-repeat="row in board"
          layout="row">
   <game-square ng-repeat="square in row"
+               character="getCharacter($index, $parent.$index)"
                flex></game-square>
 </section>

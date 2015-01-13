@@ -35,6 +35,7 @@
         $httpBackend: $httpBackend,
         createDefaultUser: createDefaultUser,
         createDefaultUserAuthResponse: createDefaultUserAuthResponse,
+        createDefaultCharacterResponse: createDefaultCharacterResponse,
         createDefaultGameResponse: createDefaultGameResponse,
         createDefaultGamesResponse: createDefaultGamesResponse,
         events: events,
@@ -55,6 +56,22 @@
       };
     }
 
+    function createDefaultCharacterResponse() {
+      return {
+        _id: 'characterid1',
+        game: 'gameid1',
+        player: 'playerid1',
+        type: {
+          _id: 0,
+          name: 'SOLDIER'
+        },
+        position: {
+          x: 0,
+          y: 1
+        }
+      };
+    }
+
     function createDefaultGameResponse() {
       return {
         _id: 'gameId1',
@@ -65,11 +82,35 @@
         },
         challenger: {
           _id: 'userid1',
-          userName: 'EnoF'
+          userName: 'EnoF',
+          team: [{
+            _id: 'charid11',
+            player: 'userid1',
+            type: {
+              _id: 0,
+              name: 'Soldier'
+            },
+            position: {
+              x: 0,
+              y: 1
+            }
+          }]
         },
         opponent: {
           _id: 'userid2',
-          userName: 'Rina'
+          userName: 'Rina',
+          team: [{
+            _id: 'charid21',
+            player: 'userid2',
+            type: {
+              _id: 0,
+              name: 'Soldier'
+            },
+            position: {
+              x: 0,
+              y: 9
+            }
+          }]
         },
         started: false
       };

@@ -104,11 +104,11 @@
           if (isFailCase) return;
           if (!!req.header || !!req.path || !!req.method) {
             var response = res.send.called ? res.send.args[0][0] : null;
-            expectations(response, next);
+            return expectations(response, next, data);
           } else {
             expect(res.send).to.have.been.called;
             var response = res.send.args[0][0];
-            expectations(response, req, data);
+            return expectations(response, req, data);
           }
         });
         testQueue = testQueue.then(done);

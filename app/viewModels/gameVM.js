@@ -23,6 +23,12 @@
         });
     };
 
+    $scope.getCharacter = function getCharacter(x, y) {
+      return $scope.game.getChallengerTeam().get('x' + x + 'y' + y) ||
+        $scope.game.getOpponentTeam().get('x' + x + 'y' + y) ||
+        null;
+    };
+
     $scope.load = function load() {
       var promise = gameDAO.getGame($scope.id);
       promise.then(function setGame(game) {

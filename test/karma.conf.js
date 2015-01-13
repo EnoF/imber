@@ -25,7 +25,7 @@ module.exports = function(config) {
       'app/bower_components/angular-animate/angular-animate.min.js',
       'app/bower_components/hammerjs/hammer.min.js',
       'app/bower_components/angular-material/angular-material.min.js',
-      'app/bower_components/enofjs/dist/enofjs/enof.min.js',
+      'app/bower_components/enofjs/src/clazz.js',
       // App wiring
       'app/app.js',
       // DAO

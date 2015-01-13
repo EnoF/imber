@@ -3,7 +3,9 @@
 @import (inline) "app/bower_components/angular-material/themes/teal-theme.css";
 @import (inline) "app/bower_components/angular-material/themes/light-blue-dark-theme.css";
 @import (inline) "app/bower_components/famous-angular/dist/famous-angular.css";
+@import "app/widgets/actionPanel/actionPanel.less";
 @import "app/widgets/autoComplete/autoComplete.less";
+@import "app/widgets/character/character.less";
 @import "app/widgets/challenge/challenge.less";
 @import "app/widgets/challenges/challenges.less";
 @import "app/widgets/gameCreation/gameCreation.less";
@@ -11,50 +13,11 @@
 @import "app/widgets/gameSquare/gameSquare.less";
 @import "app/widgets/login/login.less";
 @import "app/widgets/logout/logout.less";
+@import "app/widgets/menuPanel/menuPanel.less";
+@import "app/widgets/navigableContent/navigableContent.less";
 @import "app/widgets/playerSearch/playerSearch.less";
 @import "app/widgets/register/register.less";
 
-md-sidenav {
-  .md-button {
-    padding: 0;
-    margin: 6px;
-  }
-}
-
-.menu-item {
-  background: none;
-  border-width: 0;
-  cursor: pointer;
-  display: block;
-  color: #ccc;
-  font-size: inherit;
-  line-height: 40px;
-  max-height: 40px;
-  opacity: 1;
-  margin: 0;
-  outline: none;
-  padding: 0px 28px;
-  position: relative;
-  text-align: left;
-  text-decoration: none;
-  width: 100%;
-  z-index: 1;
-  -webkit-transition: 0.2s ease-in-out;
-  -webkit-transition-property: max-height, background-color, opacity;
-  -moz-transition: 0.2s ease-in-out;
-  -moz-transition-property: max-height, background-color, opacity;
-  transition: 0.2s ease-in-out;
-  transition-property: max-height, background-color, opacity;
-}
-
-.md-button {
-  color: #aaa;
-}
-
 h2 {
   color: #aaa;
-}
-
-[ng-view] {
-  min-height: 500px;
 }

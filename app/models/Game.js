@@ -3,7 +3,7 @@
 
   var app = angular.module('imber');
 
-  app.factory('Game', function GameScope(Board, User) {
+  app.factory('Game', function GameScope(Board, User, Team) {
     function Game() {
       this.private = {
         id: {
@@ -15,7 +15,13 @@
         challenger: {
           getSet: null
         },
+        challengerTeam: {
+          getSet: null
+        },
         opponent: {
+          getSet: null
+        },
+        opponentTeam: {
           getSet: null
         },
         started: {
@@ -29,6 +35,8 @@
         this.private.challenger = new User(game.challenger);
         this.private.opponent = new User(game.opponent);
         this.private.started = game.started;
+        this.private.challengerTeam = new Team(game.challenger.team);
+        this.private.opponentTeam = new Team(game.opponent.team);
       };
     }
 
