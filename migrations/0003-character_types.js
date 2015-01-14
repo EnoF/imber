@@ -5,16 +5,16 @@ var types = [{
   name: 'Soldier'
 }, {
   _id: 1,
-  name: 'Knight'
+  name: 'Lancer'
 }, {
   _id: 2,
-  name: 'Mage'
+  name: 'Knight'
 }, {
   _id: 3,
   name: 'Archer'
 }, {
   _id: 4,
-  name: 'Lancer'
+  name: 'Mage'
 }, {
   _id: 5,
   name: 'Hero'

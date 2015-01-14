@@ -8,7 +8,8 @@
       restrict: 'E',
       templateUrl: 'gameSquare',
       scope: {
-        character: '=character'
+        character: '=?character',
+        isOpponent: '=?isOpponent'
       },
       link: function gameSquareConstructor(scope) {
         scope.x = scope.$index;
