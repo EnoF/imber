@@ -49,6 +49,27 @@ module.exports = function(grunt) {
             '.tmp/pre.imber.js'
           ]
         }
+      },
+      dev: {
+        options: {
+          sourceMap: true
+        },
+        files: {
+          '<%= app.tmp %>/js/imber.js': [
+            '<%= app.app %>/dao/*.js',
+            '<%= app.app %>/models/*.js',
+            '<%= app.app %>/modules/*.js',
+            '<%= app.app %>/viewModels/*.js',
+            '<%= app.app %>/widgets/**/*.js'
+          ]
+        }
+      },
+      less: {
+        files: {
+          '<%= app.tmp %>/less/styles.less': [
+            '<%= app.app %>/widgets/**/*.less'
+          ]
+        }
       }
     },
     copy: {
@@ -284,7 +305,7 @@ module.exports = function(grunt) {
           '<%= app.app %>/styles/*.less',
           '<%= app.app %>/widgets/**/*.less'
         ],
-        tasks: ['less:main'],
+        tasks: ['concat:less', 'less:main'],
         options: {
           // Start a live reload server on the default port 35729
           livereload: true
@@ -313,7 +334,7 @@ module.exports = function(grunt) {
           '<%= app.app %>/**/*.js',
           '<%= app.test %>/unit/app/**/*.js'
         ],
-        tasks: ['karma:unitAuto:run'],
+        tasks: ['karma:unitAuto:run', 'concat:dev'],
         options: {
           // Start a live reload server on the default port 35729
           livereload: true
@@ -342,8 +363,10 @@ module.exports = function(grunt) {
   grunt.registerTask('build', [
     'clean',
     'jshint',
+    'concat:less',
     'less',
     'ngtemplates:dev',
+    'concat:dev',
     'preprocess:develop'
   ]);
 
