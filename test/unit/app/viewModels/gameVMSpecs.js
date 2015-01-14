@@ -139,6 +139,28 @@
         // then
         expect(character).to.equal(null);
       });
+
+      it('should return that character belongs to the opponent', function teamBelongs() {
+        // given
+        loadGameDetails();
+
+        // when
+        var isOpponent = $scope.isOpponent(0, 9);
+
+        // then
+        expect(isOpponent).to.equal(true);
+      });
+
+      it('should return that character belongs to the challenger', function teamBelongs() {
+        // given
+        loadGameDetails();
+
+        // when
+        var isOpponent = $scope.isOpponent(0, 1);
+
+        // then
+        expect(isOpponent).to.equal(false);
+      });
     });
   });
 }(window.sinon));

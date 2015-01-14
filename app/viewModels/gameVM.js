@@ -29,6 +29,10 @@
         null;
     };
 
+    $scope.isOpponent = function isOpponent(x, y) {
+      return !!$scope.game.getOpponentTeam().get('x' + x + 'y' + y);
+    };
+
     $scope.load = function load() {
       var promise = gameDAO.getGame($scope.id);
       promise.then(function setGame(game) {

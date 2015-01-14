@@ -25,5 +25,17 @@
       expect($scope.character).to.be.instanceof(Character);
       expect($scope.character).to.equal(defaultCharacter);
     });
+
+    it('should set occupied by opponent', function occupiedByOpponent() {
+      // given
+      parentScope.isOpponent = true;
+      var directive = angular.element('<game-square is-opponent="isOpponent"></game-square>')
+
+      // when
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
+
+      // then
+      expect($scope.isOpponent).to.equal(true);
+    });
   });
 }(window.angular));
