@@ -57,7 +57,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: '<%= app.app %>/icons',
           dest: '<%= app.dist %>/icons',
-          src: '*.svg'
+          src: ['*.svg', '*.png']
         }, {
           expand: true,
           cwd: '<%= app.app %>/pages',

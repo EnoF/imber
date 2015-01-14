@@ -20,13 +20,7 @@ build:
           echo "building $WERCKER_GIT_REPOSITORY"
 
     - grunt:
-        tasks: test
-
-    - script:
-        name: update groc
-        code: |
-          chmod +x ./scripts/groc.sh
-          ./scripts/groc.sh
+        tasks: package
 
 deploy:
   steps:
