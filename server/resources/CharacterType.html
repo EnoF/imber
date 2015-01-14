@@ -1,0 +1,25 @@
+<!DOCTYPE html><html lang="en"><head><title>server/resources/CharacterType</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../"><meta name="groc-document-path" content="server/resources/CharacterType"><meta name="groc-project-path" content="server/resources/CharacterType.js"><link rel="stylesheet" type="text/css" media="all" href="../../assets/style.css"><script type="text/javascript" src="../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">server/resources/CharacterType.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="p">(</span><span class="kd">function</span> <span class="nx">CharacterTypeScope</span><span class="p">(</span><span class="nx">mongoose</span><span class="p">)</span> <span class="p">{</span>
+  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+  <span class="kd">var</span> <span class="nx">Schema</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Schema</span><span class="p">;</span>
+
+  <span class="kd">var</span> <span class="nx">characterTypeSchema</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Schema</span><span class="p">({</span>
+    <span class="nx">_id</span><span class="o">:</span> <span class="nb">Number</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="nb">String</span>
+  <span class="p">},</span> <span class="p">{</span>
+    <span class="nx">collection</span><span class="o">:</span> <span class="s1">&#39;characterTypes&#39;</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">CharacterType</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span><span class="p">(</span><span class="s1">&#39;CharacterType&#39;</span><span class="p">,</span> <span class="nx">characterTypeSchema</span><span class="p">);</span>
+  <span class="nx">CharacterType</span><span class="p">.</span><span class="nx">CharacterTypes</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">SOLDIER</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">LANCER</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nx">KNIGHT</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nx">ARCHER</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="nx">MAGE</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="nx">HERO</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="nx">SAGE</span><span class="o">:</span> <span class="mi">6</span>
+  <span class="p">};</span>
+
+  <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">CharacterType</span><span class="p">;</span>
+<span class="p">}(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose&#39;</span><span class="p">)));</span></div></div></div></div></body></html>

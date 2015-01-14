@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="README.md"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path">README.md</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="imber">Imber</h1>
+
+<p>Imber is a strategy game.</p>
+
+<p><a href="https://app.wercker.com/project/bykey/56124565b5618ce4988c1a1e90e0309d"><img src="https://app.wercker.com/status/56124565b5618ce4988c1a1e90e0309d/m/master" alt="wercker status" title="wercker status" /></a></p>
+
+<h2 id="features">Features</h2>
+
+<h3 id="user-account">User account</h3>
+
+<p>Users can be registered. Registered users can also login.</p>
+
+<p>Users will be remembered via cookies for 30 days and refreshed on every login.</p>
+
+<h3 id="games">Games</h3>
+
+<p>Users will be able to challenge other users for a game. While searching for a player
+suggestions will be presented after 1 second delay.</p>
+
+<p>Challenges related to you, will be presented on the <code>Dashboard</code>. All the latest games
+can be viewed in the <code>Games</code> section.</p>
+
+<p>Challenges where you are assigned to as an opponent, allows you to accept the challenge.</p>
+
+<p>You can navigate to any game and view the current state of the game.</p>
+
+<h3 id="known-issues">Known issues</h3>
+
+<ul>
+<li>Pressing the enter button will not submit the challenge correctly</li>
+</ul>
+
+<h2 id="setup">Setup</h2>
+
+<p>Run the following commands to get all dependencies:</p>
+
+<pre><code>npm install -g bower grunt-cli
+npm install
+bower install
+</code></pre>
+
+<h2 id="run-the-server">Run the server</h2>
+
+<p>To run the server:</p>
+
+<pre><code>grunt server
+</code></pre>
+
+<h2 id="client">Client</h2>
+
+<p>The client will be build with <code>angular</code>. For the animations we will be using <code>famous-angular</code>.</p>
+
+<h2 id="test-setup">Test setup</h2>
+
+<p>The unit tests for the <code>ViewModels</code> and <code>Directives</code> have access to the <code>imber-test</code> app.
+The app is a proxy for the <code>imber</code> app with additional helpers. For testing we use:</p>
+
+<ul>
+<li>karma</li>
+<li>mocha</li>
+<li>chai</li>
+<li>sinon</li>
+</ul>
+
+<h3 id="code-coverage">Code coverage</h3>
+
+<p>The code coverage can be found when running the server: <code>http://localhost:9000/coverage</code>.
+We use <code>istanbul</code> to generate the report.</p>
+
+<h3 id="browsers">Browsers</h3>
+
+<p>We test for modern browsers only and our unit tests will be run against <code>PhantomJS</code>.</p>
+
+<h2 id="code-documentation">Code documentation</h2>
+
+<p>The documentation is found when running the server under: <code>http://localhost:9000/docs</code> or
+you can find the docs on: <code>http://enof.github.io/imber/</code>. To refresh the documentation,
+restart the server.</p>
+
+<h2 id="continious-integration">Continious integration</h2>
+
+<p>The code is build with <code>drone.io</code>.</p></div></div></div></div></body></html>

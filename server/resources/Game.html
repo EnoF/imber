@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="en"><head><title>server/resources/Game</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../"><meta name="groc-document-path" content="server/resources/Game"><meta name="groc-project-path" content="server/resources/Game.js"><link rel="stylesheet" type="text/css" media="all" href="../../assets/style.css"><script type="text/javascript" src="../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">server/resources/Game.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="p">(</span><span class="kd">function</span> <span class="nx">GameScope</span><span class="p">(</span><span class="nx">mongoose</span><span class="p">)</span> <span class="p">{</span>
+  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+  <span class="kd">var</span> <span class="nx">Schema</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Schema</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">Character</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./Character&#39;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">CharacterTypes</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./CharacterType&#39;</span><span class="p">).</span><span class="nx">CharacterTypes</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">queue</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">);</span>
+
+  <span class="kd">var</span> <span class="nx">gameSchema</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Schema</span><span class="p">({</span>
+    <span class="nx">board</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="nb">Number</span><span class="p">,</span>
+      <span class="nx">ref</span><span class="o">:</span> <span class="s1">&#39;Board&#39;</span><span class="p">,</span>
+      <span class="k">default</span><span class="o">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+    <span class="nx">challenger</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="nx">Schema</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">,</span>
+      <span class="nx">ref</span><span class="o">:</span> <span class="s1">&#39;User&#39;</span>
+    <span class="p">},</span>
+    <span class="nx">opponent</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="nx">Schema</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">,</span>
+      <span class="nx">ref</span><span class="o">:</span> <span class="s1">&#39;User&#39;</span>
+    <span class="p">},</span>
+    <span class="nx">started</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="nb">Boolean</span><span class="p">,</span>
+      <span class="k">default</span><span class="o">:</span> <span class="kc">false</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">function</span> <span class="nx">createChallengerTeam</span><span class="p">(</span><span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">team</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">addSoldiers</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+    <span class="nx">addSymetric</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">CharacterTypes</span><span class="p">.</span><span class="nx">LANCER</span><span class="p">);</span>
+    <span class="nx">addSymetric</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">CharacterTypes</span><span class="p">.</span><span class="nx">KNIGHT</span><span class="p">);</span>
+    <span class="nx">addSymetric</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">CharacterTypes</span><span class="p">.</span><span class="nx">ARCHER</span><span class="p">);</span>
+    <span class="nx">addSymetric</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">CharacterTypes</span><span class="p">.</span><span class="nx">MAGE</span><span class="p">);</span>
+    <span class="nx">addNewCharacter</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">CharacterTypes</span><span class="p">.</span><span class="nx">HERO</span><span class="p">);</span>
+    <span class="nx">addNewCharacter</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">CharacterTypes</span><span class="p">.</span><span class="nx">SAGE</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">team</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">createOpponentTeam</span><span class="p">(</span><span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">team</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">addSoldiers</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+    <span class="nx">addSymetric</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="nx">CharacterTypes</span><span class="p">.</span><span class="nx">LANCER</span><span class="p">);</span>
+    <span class="nx">addSymetric</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="nx">CharacterTypes</span><span class="p">.</span><span class="nx">KNIGHT</span><span class="p">);</span>
+    <span class="nx">addSymetric</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="nx">CharacterTypes</span><span class="p">.</span><span class="nx">ARCHER</span><span class="p">);</span>
+    <span class="nx">addSymetric</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="nx">CharacterTypes</span><span class="p">.</span><span class="nx">MAGE</span><span class="p">);</span>
+    <span class="nx">addNewCharacter</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="nx">CharacterTypes</span><span class="p">.</span><span class="nx">HERO</span><span class="p">);</span>
+    <span class="nx">addNewCharacter</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="nx">CharacterTypes</span><span class="p">.</span><span class="nx">SAGE</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">team</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">addNewCharacter</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">team</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+      <span class="nx">game</span><span class="o">:</span> <span class="nx">gameId</span><span class="p">,</span>
+      <span class="nx">player</span><span class="o">:</span> <span class="nx">playerId</span><span class="p">,</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="nx">type</span><span class="p">,</span>
+      <span class="nx">position</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">x</span><span class="o">:</span> <span class="nx">x</span><span class="p">,</span>
+        <span class="nx">y</span><span class="o">:</span> <span class="nx">y</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">addSoldiers</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">amount</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">addNewCharacter</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">CharacterTypes</span><span class="p">.</span><span class="nx">SOLDIER</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">addSymetric</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">addNewCharacter</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">type</span><span class="p">);</span>
+    <span class="nx">addNewCharacter</span><span class="p">(</span><span class="nx">team</span><span class="p">,</span> <span class="nx">gameId</span><span class="p">,</span> <span class="nx">playerId</span><span class="p">,</span> <span class="mi">9</span> <span class="o">-</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">type</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">gameSchema</span><span class="p">.</span><span class="nx">pre</span><span class="p">(</span><span class="s1">&#39;save&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">challengerDeferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">opponentDeferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isNew</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">Character</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">createChallengerTeam</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">challenger</span><span class="p">),</span>
+        <span class="nx">challengerDeferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+      <span class="nx">Character</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">createOpponentTeam</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">opponent</span><span class="p">),</span>
+        <span class="nx">opponentDeferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+      <span class="nx">queue</span><span class="p">.</span><span class="nx">all</span><span class="p">([</span><span class="nx">challengerDeferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">,</span> <span class="nx">opponentDeferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">])</span>
+        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">finishedCreation</span><span class="p">()</span> <span class="p">{</span>
+          <span class="nx">next</span><span class="p">();</span>
+        <span class="p">})</span>
+        <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">next</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">next</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">Game</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span><span class="p">(</span><span class="s1">&#39;Game&#39;</span><span class="p">,</span> <span class="nx">gameSchema</span><span class="p">);</span>
+
+  <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Game</span><span class="p">;</span>
+<span class="p">}(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose&#39;</span><span class="p">)));</span></div></div></div></div></body></html>

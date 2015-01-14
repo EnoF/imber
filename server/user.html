@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="en"><head><title>server/user</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="server/user"><meta name="groc-project-path" content="server/user.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">server/user.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="p">(</span><span class="kd">function</span> <span class="nx">userScope</span><span class="p">(</span><span class="nx">mongoose</span><span class="p">,</span> <span class="nx">queue</span><span class="p">,</span> <span class="nx">HMAC</span><span class="p">)</span> <span class="p">{</span>
+  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+  <span class="kd">var</span> <span class="nx">User</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./resources/User&#39;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">auth</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./authorization&#39;</span><span class="p">);</span>
+
+  <span class="kd">function</span> <span class="nx">createNewAuthToken</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span> <span class="nx">newUser</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span> <span class="nx">createNewAuthToken</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>During the creation of a user, the user will be passed with
+the initial function call.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">user</span> <span class="o">=</span> <span class="nx">newUser</span> <span class="o">||</span> <span class="nx">user</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>User is not found</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">401</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;bad credentials&#39;</span><span class="p">);</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">();</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Create a new authentication token</p></div></div><div class="code"><div class="wrapper">        <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span>
+          <span class="nx">authToken</span><span class="o">:</span> <span class="nx">auth</span><span class="p">.</span><span class="nx">createAuthToken</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">userName</span><span class="p">),</span>
+          <span class="nx">user</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">_id</span><span class="o">:</span> <span class="nx">user</span><span class="p">.</span><span class="nx">_id</span><span class="p">,</span>
+            <span class="nx">userName</span><span class="o">:</span> <span class="nx">user</span><span class="p">.</span><span class="nx">userName</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">};</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">login</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">loginDeferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+    <span class="nx">User</span><span class="p">.</span><span class="nx">findOne</span><span class="p">({</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Find username case insensitive.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">userName</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">$regex</span><span class="o">:</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">&#39;^&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">userName</span> <span class="o">+</span> <span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">)</span>
+      <span class="p">},</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>HMAC the password so that we can match it with the encrypted password.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">password</span><span class="o">:</span> <span class="nx">HMAC</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">password</span><span class="p">,</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">IMBER_HMAC_KEY</span><span class="p">).</span><span class="nx">toString</span><span class="p">()</span>
+    <span class="p">},</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+    <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">createNewAuthToken</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">loginDeferred</span><span class="p">));</span>
+    <span class="k">return</span> <span class="nx">loginDeferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">reauthenticate</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+    <span class="k">try</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Extracting the username will throw an error when
+the token is too old or tampered by a hacker.</p></div></div><div class="code"><div class="wrapper">      <span class="kd">var</span> <span class="nx">userName</span> <span class="o">=</span> <span class="nx">auth</span><span class="p">.</span><span class="nx">extractUserName</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">authToken</span><span class="p">);</span>
+      <span class="nx">User</span><span class="p">.</span><span class="nx">findOne</span><span class="p">({</span>
+        <span class="nx">userName</span><span class="o">:</span> <span class="nx">userName</span>
+      <span class="p">},</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+      <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">createNewAuthToken</span><span class="p">(</span><span class="nx">res</span><span class="p">));</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>In case the user is no hacker, we want to tell the user
+the token is too old.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">401</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;old token&#39;</span><span class="p">);</span>
+      <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">register</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Check if the provided registration details are valid.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">isValidRegistration</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Encrypt the password before we store an unencrypted password!</p></div></div><div class="code"><div class="wrapper">    <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">password</span> <span class="o">=</span> <span class="nx">HMAC</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">password</span><span class="p">,</span>
+      <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">IMBER_HMAC_KEY</span><span class="p">).</span><span class="nx">toString</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">newUser</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Check if the user has a conflicting username or email with an other user.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">isUserDetailConflicting</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">userName</span><span class="p">,</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">email</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">checkExistance</span><span class="p">(</span><span class="nx">newUser</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">));</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>When registered successful we can directly log the user in.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">createNewAuthToken</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span> <span class="nx">newUser</span><span class="p">));</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>When for what ever reason the registration was rejected,
+send a proper response.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">fail</span><span class="p">(</span><span class="nx">sendRegistrationInvalid</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">newUser</span><span class="p">));</span>
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">checkExistance</span><span class="p">(</span><span class="nx">newUser</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span> <span class="nx">noSuchUser</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>There is no conflicting user found!</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="p">(</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Create the new user.</p></div></div><div class="code"><div class="wrapper">        <span class="nx">newUser</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">};</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">sendRegistrationInvalid</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span> <span class="nx">registrationIsInvalid</span><span class="p">()</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>User can't be used.</p></div></div><div class="code"><div class="wrapper">      <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">410</span><span class="p">).</span><span class="nx">send</span><span class="p">({</span>
+        <span class="nx">userName</span><span class="o">:</span> <span class="nx">user</span><span class="p">.</span><span class="nx">userName</span> <span class="o">===</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">userName</span><span class="p">,</span>
+        <span class="nx">email</span><span class="o">:</span> <span class="nx">user</span><span class="p">.</span><span class="nx">email</span> <span class="o">===</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">email</span>
+      <span class="p">});</span>
+    <span class="p">};</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">isValidRegistration</span><span class="p">(</span><span class="nx">details</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>All properties must be set!</p></div></div><div class="code"><div class="wrapper">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">details</span><span class="p">.</span><span class="nx">userName</span> <span class="o">||</span> <span class="o">!</span><span class="nx">details</span><span class="p">.</span><span class="nx">password</span> <span class="o">||</span> <span class="o">!</span><span class="nx">details</span><span class="p">.</span><span class="nx">email</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">isUserDetailConflicting</span><span class="p">(</span><span class="nx">userName</span><span class="p">,</span> <span class="nx">email</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Search for any conflicting users in the db.</p></div></div><div class="code"><div class="wrapper">    <span class="nx">User</span><span class="p">.</span><span class="nx">findOne</span><span class="p">({</span>
+      <span class="nx">$or</span><span class="o">:</span> <span class="p">[{</span>
+        <span class="nx">userName</span><span class="o">:</span> <span class="nx">userName</span>
+      <span class="p">},</span> <span class="p">{</span>
+        <span class="nx">email</span><span class="o">:</span> <span class="nx">email</span>
+      <span class="p">}]</span>
+    <span class="p">},</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">search</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">findDeferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Find the user close to the provided name</p></div></div><div class="code"><div class="wrapper">    <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">search</span><span class="p">;</span>
+    <span class="nx">User</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span>
+        <span class="nx">userName</span><span class="o">:</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">&#39;^&#39;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">)</span>
+      <span class="p">})</span>
+      <span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;userName&#39;</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">limit</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">findDeferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+    <span class="nx">findDeferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">handleFindResults</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">));</span>
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">handleFindResults</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span> <span class="nx">sendFindResults</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">result</span> <span class="o">||</span> <span class="p">(</span><span class="nx">result</span> <span class="k">instanceof</span> <span class="nb">Array</span> <span class="o">&amp;&amp;</span> <span class="nx">result</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>when there are no results found</p></div></div><div class="code"><div class="wrapper">        <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">404</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;not found&#39;</span><span class="p">);</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">();</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>otherwise send the result</p></div></div><div class="code"><div class="wrapper">        <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">};</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">find</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">findDeferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Find the user close to the provided name</p></div></div><div class="code"><div class="wrapper">    <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">find</span><span class="p">;</span>
+    <span class="nx">User</span><span class="p">.</span><span class="nx">findOne</span><span class="p">({</span>
+        <span class="nx">userName</span><span class="o">:</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">&#39;^&#39;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">)</span>
+      <span class="p">})</span>
+      <span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;userName&#39;</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">findDeferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+    <span class="nx">findDeferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">handleFindResults</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">));</span>
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Internal function to perform actions on a user.</p></div></div><div class="code"><div class="wrapper">  <span class="kd">function</span> <span class="nx">getUserById</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">findDeferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+    <span class="nx">User</span><span class="p">.</span><span class="nx">findOne</span><span class="p">({</span>
+      <span class="nx">_id</span><span class="o">:</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+    <span class="p">},</span> <span class="nx">findDeferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+    <span class="nx">findDeferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">resolveOnlyWhenFound</span><span class="p">(</span><span class="nx">deferred</span><span class="p">));</span>
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">resolveOnlyWhenFound</span><span class="p">(</span><span class="nx">deferred</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span> <span class="nx">checkUser</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!!</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">};</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">searchFor</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!!</span><span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">search</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">search</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">find</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">find</span><span class="o">:</span> <span class="nx">find</span><span class="p">,</span>
+    <span class="nx">getUserById</span><span class="o">:</span> <span class="nx">getUserById</span><span class="p">,</span>
+    <span class="nx">login</span><span class="o">:</span> <span class="nx">login</span><span class="p">,</span>
+    <span class="nx">reauthenticate</span><span class="o">:</span> <span class="nx">reauthenticate</span><span class="p">,</span>
+    <span class="nx">register</span><span class="o">:</span> <span class="nx">register</span><span class="p">,</span>
+    <span class="nx">search</span><span class="o">:</span> <span class="nx">search</span><span class="p">,</span>
+    <span class="nx">searchFor</span><span class="o">:</span> <span class="nx">searchFor</span>
+  <span class="p">};</span>
+
+<span class="p">}(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose&#39;</span><span class="p">),</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">),</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crypto-js/hmac-sha256&#39;</span><span class="p">)));</span></div></div></div></div></body></html>

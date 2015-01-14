@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"><head><title>app/models/Board</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../"><meta name="groc-document-path" content="app/models/Board"><meta name="groc-project-path" content="app/models/Board.js"><link rel="stylesheet" type="text/css" media="all" href="../../assets/style.css"><script type="text/javascript" src="../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">app/models/Board.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="p">(</span><span class="kd">function</span> <span class="nx">BoardModelScope</span><span class="p">(</span><span class="nx">angular</span><span class="p">,</span> <span class="nx">clazz</span><span class="p">)</span> <span class="p">{</span>
+  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+  <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;imber&#39;</span><span class="p">);</span>
+
+  <span class="nx">app</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">&#39;Board&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">BoardScope</span><span class="p">(</span><span class="nx">Location</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">Board</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="kr">private</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">id</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">get</span><span class="o">:</span> <span class="kc">null</span>
+        <span class="p">},</span>
+        <span class="nx">locations</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">get</span><span class="o">:</span> <span class="kc">null</span>
+        <span class="p">},</span>
+        <span class="nx">createLocations</span><span class="o">:</span> <span class="kd">function</span> <span class="nx">createLocations</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">locations</span> <span class="o">=</span> <span class="p">[];</span>
+          <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">y</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">locations</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">x</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+              <span class="nx">locations</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Location</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">);</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+          <span class="k">this</span><span class="p">.</span><span class="kr">private</span><span class="p">.</span><span class="nx">locations</span> <span class="o">=</span> <span class="nx">locations</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">};</span>
+
+      <span class="k">this</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">constructor</span><span class="p">(</span><span class="nx">board</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="kr">private</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">board</span><span class="p">.</span><span class="nx">_id</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="kr">private</span><span class="p">.</span><span class="nx">createLocations</span><span class="p">(</span><span class="nx">board</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">board</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span>
+      <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">clazz</span><span class="p">(</span><span class="nx">Board</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}(</span><span class="nb">window</span><span class="p">.</span><span class="nx">angular</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nx">enofjs</span><span class="p">.</span><span class="nx">clazz</span><span class="p">));</span></div></div></div></div></body></html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="en"><head><title>server/game</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="server/game"><meta name="groc-project-path" content="server/game.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">server/game.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="p">(</span><span class="kd">function</span> <span class="nx">gameScope</span><span class="p">(</span><span class="nx">mongoose</span><span class="p">,</span> <span class="nx">queue</span><span class="p">,</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">auth</span><span class="p">)</span> <span class="p">{</span>
+  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+  <span class="kd">var</span> <span class="nx">Game</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./resources/Game&#39;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">Character</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./resources/Character&#39;</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Required so the schema is defined.</p></div></div><div class="code"><div class="wrapper">  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./resources/Board&#39;</span><span class="p">);</span>
+  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./resources/CharacterType&#39;</span><span class="p">);</span>
+  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./resources/Character&#39;</span><span class="p">);</span>
+
+  <span class="kd">function</span> <span class="nx">accept</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+    <span class="nx">Game</span><span class="p">.</span><span class="nx">findByIdAndUpdate</span><span class="p">(</span><span class="nx">mongoose</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">),</span> <span class="p">{</span>
+      <span class="nx">$set</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">started</span><span class="o">:</span> <span class="kc">true</span>
+      <span class="p">}</span>
+    <span class="p">},</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+    <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">resolveWithOk</span><span class="p">(</span><span class="nx">res</span><span class="p">));</span>
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">challenge</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">challengerName</span> <span class="o">=</span> <span class="nx">auth</span><span class="p">.</span><span class="nx">extractUserName</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">header</span><span class="p">(</span><span class="s1">&#39;authorization&#39;</span><span class="p">));</span>
+    <span class="nx">user</span><span class="p">.</span><span class="nx">getUserById</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">challenger</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">playerFound</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">challengerName</span> <span class="o">===</span> <span class="nx">user</span><span class="p">.</span><span class="nx">userName</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">Game</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">403</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;not authorized&#39;</span><span class="p">);</span>
+          <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">();</span>
+        <span class="p">}</span>
+      <span class="p">})</span>
+      <span class="p">.</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span> <span class="nx">playerNotFound</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">404</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;challenger not found&#39;</span><span class="p">);</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">();</span>
+      <span class="p">});</span>
+    <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">resolveWithOk</span><span class="p">(</span><span class="nx">res</span><span class="p">));</span>
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">getGame</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+    <span class="nx">Game</span><span class="p">.</span><span class="nx">findOne</span><span class="p">({</span>
+        <span class="nx">_id</span><span class="o">:</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+      <span class="p">})</span>
+      <span class="p">.</span><span class="nx">populate</span><span class="p">(</span><span class="s1">&#39;board&#39;</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">populate</span><span class="p">(</span><span class="s1">&#39;challenger&#39;</span><span class="p">,</span> <span class="s1">&#39;_id userName&#39;</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">populate</span><span class="p">(</span><span class="s1">&#39;opponent&#39;</span><span class="p">,</span> <span class="s1">&#39;_id userName&#39;</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">exec</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">populateTeams</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">resolveGame</span><span class="p">(</span><span class="nx">game</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">game</span><span class="p">);</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">game</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">populateTeams</span><span class="p">(</span><span class="nx">game</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">game</span> <span class="o">=</span> <span class="nx">game</span><span class="p">.</span><span class="nx">toObject</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">challenger</span> <span class="o">=</span> <span class="nx">Character</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span>
+        <span class="nx">game</span><span class="o">:</span> <span class="nx">game</span><span class="p">.</span><span class="nx">_id</span><span class="p">,</span>
+        <span class="nx">player</span><span class="o">:</span> <span class="nx">game</span><span class="p">.</span><span class="nx">challenger</span><span class="p">.</span><span class="nx">_id</span>
+      <span class="p">})</span>
+      <span class="p">.</span><span class="nx">populate</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">exec</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">opponent</span> <span class="o">=</span> <span class="nx">Character</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span>
+        <span class="nx">game</span><span class="o">:</span> <span class="nx">game</span><span class="p">.</span><span class="nx">_id</span><span class="p">,</span>
+        <span class="nx">player</span><span class="o">:</span> <span class="nx">game</span><span class="p">.</span><span class="nx">opponent</span><span class="p">.</span><span class="nx">_id</span>
+      <span class="p">})</span>
+      <span class="p">.</span><span class="nx">populate</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">exec</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+    <span class="nx">queue</span><span class="p">.</span><span class="nx">all</span><span class="p">([</span><span class="nx">challenger</span><span class="p">,</span> <span class="nx">opponent</span><span class="p">])</span>
+      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">populate</span><span class="p">(</span><span class="nx">responses</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">game</span><span class="p">.</span><span class="nx">challenger</span><span class="p">.</span><span class="nx">team</span> <span class="o">=</span> <span class="nx">responses</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="nx">game</span><span class="p">.</span><span class="nx">opponent</span><span class="p">.</span><span class="nx">team</span> <span class="o">=</span> <span class="nx">responses</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">game</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">getLatestGames</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">findQuery</span> <span class="o">=</span> <span class="nx">Game</span><span class="p">.</span><span class="nx">find</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">populate</span><span class="p">(</span><span class="s1">&#39;board&#39;</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">populate</span><span class="p">(</span><span class="s1">&#39;challenger&#39;</span><span class="p">,</span> <span class="s1">&#39;_id userName&#39;</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">populate</span><span class="p">(</span><span class="s1">&#39;opponent&#39;</span><span class="p">,</span> <span class="s1">&#39;_id userName&#39;</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">limit</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+    <span class="nx">addSearchCriteria</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">findQuery</span><span class="p">);</span>
+    <span class="nx">findQuery</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+    <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">resolveWithGames</span><span class="p">(</span><span class="nx">games</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">games</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">addSearchCriteria</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">query</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!!</span><span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">query</span><span class="p">.</span><span class="nx">or</span><span class="p">([{</span>
+        <span class="nx">challenger</span><span class="o">:</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">user</span><span class="p">)</span>
+      <span class="p">},</span> <span class="p">{</span>
+        <span class="nx">opponent</span><span class="o">:</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">user</span><span class="p">)</span>
+      <span class="p">}]);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!!</span><span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">challenger</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">query</span><span class="p">.</span><span class="nx">where</span><span class="p">(</span><span class="s1">&#39;challenger&#39;</span><span class="p">).</span><span class="nx">equals</span><span class="p">(</span><span class="nx">mongoose</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">challenger</span><span class="p">));</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!!</span><span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">opponent</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">query</span><span class="p">.</span><span class="nx">where</span><span class="p">(</span><span class="s1">&#39;opponent&#39;</span><span class="p">).</span><span class="nx">equals</span><span class="p">(</span><span class="nx">mongoose</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">opponent</span><span class="p">));</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">resolveWithOk</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span> <span class="nx">resolveOk</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;ok&#39;</span><span class="p">);</span>
+    <span class="p">};</span>
+  <span class="p">}</span>
+
+  <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">accept</span><span class="o">:</span> <span class="nx">accept</span><span class="p">,</span>
+    <span class="nx">challenge</span><span class="o">:</span> <span class="nx">challenge</span><span class="p">,</span>
+    <span class="nx">getGame</span><span class="o">:</span> <span class="nx">getGame</span><span class="p">,</span>
+    <span class="nx">getLatestGames</span><span class="o">:</span> <span class="nx">getLatestGames</span>
+  <span class="p">};</span>
+<span class="p">}(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose&#39;</span><span class="p">),</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">),</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./user&#39;</span><span class="p">),</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./authorization&#39;</span><span class="p">)));</span></div></div></div></div></body></html>
