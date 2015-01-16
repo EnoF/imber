@@ -401,6 +401,33 @@
       });
     });
 
+    describe('character movement', function characterMovement() {
+      // [ ][x][ ][ ][ ][ ]
+      // [x][x][x][ ][ ][ ]
+      // [x][x][x][x][ ][ ]
+      // [x][s][o][y][y][ ]
+      // [x][x][x][x][ ][ ]
+      it('should move a character', function moveCharacter() {
+
+      });
+
+      it('should prevent moving to far', function movingToFar() {
+
+      });
+
+      it('should prevent moving off the board', function movingOffTheBoard() {
+
+      });
+
+      it('should prevent moving on top of other character', function movingOnTop() {
+
+      });
+
+      it('should block characters moving path', function movingPath() {
+
+      });
+    });
+
     function createAuthToken(name) {
       return AES.encrypt(name + ';' + new Date().getTime(), process.env.IMBER_AES_KEY).toString();
     }
