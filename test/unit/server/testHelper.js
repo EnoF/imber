@@ -89,19 +89,7 @@
         return testObject;
       },
       then: function then(expectations) {
-        testQueue = testQueue.fail(function failure(error) {
-          if (!!error) {
-            throw new Error(error);
-          }
-          expect(res.status).to.have.been.called.once;
-          expect(res.send).to.have.been.called;
-          var response = res.send.args[0][0];
-          var status = res.status.args[0][0];
-          isFailCase = true;
-          expectations(response, status, next);
-        });
         testQueue = testQueue.then(function success(data) {
-          if (isFailCase) return;
           if (!!req.header || !!req.path || !!req.method) {
             var response = res.send.called ? res.send.args[0][0] : null;
             return expectations(response, next, data);
@@ -111,8 +99,26 @@
             return expectations(response, req, data);
           }
         });
-        testQueue = testQueue.then(done);
-        testQueue.done();
+
+        testQueue
+          .fail(function unexpectedFail() {
+            done('should not end up here');
+          })
+          .then(done)
+          .catch(done);
+        return testObject;
+      },
+      thenFail: function thenFail(expectations) {
+        testQueue = testQueue.fail(function expectedFail(error) {
+          expect(res.status).to.have.been.called.once;
+          expect(res.send).to.have.been.called;
+          var response = res.send.args[0][0];
+          var status = res.status.args[0][0];
+          expectations(response, status, next);
+        });
+        testQueue
+          .then(done)
+          .catch(done);
         return testObject;
       }
     };

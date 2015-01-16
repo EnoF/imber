@@ -43,7 +43,7 @@
           authorization: authToken
         })
         .when(authorization)
-        .then(function assert(response, status, next) {
+        .thenFail(function assert(response, status, next) {
           expect(response).to.equal('old token');
           expect(status).to.equal(401);
           expect(next).not.to.have.been.called;
@@ -65,7 +65,7 @@
         .givenPath('/api/login')
         .givenMethod('ANY OTHER METHOD')
         .when(authorization)
-        .then(function assert(response, status, next) {
+        .thenFail(function assert(response, status, next) {
           expect(response).to.equal('old token');
           expect(status).to.equal(401);
           expect(next).not.to.have.been.called;

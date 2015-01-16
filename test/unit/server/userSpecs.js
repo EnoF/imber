@@ -66,7 +66,7 @@
             password: 'some unknown password that will not work'
           })
           .when(user.login)
-          .then(function assert(response, status) {
+          .thenFail(function assert(response, status) {
             expect(status).to.equal(401);
             expect(response).to.equal('bad credentials');
           });
@@ -81,7 +81,7 @@
             authToken: oldAuth.toString()
           })
           .when(user.reauthenticate)
-          .then(function assert(response, status) {
+          .thenFail(function assert(response, status) {
             expect(status).to.equal(401);
             expect(response).to.equal('old token');
           });
@@ -129,7 +129,7 @@
             email: 'somenotfound@email.com'
           })
           .when(user.register)
-          .then(function assert(response) {
+          .thenFail(function assert(response) {
             expect(response.userName).to.be.true;
           });
       });
@@ -142,7 +142,7 @@
             email: 'andyt@live.nl'
           })
           .when(user.register)
-          .then(function assert(response) {
+          .thenFail(function assert(response) {
             expect(response.email).to.be.true;
           });
       });
@@ -155,7 +155,7 @@
             email: 'somenotfound@email.com'
           })
           .when(user.register)
-          .then(function assert(response) {
+          .thenFail(function assert(response) {
             expect(response.email).to.be.true;
           });
       });
@@ -168,7 +168,7 @@
             email: 'somenotfound@email.com'
           })
           .when(user.register)
-          .then(function assert(response) {
+          .thenFail(function assert(response) {
             expect(response.email).to.be.true;
           });
       });
@@ -181,7 +181,7 @@
             email: ''
           })
           .when(user.register)
-          .then(function assert(response) {
+          .thenFail(function assert(response) {
             expect(response.email).to.be.true;
           });
       });
@@ -207,7 +207,7 @@
             search: 'nof'
           })
           .when(user.search)
-          .then(function assert(response, status) {
+          .thenFail(function assert(response, status) {
             expect(response).to.equal('not found');
             expect(status).to.equal(404);
           });
@@ -231,7 +231,7 @@
             find: 'Eno'
           })
           .when(user.find)
-          .then(function assert(response, status) {
+          .thenFail(function assert(response, status) {
             expect(response).to.equal('not found');
             expect(status).to.equal(404);
           });

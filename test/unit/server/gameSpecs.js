@@ -287,7 +287,7 @@
               authorization: createAuthToken('EnoF')
             })
             .when(game.challenge)
-            .then(function assert(response, status) {
+            .thenFail(function assert(response, status) {
               expect(response).to.equal('challenger not found');
               expect(status).to.equal(404);
             });
@@ -304,7 +304,7 @@
                 authorization: createAuthToken('Rina')
               })
               .when(game.challenge)
-              .then(function assert(response, status) {
+              .thenFail(function assert(response, status) {
                 expect(response).to.equal('not authorized');
                 expect(status).to.equal(403);
               });
@@ -403,11 +403,11 @@
 
     describe('character movement', function characterMovement() {
       // [ ][x][ ][ ][ ][ ]
-      // [x][x][x][ ][ ][ ]
-      // [x][x][x][x][ ][ ]
+      // [ ][x][ ][ ][ ][ ]
+      // [ ][x][ ][ ][ ][ ]
       // [x][s][o][y][y][ ]
-      // [x][x][x][x][ ][ ]
-      it('should move a character', function moveCharacter() {
+      // [ ][x][ ][ ][ ][ ]
+      it('should move a character in a line', function moveCharacter() {
 
       });
 
