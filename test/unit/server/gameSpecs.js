@@ -414,6 +414,9 @@
             x: 3,
             y: 0
           })
+          .givenHeader({
+            authorization: createAuthToken('EnoF')
+          })
           .when(game.moveCharacter)
           .then(function assert(response) {
             expect(response).to.equal('ok');
@@ -427,6 +430,9 @@
             x: 3,
             y: 1
           })
+          .givenHeader({
+            authorization: createAuthToken('EnoF')
+          })
           .when(game.moveCharacter)
           .thenFail(function assert(response, status) {
             expect(status).to.equal(403);
@@ -434,8 +440,21 @@
           });
       });
 
-      it('should only allow movement when the user is the owner of the team member', function userIsOwner() {
-
+      it('should only allow movement when the user is the owner of the team member', function userIsOwner(done) {
+        test(done)
+          .given({
+            character: '548726928469e940555ce987',
+            x: 3,
+            y: 0
+          })
+          .givenHeader({
+            authorization: createAuthToken('Banana')
+          })
+          .when(game.moveCharacter)
+          .thenFail(function assert(response, status) {
+            expect(status).to.equal(403);
+            expect(response).to.equal('not allowed');
+          });
       });
 
       it('should block the character movement when a character is in front', function blockMovement() {

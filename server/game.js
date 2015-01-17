@@ -118,11 +118,15 @@
   function moveCharacter(req, res) {
     return Character.findById(mongoose.Types.ObjectId(req.body.character))
       .populate('type')
+      .populate('player')
       .exec()
       .then(function validateMovement(character) {
         return isMovementAllowed(character, req.body);
       })
-      .then(function validateMovement(character) {
+      .then(function checkUser(character) {
+        return isOwnerOfCharacter(auth.extractUserName(req.header('authorization')), character);
+      })
+      .then(function updatePosition(character) {
         character.position.x = req.body.x;
         character.position.y = req.body.y;
         return character.save();
@@ -131,12 +135,25 @@
         res.send('ok');
       }, function reject(reason) {
         res.status(403).send(reason);
+        var deferred = queue.defer();
+        deferred.reject();
+        return deferred.promise;
       });
   }
 
   function isMovementAllowed(character, newPos) {
     var deferred = queue.defer();
     if (character.position.x !== newPos.x && character.position.y !== newPos.y) {
+      deferred.reject('not allowed');
+    } else {
+      deferred.resolve(character);
+    }
+    return deferred.promise;
+  }
+
+  function isOwnerOfCharacter(userName, character) {
+    var deferred = queue.defer();
+    if (character.player.userName !== userName) {
       deferred.reject('not allowed');
     } else {
       deferred.resolve(character);

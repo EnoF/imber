@@ -115,6 +115,11 @@
         return testObject;
       },
       thenFail: function thenFail(expectations) {
+        testQueue = testQueue.then(function unexpectedOk() {
+          console.log('The request was unexpectedly successfull');
+          done('unexpected');
+        });
+
         testQueue = testQueue.fail(function expectedFail(error) {
           expect(res.status).to.have.been.called.once;
           expect(res.send).to.have.been.called;
