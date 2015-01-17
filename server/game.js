@@ -120,13 +120,28 @@
       .populate('type')
       .exec()
       .then(function validateMovement(character) {
+        return isMovementAllowed(character, req.body);
+      })
+      .then(function validateMovement(character) {
         character.position.x = req.body.x;
         character.position.y = req.body.y;
         return character.save();
       })
       .then(function movedTheCharacter() {
         res.send('ok');
+      }, function reject(reason) {
+        res.status(403).send(reason);
       });
+  }
+
+  function isMovementAllowed(character, newPos) {
+    var deferred = queue.defer();
+    if (character.position.x !== newPos.x && character.position.y !== newPos.y) {
+      deferred.reject('not allowed');
+    } else {
+      deferred.resolve(character);
+    }
+    return deferred.promise;
   }
 
   module.exports = {

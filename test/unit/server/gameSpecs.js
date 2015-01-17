@@ -407,7 +407,7 @@
       // [ ][x][ ][ ][ ][ ]
       // [x][s][o][y][y][ ]
       // [ ][x][ ][ ][ ][ ]
-      it.only('should move a character in a line', function moveCharacter(done) {
+      it('should move a character in a line', function moveCharacter(done) {
         test(done)
           .given({
             character: '548726928469e940555ce987',
@@ -420,8 +420,18 @@
           });
       });
 
-      it('should prevent moving out of line', function movingOutOfLine() {
-
+      it('should prevent moving out of line', function movingOutOfLine(done) {
+        test(done)
+          .given({
+            character: '548726928469e940555ce987',
+            x: 3,
+            y: 1
+          })
+          .when(game.moveCharacter)
+          .thenFail(function assert(response, status) {
+            expect(status).to.equal(403);
+            expect(response).to.equal('not allowed');
+          });
       });
 
       it('should only allow movement when the user is the owner of the team member', function userIsOwner() {
