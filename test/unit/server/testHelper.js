@@ -89,6 +89,11 @@
         return testObject;
       },
       then: function then(expectations) {
+        testQueue = testQueue.fail(function unexpectedFail(error) {
+          console.log(error);
+          done('should not end up here' + error);
+        });
+
         testQueue = testQueue.then(function success(data) {
           if (!!req.header || !!req.path || !!req.method) {
             var response = res.send.called ? res.send.args[0][0] : null;
@@ -101,8 +106,9 @@
         });
 
         testQueue
-          .fail(function unexpectedFail() {
-            done('should not end up here');
+          .fail(function unexpectedFail(error) {
+            console.log(error);
+            done('should not end up here' + error);
           })
           .then(done)
           .catch(done);

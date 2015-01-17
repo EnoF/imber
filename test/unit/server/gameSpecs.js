@@ -407,7 +407,37 @@
       // [ ][x][ ][ ][ ][ ]
       // [x][s][o][y][y][ ]
       // [ ][x][ ][ ][ ][ ]
-      it('should move a character in a line', function moveCharacter() {
+      it.only('should move a character in a line', function moveCharacter(done) {
+        test(done)
+          .given({
+            character: '548726928469e940555ce987',
+            x: 3,
+            y: 0
+          })
+          .when(game.moveCharacter)
+          .then(function assert(response) {
+            expect(response).to.equal('ok');
+          });
+      });
+
+      it('should prevent moving out of line', function movingOutOfLine() {
+
+      });
+
+      it('should only allow movement when the user is the owner of the team member', function userIsOwner() {
+
+      });
+
+      it('should block the character movement when a character is in front', function blockMovement() {
+
+      });
+
+      // [ ][ ][ ][ ][ ][ ]
+      // [ ][ ][ ][ ][ ][ ]
+      // [x][ ][x][ ][ ][ ]
+      // [ ][s][o][y][y][ ]
+      // [x][ ][x][ ][ ][ ]
+      it('should move a diagonal', function moveDiagonal() {
 
       });
 

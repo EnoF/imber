@@ -115,10 +115,25 @@
     };
   }
 
+  function moveCharacter(req, res) {
+    return Character.findById(mongoose.Types.ObjectId(req.body.character))
+      .populate('type')
+      .exec()
+      .then(function validateMovement(character) {
+        character.position.x = req.body.x;
+        character.position.y = req.body.y;
+        return character.save();
+      })
+      .then(function movedTheCharacter() {
+        res.send('ok');
+      });
+  }
+
   module.exports = {
     accept: accept,
     challenge: challenge,
     getGame: getGame,
-    getLatestGames: getLatestGames
+    getLatestGames: getLatestGames,
+    moveCharacter: moveCharacter
   };
 }(require('mongoose'), require('q'), require('./user'), require('./authorization')));
