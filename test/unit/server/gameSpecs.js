@@ -19,6 +19,7 @@
     var game = require('../../../server/game');
     var AES = require('crypto-js/aes');
     var CryptoJS = require('crypto-js');
+    var Game = require('../../../server/resources/Game');
     var Character = require('../../../server/resources/Character');
     var CharacterTypes = require('../../../server/resources/CharacterType').CharacterTypes;
 
@@ -39,8 +40,28 @@
           })
           .when(game.challenge)
           .then(function assert(response, next, data) {
+            expect(response).to.equal('ok');
+          });
+      });
+
+      it('should assign challenger as default turn', function challengersTurn(done) {
+        test(done)
+          .given({
+            challenger: '545726928469e940235ce769',
+            opponent: '545726928469e940235ce853'
+          })
+          .givenHeader({
+            authorization: createAuthToken('EnoF')
+          })
+          .when(game.challenge)
+          .then(function assert(response, next, data) {
             var deferred = queue.defer();
             expect(response).to.equal('ok');
+            return Game.findById(data._id)
+              .exec()
+              .then(function checkTurn(game) {
+                expect(game.challenger.toString()).to.equal(game.turn.toString());
+              });
           });
       });
 

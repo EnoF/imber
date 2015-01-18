@@ -25,6 +25,7 @@
     user.getUserById(req.body.challenger)
       .then(function playerFound(user) {
         if (challengerName === user.userName) {
+          req.body.turn = req.body.challenger;
           Game.create(req.body)
             .then(Game.addDefaultTeams)
             .then(deferred.resolve,
