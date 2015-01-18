@@ -474,13 +474,25 @@
           });
       });
 
-      // [ ][ ][ ][ ][ ][ ]
-      // [ ][ ][ ][ ][ ][ ]
+      // [ ][ ][ ][ ][x][ ]
+      // [ ][ ][ ][x][ ][ ]
       // [x][ ][x][ ][ ][ ]
       // [ ][s][o][y][y][ ]
       // [x][ ][x][ ][ ][ ]
-      it('should move a diagonal', function moveDiagonal() {
-
+      it('should move a diagonal', function moveDiagonal(done) {
+        test(done)
+          .given({
+            character: '548726928469e940555ce987',
+            x: 2,
+            y: 2
+          })
+          .givenHeader({
+            authorization: createAuthToken('EnoF')
+          })
+          .when(game.moveCharacter)
+          .then(function assert(response) {
+            expect(response).to.equal('ok');
+          });
       });
 
       it('should prevent moving to far', function movingToFar() {

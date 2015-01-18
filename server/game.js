@@ -184,14 +184,21 @@
     }
   }
 
-  function isMovementAllowed(character, newPos) {
+  function isMovementAllowed(character, posNew) {
     var deferred = queue.defer();
-    if (character.position.x !== newPos.x && character.position.y !== newPos.y) {
+    if (character.position.x !== posNew.x && character.position.y !== posNew.y &&
+      !isDiagonal(character.position, posNew)) {
       deferred.reject('not allowed');
     } else {
       deferred.resolve(character);
     }
     return deferred.promise;
+  }
+
+  function isDiagonal(posChar, posNew) {
+    var x = Math.abs(posChar.x - posNew.x);
+    var y = Math.abs(posChar.y - posNew.y);
+    return x === y;
   }
 
   function isOwnerOfCharacter(userName, character) {
