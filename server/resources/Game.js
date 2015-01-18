@@ -73,25 +73,24 @@
     addNewCharacter(team, gameId, playerId, 9 - x, y, type);
   }
 
-  gameSchema.pre('save', function(next) {
+  function addDefaultTeams(game) {
     var challengerDeferred = queue.defer();
     var opponentDeferred = queue.defer();
-    if (this.isNew) {
-      Character.create(createChallengerTeam(this._id, this.challenger),
-        challengerDeferred.makeNodeResolver());
-      Character.create(createOpponentTeam(this._id, this.opponent),
-        opponentDeferred.makeNodeResolver());
-      queue.all([challengerDeferred.promise, opponentDeferred.promise])
-        .then(function finishedCreation() {
-          next();
-        })
-        .catch(next);
-    } else {
-      next();
-    }
-  });
+    var deferred = queue.defer();
+    Character.create(createChallengerTeam(game._id, game.challenger),
+      challengerDeferred.makeNodeResolver());
+    Character.create(createOpponentTeam(game._id, game.opponent),
+      opponentDeferred.makeNodeResolver());
+    queue.all([challengerDeferred.promise, opponentDeferred.promise])
+      .then(function resolveWithGame() {
+        deferred.resolve(game);
+      })
+      .catch(deferred.reject);
+    return deferred.promise;
+  }
 
   var Game = mongoose.model('Game', gameSchema);
+  Game.addDefaultTeams = addDefaultTeams;
 
   module.exports = Game;
 }(require('mongoose')));

@@ -25,7 +25,10 @@
     user.getUserById(req.body.challenger)
       .then(function playerFound(user) {
         if (challengerName === user.userName) {
-          Game.create(req.body, deferred.makeNodeResolver());
+          Game.create(req.body)
+            .then(Game.addDefaultTeams)
+            .then(deferred.resolve,
+              deferred.reject);
         } else {
           res.status(403).send('not authorized');
           deferred.reject();
@@ -123,6 +126,9 @@
       .then(function validateMovement(character) {
         return isMovementAllowed(character, req.body);
       })
+      .then(function validateBlocked(character) {
+        return isBlocked(character, req.body);
+      })
       .then(function checkUser(character) {
         return isOwnerOfCharacter(auth.extractUserName(req.header('authorization')), character);
       })
@@ -139,6 +145,43 @@
         deferred.reject();
         return deferred.promise;
       });
+  }
+
+  function isBlocked(character, newPos) {
+    var deferred = queue.defer();
+    Character.find({
+        game: character.game,
+        position: buildIsBlockedQuery(character.position, newPos)
+      })
+      .exec()
+      .then(function foundAnyBlockers(blockers) {
+        if (blockers.length > 0) {
+          deferred.reject('path is blocked');
+        } else {
+          deferred.resolve(character);
+        }
+      });
+    return deferred.promise;
+  }
+
+  function buildIsBlockedQuery(posChar, posNew) {
+    var query = {};
+    buildBlockQueryDirection(query, 'x', posChar, posNew);
+    buildBlockQueryDirection(query, 'y', posChar, posNew);
+    return query;
+  }
+
+  function buildBlockQueryDirection(query, direction, posChar, posNew) {
+    if (posChar[direction] === posNew[direction]) {
+      // not moving in given direction
+      query[direction] = posChar[direction];
+    } else {
+      // moving in given direction
+      query[direction] = {
+        $gt: posChar[direction] > posNew[direction] ? posNew[direction] : posChar[direction],
+        $lte: posChar[direction] < posNew[direction] ? posNew[direction] : posChar[direction]
+      };
+    }
   }
 
   function isMovementAllowed(character, newPos) {

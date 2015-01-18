@@ -457,8 +457,21 @@
           });
       });
 
-      it('should block the character movement when a character is in front', function blockMovement() {
-
+      it('should block the character movement when a character is in front', function blockMovement(done) {
+        test(done)
+          .given({
+            character: '548726928469e940555ce987',
+            x: 0,
+            y: 3
+          })
+          .givenHeader({
+            authorization: createAuthToken('EnoF')
+          })
+          .when(game.moveCharacter)
+          .thenFail(function assert(response, status) {
+            expect(status).to.equal(403);
+            expect(response).to.equal('path is blocked');
+          });
       });
 
       // [ ][ ][ ][ ][ ][ ]

@@ -43,7 +43,7 @@
     "karma-sinon-chai": "^0.2.0",
     "load-grunt-tasks": "~0.3.0",
     "mocha": "^2.0.1",
-    "mockgoose": "^1.10.7",
+    "mockgoose": "EnoF/Mockgoose",
     "mongo-migrate": "^0.1.0",
     "mongodb": "^1.4.26",
     "nock": "~0.48.2",
