@@ -111,7 +111,7 @@
       thenFail: function thenFail(expectations) {
         testQueue = testQueue.then(function unexpectedOk() {
           console.log('The request was unexpectedly successfull');
-          done('unexpected');
+          done(new Error('unexpected'));
         });
 
         testQueue = testQueue.fail(function expectedFail(error) {

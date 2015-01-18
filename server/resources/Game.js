@@ -23,6 +23,14 @@
     started: {
       type: Boolean,
       default: false
+    },
+    energy: {
+      type: Number,
+      default: 25
+    },
+    turn: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
     }
   });
 

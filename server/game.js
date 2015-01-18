@@ -120,6 +120,7 @@
 
   function moveCharacter(req, res) {
     return Character.findById(mongoose.Types.ObjectId(req.body.character))
+      .populate('game')
       .populate('type')
       .populate('player')
       .exec()
@@ -130,7 +131,7 @@
         return isBlocked(character, req.body);
       })
       .then(function checkUser(character) {
-        return isOwnerOfCharacter(auth.extractUserName(req.header('authorization')), character);
+        return isUserAllowed(auth.extractUserName(req.header('authorization')), character);
       })
       .then(function updatePosition(character) {
         character.position.x = req.body.x;
@@ -201,9 +202,10 @@
     return x === y;
   }
 
-  function isOwnerOfCharacter(userName, character) {
+  function isUserAllowed(userName, character) {
     var deferred = queue.defer();
-    if (character.player.userName !== userName) {
+    if (character.player.userName !== userName ||
+      !character.game.turn.equals(character.player._id)) {
       deferred.reject('not allowed');
     } else {
       deferred.resolve(character);

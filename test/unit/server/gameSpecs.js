@@ -495,6 +495,23 @@
           });
       });
 
+      it('should prevent moving the character when it is not the turn', function notYourTurn(done) {
+        test(done)
+          .given({
+            character: '543216928469e940555ce987',
+            x: 1,
+            y: 1
+          })
+          .givenHeader({
+            authorization: createAuthToken('Banana')
+          })
+          .when(game.moveCharacter)
+          .thenFail(function assert(response, status) {
+            expect(status).to.equal(403);
+            expect(response).to.equal('not allowed');
+          });
+      });
+
       it('should prevent moving to far', function movingToFar() {
 
       });
