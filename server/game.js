@@ -5,18 +5,16 @@
   var Character = require('./resources/Character');
   // Required so the schema is defined.
   require('./resources/Board');
-  require('./resources/CharacterType');
+  var CharacterType = require('./resources/CharacterType');
   require('./resources/Character');
 
   function accept(req, res) {
-    var deferred = queue.defer();
-    Game.findByIdAndUpdate(mongoose.Types.ObjectId(req.params.id), {
-      $set: {
-        started: true
-      }
-    }, deferred.makeNodeResolver());
-    deferred.promise.then(resolveWithOk(res));
-    return deferred.promise;
+    return Game.findByIdAndUpdate(mongoose.Types.ObjectId(req.params.id), {
+        $set: {
+          started: true
+        }
+      }).exec()
+      .then(resolveWithOk(res));
   }
 
   function challenge(req, res) {
@@ -122,8 +120,7 @@
   function moveCharacter(req, res) {
     return Character.findById(mongoose.Types.ObjectId(req.body.character))
       .populate('game')
-      .populate('type')
-      .populate('player')
+      .populate('player', '_id userName')
       .exec()
       .then(function validateMovement(character) {
         return isMovementAllowed(character, req.body);
@@ -134,6 +131,9 @@
       .then(function checkUser(character) {
         return isUserAllowed(auth.extractUserName(req.header('authorization')), character);
       })
+      .then(function consumeEnergyOfPlayer(character) {
+        return consumeEnergy(character, req.body);
+      })
       .then(function updatePosition(character) {
         character.position.x = req.body.x;
         character.position.y = req.body.y;
@@ -142,28 +142,24 @@
       .then(function movedTheCharacter() {
         res.send('ok');
       }, function reject(reason) {
-        res.status(403).send(reason);
-        var deferred = queue.defer();
-        deferred.reject();
-        return deferred.promise;
+        res.status(403).send(reason.message);
+        throw reason;
       });
   }
 
   function isBlocked(character, newPos) {
-    var deferred = queue.defer();
-    Character.find({
+    return Character.find({
         game: character.game,
         position: buildIsBlockedQuery(character.position, newPos)
       })
       .exec()
       .then(function foundAnyBlockers(blockers) {
         if (blockers.length > 0) {
-          deferred.reject('path is blocked');
+          throw new Error('path is blocked');
         } else {
-          deferred.resolve(character);
+          return character;
         }
       });
-    return deferred.promise;
   }
 
   function buildIsBlockedQuery(posChar, posNew) {
@@ -186,15 +182,32 @@
     }
   }
 
+  function consumeEnergy(character, posNew) {
+    var distance = Math.abs(character.position.x - posNew.x) +
+      Math.abs(character.position.y - posNew.y);
+    return populateType(character)
+      .then(function calculateConsumption(type) {
+        var energyConsumption = distance * type.stats.moveConsumption;
+        if (character.game.energy <= energyConsumption) {
+          throw new Error('not enough energy');
+        }
+        return Game.findByIdAndUpdate(character.game, {
+            energy: character.game.energy - energyConsumption
+          })
+          .exec();
+      })
+      .then(function updatedGame() {
+        return character;
+      });
+  }
+
   function isMovementAllowed(character, posNew) {
-    var deferred = queue.defer();
     if (character.position.x !== posNew.x && character.position.y !== posNew.y &&
       !isDiagonal(character.position, posNew)) {
-      deferred.reject('not allowed');
+      throw new Error('not allowed');
     } else {
-      deferred.resolve(character);
+      return character;
     }
-    return deferred.promise;
   }
 
   function isDiagonal(posChar, posNew) {
@@ -204,14 +217,17 @@
   }
 
   function isUserAllowed(userName, character) {
-    var deferred = queue.defer();
     if (character.player.userName !== userName ||
       !character.game.turn.equals(character.player._id)) {
-      deferred.reject('not allowed');
+      throw new Error('not allowed');
     } else {
-      deferred.resolve(character);
+      return character;
     }
-    return deferred.promise;
+  }
+
+  function populateType(character) {
+    return CharacterType.findById(character.type)
+      .exec();
   }
 
   module.exports = {

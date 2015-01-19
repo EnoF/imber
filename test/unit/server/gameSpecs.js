@@ -533,8 +533,21 @@
           });
       });
 
-      it('should prevent moving to far', function movingToFar() {
-
+      it('should prevent moving to far, consume 5 energy per square and 5 initial', function movingToFar(done) {
+        test(done)
+          .given({
+            character: '548726928469e940555ce987',
+            x: 5,
+            y: 0
+          })
+          .givenHeader({
+            authorization: createAuthToken('EnoF')
+          })
+          .when(game.moveCharacter)
+          .thenFail(function assert(response, status) {
+            expect(status).to.equal(403);
+            expect(response).to.equal('not enough energy');
+          });
       });
 
       it('should prevent moving off the board', function movingOffTheBoard() {
