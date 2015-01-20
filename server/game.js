@@ -4,7 +4,7 @@
   var Game = require('./resources/Game');
   var Character = require('./resources/Character');
   // Required so the schema is defined.
-  require('./resources/Board');
+  var Board = require('./resources/Board');
   var CharacterType = require('./resources/CharacterType');
   require('./resources/Character');
 
@@ -202,18 +202,32 @@
   }
 
   function isMovementAllowed(character, posNew) {
-    if (character.position.x !== posNew.x && character.position.y !== posNew.y &&
-      !isDiagonal(character.position, posNew)) {
-      throw new Error('not allowed');
-    } else {
-      return character;
-    }
+    return Board.findById(character.game.board)
+      .exec()
+      .then(function checkPosition(board) {
+        if (!isOnBoard(posNew, board) ||
+          (!isInLine(character.position, posNew) &&
+            !isDiagonal(character.position, posNew))) {
+          throw new Error('not allowed');
+        } else {
+          return character;
+        }
+      });
+  }
+
+  function isInLine(posChar, posNew) {
+    return posChar.x === posNew.x || posChar.y === posNew.y;
   }
 
   function isDiagonal(posChar, posNew) {
     var x = Math.abs(posChar.x - posNew.x);
     var y = Math.abs(posChar.y - posNew.y);
     return x === y;
+  }
+
+  function isOnBoard(posNew, boardSize) {
+    return posNew.x >= 0 && posNew.y >= 0 &&
+      posNew.x < boardSize.x && posNew.y < boardSize.y;
   }
 
   function isUserAllowed(userName, character) {

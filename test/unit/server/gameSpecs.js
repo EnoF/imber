@@ -550,16 +550,55 @@
           });
       });
 
-      it('should prevent moving off the board', function movingOffTheBoard() {
-
+      it('should prevent moving off the board at the bottom', function movingOffTheBoard(done) {
+        test(done)
+          .given({
+            character: '548726928469e940555ce987',
+            x: 0,
+            y: -1
+          })
+          .givenHeader({
+            authorization: createAuthToken('EnoF')
+          })
+          .when(game.moveCharacter)
+          .thenFail(function assert(response, status) {
+            expect(status).to.equal(403);
+            expect(response).to.equal('not allowed');
+          });
       });
 
-      it('should prevent moving on top of other character', function movingOnTop() {
-
+      it('should prevent moving off the board at the top', function movingOffTheBoard(done) {
+        test(done)
+          .given({
+            character: '548726928469e940555ce987',
+            x: 0,
+            y: 10
+          })
+          .givenHeader({
+            authorization: createAuthToken('EnoF')
+          })
+          .when(game.moveCharacter)
+          .thenFail(function assert(response, status) {
+            expect(status).to.equal(403);
+            expect(response).to.equal('not allowed');
+          });
       });
 
-      it('should block characters moving path', function movingPath() {
-
+      it('should prevent moving on top of other character', function movingOnTop(done) {
+        test(done)
+          .given({
+            character: '548726928469e940555ce987',
+            x: 0,
+            y: 1
+          })
+          .givenHeader({
+            authorization: createAuthToken('EnoF')
+          })
+          .when(game.moveCharacter)
+          .thenFail(function assert(response, status) {
+            expect(status).to.equal(403);
+            expect(response).to.equal('path is blocked');
+          });
       });
     });
 
