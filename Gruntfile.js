@@ -262,6 +262,26 @@ module.exports = function(grunt) {
         src: ['test/unit/server/**/*.js']
       }
     },
+    template: {
+      features: {
+        options: {
+          data: function retrieveFilenames() {
+            var fs = require('fs');
+            var files = fs.readdirSync('./test/features/step_definitions');
+            var requireArr = [];
+            files.forEach(function(value) {
+              this.push('../test/features/step_definitions/' + value.replace('.js', ''));
+            }, requireArr);
+            return {
+              files: requireArr
+            };
+          }
+        },
+        files: {
+          '<%= app.tmp %>/test.spec.js': '<%= app.test %>/test.spec.template'
+        }
+      }
+    },
     uglify: {
       options: {
         mangle: {
@@ -371,7 +391,8 @@ module.exports = function(grunt) {
     'less',
     'ngtemplates:dev',
     'concat:dev',
-    'preprocess:develop'
+    'preprocess:develop',
+    'template'
   ]);
 
   grunt.registerTask('migration-config', function createMigrationConfig() {

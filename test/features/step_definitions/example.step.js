@@ -3,9 +3,10 @@
 var Yadda = require('yadda');
 var English = Yadda.localisation.English;
 var Dictionary = Yadda.Dictionary;
-var assert = require('assert');
+var expect = require('chai').expect;
 
 module.exports = (function() {
+
   var wall;
   var dictionary = new Dictionary().define('NUM', /(\d+)/);
   var library = English.library(dictionary)
@@ -26,7 +27,7 @@ module.exports = (function() {
   })
 
   .then("there (?:are|are still) $NUM green bottles standing on the wall", function(number_of_bottles, next) {
-    assert.equal(number_of_bottles, wall.bottles);
+    expect(number_of_bottles).to.equal(wall.bottles.toString());
     next();
   });
 

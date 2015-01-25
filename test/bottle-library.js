@@ -1,7 +1,6 @@
 "use strict";
 
 var Yadda = require('yadda');
-console.log('ok');
 var English = Yadda.localisation.English;
 var Dictionary = Yadda.Dictionary;
 var expect = require('chai').expect;

@@ -1,0 +1,30 @@
+module.export = (function() {
+  'use strict';
+  var $ = require('jquery');
+
+  $.ajaxSetup({
+    async: false
+  });
+
+  var Yadda = require('yadda');
+  var English = Yadda.localisation.English;
+  var FeatureParser = Yadda.parsers.FeatureParser;
+  var parser = new FeatureParser(English);
+  var loaderFeature = $.get('base/test/features/example.feature').responseText;
+  var feature = parser.parse(loaderFeature);
+
+  var steps = [];
+  <% _.forEach(files, function(name) { %>
+  steps.push(require('<%= name %>'));
+  // var steps = require('../test/features/step_definitions/example.step');
+  <%  }); %>
+
+  var yadda = new Yadda.Yadda(steps);
+
+  Yadda.plugins.mocha.ScenarioLevelPlugin.init();
+
+
+  scenarios(feature.scenarios, function(scenario, done) {
+    yadda.run(scenario.steps, done);
+  });
+}());

@@ -15,14 +15,14 @@ module.exports = function(config) {
     browserify: {
       debug: true,
       files: [
-        'test/test.spec.js',
+        '.tmp/test.spec.js',
         'test/bottle-library.js',
         'test/features/step_definitions/*.step.js'
       ]
     },
 
     preprocessors: {
-      'test/test.spec.js': 'browserify',
+      '.tmp/test.spec.js': 'browserify',
       'test/bottle-library.js': 'browserify',
       'test/features/step_definitions/*.step.js': 'browserify'
     },
