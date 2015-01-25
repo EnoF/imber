@@ -158,6 +158,10 @@ module.exports = function(grunt) {
       e2eAuto: {
         configFile: '<%= app.test %>/e2e-karma.conf.js',
         background: true
+      },
+      yadda: {
+        configFile: '<%= app.test %>/yadda.conf.js',
+        singleRun: true
       }
     },
     less: {
