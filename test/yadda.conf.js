@@ -28,10 +28,11 @@ module.exports = function(config) {
     },
 
     reporters: ['mocha', 'progress'],
-    port: 9999,
+    port: 5050,
     colors: true,
     logLevel: config.LOG_INFO,
-    singleRun: true,
+    singleRun: false,
+    autoWatch: false,
 
     plugins: [
       'karma-chai',

@@ -162,6 +162,10 @@ module.exports = function(grunt) {
       yadda: {
         configFile: '<%= app.test %>/yadda.conf.js',
         singleRun: true
+      },
+      yaddaAuto: {
+        configFile: '<%= app.test %>/yadda.conf.js',
+        background: true
       }
     },
     less: {
@@ -353,16 +357,22 @@ module.exports = function(grunt) {
           livereload: true
         }
       },
-      testsApp: {
+      // testsApp: {
+      //   files: [
+      //     '<%= app.app %>/**/*.js',
+      //     '<%= app.test %>/unit/app/**/*.js'
+      //   ],
+      //   tasks: ['karma:unitAuto:run', 'concat:dev'],
+      //   options: {
+      //     // Start a live reload server on the default port 35729
+      //     livereload: true
+      //   }
+      // },
+      testsFeature: {
         files: [
-          '<%= app.app %>/**/*.js',
-          '<%= app.test %>/unit/app/**/*.js'
+          '<%= app.test %>/features/**/*.*'
         ],
-        tasks: ['karma:unitAuto:run', 'concat:dev'],
-        options: {
-          // Start a live reload server on the default port 35729
-          livereload: true
-        }
+        tasks: ['template', 'karma:yaddaAuto:run']
       },
       testsServer: {
         files: [
@@ -430,7 +440,8 @@ module.exports = function(grunt) {
     var tasks = [
       'setupEnv',
       'groc:dev',
-      'karma:unitAuto',
+      // 'karma:unitAuto',
+      'karma:yaddaAuto',
       'watch'
     ];
     if (target === 'e2e') {
