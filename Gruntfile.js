@@ -271,13 +271,15 @@ module.exports = function(grunt) {
         options: {
           data: function retrieveFilenames() {
             var fs = require('fs');
-            var files = fs.readdirSync('./test/features/step_definitions');
+            var files = fs.readdirSync('./test/step_definitions');
             var requireArr = [];
             files.forEach(function(value) {
-              this.push('../test/features/step_definitions/' + value.replace('.js', ''));
+              this.push('../test/step_definitions/' + value.replace('.js', ''));
             }, requireArr);
+            var features = fs.readdirSync('./test/features/');
             return {
-              files: requireArr
+              files: requireArr,
+              features: features
             };
           }
         },
@@ -370,9 +372,10 @@ module.exports = function(grunt) {
       // },
       testsFeature: {
         files: [
-          '<%= app.test %>/features/**/*.*'
+          '<%= app.test %>/features/**/*.*',
+          '<%= app.test %>/step_definitions/**/*.*'
         ],
-        tasks: ['template', 'karma:yaddaAuto:run']
+        tasks: ['karma:yaddaAuto:run']
       },
       testsServer: {
         files: [

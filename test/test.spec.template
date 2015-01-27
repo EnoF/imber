@@ -1,4 +1,4 @@
-module.export = (function() {
+module.export = (function(window) {
   'use strict';
   var $ = require('jquery');
 
@@ -11,8 +11,13 @@ module.export = (function() {
   var FeatureParser = Yadda.parsers.FeatureParser;
   var parser = new FeatureParser(English);
   var loaderFeature = $.get('base/test/features/example.feature').responseText;
-  var feature = parser.parse(loaderFeature);
 
+  window.initModule = window.module;
+
+  var featuresSpecs = [];
+  <% _.forEach(features, function(feature) { %>
+  featuresSpecs.push(parser.parse($.get('base/test/features/<%= feature %>').responseText));
+  <%  }); %>
   var steps = [];
   <% _.forEach(files, function(name) { %>
   steps.push(require('<%= name %>'));
@@ -23,8 +28,10 @@ module.export = (function() {
 
   Yadda.plugins.mocha.ScenarioLevelPlugin.init();
 
-
-  scenarios(feature.scenarios, function(scenario, done) {
-    yadda.run(scenario.steps, done);
+  features(featuresSpecs, function(feature){
+    scenarios(feature.scenarios, function(scenario, done) {
+      yadda.run(scenario.steps, done);
+    });
   });
-}());
+
+}(window));
