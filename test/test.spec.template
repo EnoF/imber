@@ -18,16 +18,26 @@
   featuresSpecs.push(parser.parse($.get('base/test/features/<%= feature %>').responseText));
   <%  }); %>
 
+  var ctx = {};
   var yadda = new Yadda.Yadda(window.stepsLibrary, {
-    ctx: {}
+    ctx: ctx
   });
 
   Yadda.plugins.mocha.ScenarioLevelPlugin.init();
 
   features(featuresSpecs, function(feature){
-    scenarios(feature.scenarios, function(scenario, done) {
-      yadda.run(scenario.steps, done);
+    beforeEach(initModule('imber'));
+
+    scenarios(feature.scenarios, function(scenario) {
+      yadda.run(scenario.steps);
     });
+
+    afterEach(inject(function(ipCookie){
+      for(var i in ctx){
+        delete ctx[i];
+      }
+      ipCookie.remove('authToken');
+    }));
   });
 
 }(window, $));

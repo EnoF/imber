@@ -3,21 +3,17 @@ module.exports = (function(stepsLibrary) {
 
   var wall;
   stepsLibrary
-    .given("a $NUM foot wall", function(height, next) {
+    .given("a $NUM foot wall", function(height) {
       wall = new Wall();
-      next();
     })
-    .given("$NUM green bottles are standing on the wall", function(number_of_bottles, next) {
+    .given("$NUM green bottles are standing on the wall", function(number_of_bottles) {
       wall.bottles = number_of_bottles;
-      next();
     })
-    .when("$NUM green bottle accidentally falls", function(number_of_falling_bottles, next) {
+    .when("$NUM green bottle accidentally falls", function(number_of_falling_bottles) {
       wall.fall(number_of_falling_bottles);
-      next();
     })
-    .then("there (?:are|are still) $NUM green bottles standing on the wall", function(number_of_bottles, next) {
+    .then("there (?:are|are still) $NUM green bottles standing on the wall", function(number_of_bottles) {
       expect(number_of_bottles).to.equal(wall.bottles.toString());
-      next();
     });
 
   var Wall = function(bottles) {

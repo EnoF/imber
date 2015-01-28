@@ -13,3 +13,9 @@ Feature: Login on Imber
       And the credentials are correct
     When player logs in
     Then player should be logged in
+
+  Scenario: Player attempts to log in with no credentials
+    Given player provides "" as user name
+      And player provides "" as password
+    When player attempts to log in
+    Then player should not be logged in
