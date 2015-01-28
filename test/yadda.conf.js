@@ -1,9 +1,11 @@
 module.exports = function(config) {
   config.set({
     basePath: '..',
-    frameworks: ['mocha', 'chai', 'sinon', 'browserify'],
+    frameworks: ['mocha', 'chai', 'sinon'],
 
     files: [
+      // yadda
+      'node_modules/yadda/dist/yadda-0.11.4.js',
       // jQuery for easier testing
       'app/bower_components/jquery/dist/jquery.js',
       // Angular dependencies
@@ -35,11 +37,18 @@ module.exports = function(config) {
       // The specs for unit testing
       'test/unit/**/*.js',
 
+      // Step library
+      'test/step_definitions/stepsLibrary.js',
 
       'test/step_definitions/*.step.js', {
         pattern: 'test/features/*.feature',
         included: false
-      }
+      },
+
+      // Steps
+      'test/step_definitions/**/*.js',
+      // Test bootstrap
+      '.tmp/test.spec.js'
     ],
 
     // list of files / patterns to exclude
@@ -47,18 +56,10 @@ module.exports = function(config) {
 
     browserify: {
       debug: true,
-      files: [
-        '.tmp/test.spec.js',
-        'test/bottle-library.js',
-        'test/step_definitions/*.step.js'
-      ]
+      files: []
     },
 
-    preprocessors: {
-      '.tmp/test.spec.js': 'browserify',
-      'test/bottle-library.js': 'browserify',
-      'test/step_definitions/*.step.js': 'browserify'
-    },
+    preprocessors: {},
 
     reporters: ['mocha'],
     port: 5050,

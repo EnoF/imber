@@ -1,34 +1,12 @@
-"use strict";
+(function scenarioScope(stepsLibrary) {
+  'use strict';
 
-var Yadda = require('yadda');
-var English = Yadda.localisation.English;
-var Dictionary = Yadda.Dictionary;
-var expect = require('chai').expect;
-
-var dictionary = new Dictionary().define('NUM', /(\d+)/);
-
-String.prototype.toCamelCase = function() {
-  return this.toLowerCase().replace(/ (.)/g, function(match, firstLetter) {
-    return firstLetter.toUpperCase();
-  });
-};
-
-module.exports = (function scenarioScope() {
   var ctx;
-  return English.library(dictionary)
+
+  stepsLibrary
     .given('player is on login screen', function(next) {
       ctx = {};
-      initModule('imber');
-      inject(function($rootScope, $controller, $httpBackend, userDAO, ipCookie) {
-        ctx.$scope = $rootScope.$new();
-        $controller('userAuthVM', {
-          $scope: ctx.$scope
-        });
-        ctx.$httpBackend = $httpBackend;
-        ctx.userDAO = userDAO;
-        ctx.ipCookie = ipCookie;
-        next();
-      });
+      stepsLibrary.initializeVM('userAuthVM', ctx, next);
     })
     .given('player provides (.*) as (.*)', function(value, model, next) {
       ctx.$scope[model.toCamelCase()] = value;
@@ -60,4 +38,4 @@ module.exports = (function scenarioScope() {
       expect(ctx.userDAO.getCurrentUser().getUserName()).to.equal(ctx.expectedResponse.user.userName);
       next();
     });
-}());
+}(window.stepsLibrary));

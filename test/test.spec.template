@@ -1,6 +1,5 @@
-module.export = (function(window) {
+(function(window, $) {
   'use strict';
-  var $ = require('jquery');
 
   $.ajaxSetup({
     async: false
@@ -18,13 +17,8 @@ module.export = (function(window) {
   <% _.forEach(features, function(feature) { %>
   featuresSpecs.push(parser.parse($.get('base/test/features/<%= feature %>').responseText));
   <%  }); %>
-  var steps = [];
-  <% _.forEach(files, function(name) { %>
-  steps.push(require('<%= name %>'));
-  // var steps = require('../test/features/step_definitions/example.step');
-  <%  }); %>
 
-  var yadda = new Yadda.Yadda(steps);
+  var yadda = new Yadda.Yadda(window.stepsLibrary);
 
   Yadda.plugins.mocha.ScenarioLevelPlugin.init();
 
@@ -34,4 +28,4 @@ module.export = (function(window) {
     });
   });
 
-}(window));
+}(window, $));
