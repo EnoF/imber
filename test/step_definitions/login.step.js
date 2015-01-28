@@ -1,41 +1,38 @@
 (function scenarioScope(stepsLibrary) {
   'use strict';
 
-  var ctx;
-
   stepsLibrary
     .given('player is on login screen', function(next) {
-      ctx = {};
-      stepsLibrary.initializeVM('userAuthVM', ctx, next);
+      stepsLibrary.initializeVM('userAuthVM', this.ctx, next);
     })
     .given('player provides (.*) as (.*)', function(value, model, next) {
-      ctx.$scope[model.toCamelCase()] = value;
+      this.ctx.$scope[model.toCamelCase()] = value;
       next();
     })
     .given('the credentials are correct', function(next) {
-      ctx.expectedResponse = {
+      this.ctx.expectedResponse = {
         authToken: 'returnedAuthToken',
         user: {
           _id: 'a1b2c3d4e5f6g7',
-          userName: ctx.$scope.userName
+          userName: this.ctx.$scope.userName
         }
       };
-      ctx.$httpBackend.expect('POST', '/api/login', {
-        userName: ctx.$scope.userName,
-        password: ctx.$scope.password
-      }).respond(200, ctx.expectedResponse);
+      this.ctx.$httpBackend.expect('POST', '/api/login', {
+        userName: this.ctx.$scope.userName,
+        password: this.ctx.$scope.password
+      }).respond(200, this.ctx.expectedResponse);
       next();
     })
     .when('player logs in', function(next) {
-      ctx.$scope.login();
-      ctx.$httpBackend.flush();
+      this.ctx.$scope.login();
+      this.ctx.$httpBackend.flush();
       next();
     })
     .then('player should be logged in', function(next) {
-      expect(ctx.$scope.loggedIn()).to.be.true;
-      expect(ctx.ipCookie('authToken')).to.equal(ctx.expectedResponse.authToken);
-      expect(ctx.userDAO.getCurrentUser().getId()).to.equal(ctx.expectedResponse.user._id);
-      expect(ctx.userDAO.getCurrentUser().getUserName()).to.equal(ctx.expectedResponse.user.userName);
+      expect(this.ctx.$scope.loggedIn()).to.be.true;
+      expect(this.ctx.ipCookie('authToken')).to.equal(this.ctx.expectedResponse.authToken);
+      expect(this.ctx.userDAO.getCurrentUser().getId()).to.equal(this.ctx.expectedResponse.user._id);
+      expect(this.ctx.userDAO.getCurrentUser().getUserName()).to.equal(this.ctx.expectedResponse.user.userName);
       next();
     });
 }(window.stepsLibrary));

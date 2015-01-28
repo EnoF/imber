@@ -18,7 +18,9 @@
   featuresSpecs.push(parser.parse($.get('base/test/features/<%= feature %>').responseText));
   <%  }); %>
 
-  var yadda = new Yadda.Yadda(window.stepsLibrary);
+  var yadda = new Yadda.Yadda(window.stepsLibrary, {
+    ctx: {}
+  });
 
   Yadda.plugins.mocha.ScenarioLevelPlugin.init();
 
