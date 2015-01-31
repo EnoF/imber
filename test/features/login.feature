@@ -19,3 +19,9 @@ Feature: Login on Imber
       And player provides "" as password
     When player attempts to log in
     Then player should not be logged in
+
+  Scenario: Player logs in with authToken
+    Given player has logged in before
+      And the token is correct
+    When player refreshes the page
+    Then player should be logged in
