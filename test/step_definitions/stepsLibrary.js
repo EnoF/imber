@@ -18,7 +18,7 @@
   var stepLibrary = window.stepsLibrary = English.library(dictionary);
 
   stepLibrary.initializeVM = function initializeVM(vm, ctx) {
-    inject(function($rootScope, $controller, $httpBackend, userDAO, ipCookie) {
+    inject(function($rootScope, $controller, $httpBackend, userDAO, ipCookie, events) {
       ctx.$scope = $rootScope.$new();
       $controller(vm, {
         $scope: ctx.$scope
@@ -26,6 +26,7 @@
       ctx.$httpBackend = $httpBackend;
       ctx.userDAO = userDAO;
       ctx.ipCookie = ipCookie;
+      ctx.events = events;
     });
   };
 }(window));

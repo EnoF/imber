@@ -1,7 +1,7 @@
 module.exports = function(config) {
   config.set({
     basePath: '..',
-    frameworks: ['mocha', 'chai', 'sinon'],
+    frameworks: ['mocha', 'sinon-chai'],
 
     files: [
       // yadda
@@ -69,11 +69,10 @@ module.exports = function(config) {
     autoWatch: false,
 
     plugins: [
-      'karma-chai',
       'karma-mocha',
       'karma-phantomjs-launcher',
       'karma-browserifast',
-      'karma-sinon',
+      'karma-sinon-chai',
       'karma-mocha-reporter'
     ],
 
