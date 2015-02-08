@@ -37,3 +37,18 @@ Feature: Autocomplete
       hell  | is    | is     | is not
       hel   | is    | is     | is
       hellow| is not| is     | is not
+
+  Scenario: Should prevent loading before minimal threshold
+    Given there is a load function provided
+      And the minimum threshold is 3
+    When the player types "he"
+      And the options will be loaded
+      And the delay has passed
+    Then the options should be empty
+
+  Scenario: Should focus on the first suggestion
+    Given there is an option "hello"
+      And there is an option "hellow"
+      And there is an option "helelel"
+    When the player types "hell"
+    Then option 1 should be focussed

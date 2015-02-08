@@ -16,6 +16,10 @@
         return deferred.promise;
       };
     })
+    .given('the minimum threshold is $NUM', function(threshold) {
+      threshold = parseInt(threshold, 10);
+      this.ctx.$scope.minSearch = threshold;
+    })
     .when('the player types "(.*)"', function(input) {
       this.ctx.$scope.value = input;
       this.ctx.$scope.suggest();
@@ -35,5 +39,9 @@
     })
     .then('the options should be empty', function() {
       expect(this.ctx.$scope.options).to.be.empty;
+    })
+    .then('option $NUM should be focussed', function(index) {
+      index = parseInt(index, 10);
+      expect(this.ctx.$scope.focus).to.equal(index - 1);
     });
 }(window.stepsLibrary));
