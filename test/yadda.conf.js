@@ -62,7 +62,7 @@ module.exports = function(config) {
     preprocessors: {},
 
     reporters: ['mocha'],
-    port: 5050,
+    port: 5053,
     colors: true,
     logLevel: config.LOG_INFO,
     singleRun: false,

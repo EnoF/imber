@@ -97,7 +97,7 @@ module.exports = function(grunt) {
     express: {
       dev: {
         options: {
-          port: 9000,
+          port: 9003,
           script: './devServer.js'
         }
       }
@@ -338,7 +338,7 @@ module.exports = function(grunt) {
         tasks: ['concat:less', 'less:main'],
         options: {
           // Start a live reload server on the default port 35729
-          livereload: true
+          livereload: 35730
         }
       },
       ngTemplates: {
@@ -346,7 +346,7 @@ module.exports = function(grunt) {
         tasks: ['ngtemplates'],
         options: {
           // Start a live reload server on the default port 35729
-          livereload: true
+          livereload: 35730
         }
       },
       preprocess: {
@@ -356,7 +356,7 @@ module.exports = function(grunt) {
         tasks: ['preprocess:develop'],
         options: {
           // Start a live reload server on the default port 35729
-          livereload: true
+          livereload: 35730
         }
       },
       // testsApp: {

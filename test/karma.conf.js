@@ -50,7 +50,7 @@ module.exports = function(config) {
     exclude: ['test/unit/server/**/*.js'],
 
     // web server port
-    port: 5050,
+    port: 5053,
 
     // level of logging
     // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
