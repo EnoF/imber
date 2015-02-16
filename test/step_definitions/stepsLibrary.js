@@ -19,7 +19,7 @@
 
   stepLibrary.initializeVM = function initializeVM(vm, ctx) {
     inject(function($rootScope, $controller, $httpBackend, userDAO, ipCookie, events, $q,
-      $timeout) {
+      $timeout, User) {
       ctx.$scope = $rootScope.$new();
       $controller(vm, {
         $scope: ctx.$scope
@@ -30,6 +30,7 @@
       ctx.events = events;
       ctx.$q = $q;
       ctx.$timeout = $timeout;
+      ctx.User = User;
     });
   };
 }(window));
