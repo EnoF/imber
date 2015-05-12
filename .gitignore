@@ -173,3 +173,7 @@ coverageMidway
 .coverage
 .tox
 test-results.xml
+
+.tscache
+.baseDir.ts
+reference.ts

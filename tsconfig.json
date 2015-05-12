@@ -1,0 +1,39 @@
+{
+    "version": "1.5.0-alpha",
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false,
+        "outDir": "./build/"
+    },
+    "filesGlob": [
+        "./app/*.ts",
+        "./app/core/**/*.ts",
+        "./app/widgets/**/*.ts",
+        "./test/*.ts",
+        "./app/bower_components/type-def/angularjs/angular.d.ts",
+        "./app/bower_components/type-def/node/node.d.ts",
+        "!./node_modules/**/*.ts"
+    ],
+    "files": [
+        "./app/app.ts",
+        "./app/reference.ts",
+        "./app/templates.ts",
+        "./app/widgets/login/login.ts",
+        "./app/widgets/login/src/loginForm.ts",
+        "./app/widgets/login/src/loginVM.ts",
+        "./app/widgets/login/test/unit/login.step.ts",
+        "./test/angular-mocks.d.ts",
+        "./test/definitions.ts",
+        "./app/bower_components/type-def/angularjs/angular.d.ts",
+        "./app/bower_components/type-def/node/node.d.ts"
+    ],
+    "formatCodeOptions": {
+        "indentSize": 2,
+        "tabSize": 2,
+        "convertTabsToSpaces": true
+    }
+}
