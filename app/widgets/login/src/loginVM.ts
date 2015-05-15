@@ -1,13 +1,17 @@
 module LoginVMS {
-  export class LoginVM {
-    static $inject = ['$scope'];
+  import UserDAO = DAO.UserDAO;
 
-    constructor($scope) {
+  export class LoginVM {
+    static $inject = ['$scope', 'userDAO'];
+    userName: string;
+    password: string;
+
+    constructor($scope, private userDAO: UserDAO) {
       $scope.vm = this;
     }
 
     login() {
-      
+      this.userDAO.login(this.userName, this.password);
     }
   }
 }

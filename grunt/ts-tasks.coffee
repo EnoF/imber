@@ -18,6 +18,8 @@ module.exports =
     src: [
       'app/bower_components/type-def/angularjs/angular.d.ts'
       'app/bower_components/type-def/node/node.d.ts'
+      'app/bower_components/type-def/mocha/mocha.d.ts'
+      'app/bower_components/type-def/sinon-chai/sinon-chai.d.ts'
       'test/angular-mocks.d.ts'
       'app/templates.ts'
       'test/*.ts'
