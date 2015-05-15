@@ -14,3 +14,18 @@ module.exports =
       ieCompat: true
     src: 'app/core/styles/main.less'
     dest: '.tmp/styles/main.css'
+  concat:
+    src: [
+      'app/core/widgets/**/*.less'
+      'app/widgets/**/*.less'
+    ]
+    dest: '.tmp/styles/widgets.less'
+  watch:
+    files: [
+      'app/core/**/*.less'
+      'app/widgets/**/*.less'
+    ]
+    tasks: [
+      'concat'
+      'less'
+    ]

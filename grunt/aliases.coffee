@@ -5,6 +5,7 @@ module.exports =
     'ngtemplates:html'
     'ts'
     'template'
+    'concat'
     'less'
   ]
   verify: [
