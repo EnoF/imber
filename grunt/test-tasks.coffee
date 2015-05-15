@@ -51,15 +51,6 @@ module.exports =
     dest: '.tmp/test.spec.js'
   watch:
     files: [
-      'app/widgets/**/test/unit/*.ts'
-      'app/core/widgets/**/test/unit/*.ts'
-      'test/*.ts'
-    ]
-    tasks: [
-      'karma:test_background:run'
-    ]
-  watch__features:
-    files: [
       'app/widgets/**/test/features/*.feature'
       'app/core/widgets/**/test/features/*.feature'
     ]

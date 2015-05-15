@@ -7,9 +7,11 @@ module.exports =
       'app/core/dao/**/*.ts'
       'app/core/modules/**/*.ts'
       'app/core/widgets/**/src/*.ts'
-      'app/core/widgets\/(.*)\/*.ts'
+      'app/core/widgets/**/*.ts'
+      '!app/core/widgets/**/test/**'
       'app/widgets/**/src/*.ts'
-      'app/widgets\/(.*)\/*ts'
+      'app/widgets/**/*.ts'
+      '!app/widgets/**/test/**'
       'app/app.ts'
     ]
     reference: 'app/reference.ts'
@@ -31,8 +33,6 @@ module.exports =
       'app/widgets/**/src/*.ts'
       'app/widgets/**/*.ts'
       'app/app.ts'
-      'app/core/widgets/**/test/*.ts'
-      'app/widgets/**/test/*.ts'
     ]
     reference: 'app/reference.ts'
     outDir: '.tmp/js'
@@ -62,6 +62,7 @@ module.exports =
       'app/core/**/*.ts'
       'app/widgets/**/*.ts'
       'app/app.ts'
+      'test/*.ts'
     ]
     tasks: [
       'ts'

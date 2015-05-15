@@ -3,7 +3,7 @@ module DAO {
   import IHttpService = ng.IHttpService;
   import IQService = ng.IQService;
   import Session = Models.Session;
-  import Errors = Models.Errors;
+  import ERRORS = Models.ERRORS;
   import IRequestConfig = ng.IRequestConfig;
 
   export class DAO {
@@ -13,20 +13,19 @@ module DAO {
     PUT = 'put';
     DELETE = 'delete';
     session: Session;
-    ERRORS: Errors;
     $q: IQService;
 
     constructor(private $injector: IInjectorService) {
       this.$http = $injector.get('$http');
       this.session = $injector.get('session');
-      this.ERRORS = $injector.get('ERRORS');
       this.$q = $injector.get('$q');
     }
 
     private setAuthToken = (response) => {
-      if (!!response.data.authToken) {
+      if (!!response.data.authToken && !!response.data.user) {
         this.session.setAuthToken(response.data.authToken);
-      } else if (response.data.code === this.ERRORS.UNAUTHORIZED.code) {
+        this.session.setUser(response.data.user);
+      } else if (response.data.code === ERRORS.UNAUTHORIZED.code) {
         this.session.expireAuth();
       }
     };

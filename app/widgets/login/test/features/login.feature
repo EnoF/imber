@@ -14,3 +14,12 @@ Feature: Login to Imber
       And the credentials are correct
     When I press the "login" button
     Then I should be logged in
+      And I should see I am logged in with "EnoF"
+
+  Scenario: Login failed
+    Given I provide "enof" as "user name"
+      And I provide "wrong" as "password"
+      And the credentials are incorrect
+    When I press the "login" button
+    Then I should not be logged in
+      And I should see the error message "Login failed... Please try again"

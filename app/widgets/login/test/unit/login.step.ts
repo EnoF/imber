@@ -1,6 +1,7 @@
 module ImberTest {
   import library = StepLibrary.library;
   import ctx = StepLibrary.ctx;
+  import ERRORS = Models.ERRORS;
   var expect = chai.expect;
 
   library.given('the credentials are correct', function() {
@@ -15,8 +16,18 @@ module ImberTest {
       }
     });
   })
+  .given('the credentials are incorrect', () => {
+    ctx.$httpBackend.expect('GET', '/api/login', {
+      userName: ctx.$scope.vm.userName,
+      password: ctx.$scope.vm.password
+    }).respond(403, ERRORS.UNAUTHORIZED);
+  })
   .then('I should be logged in', function() {
     ctx.$httpBackend.flush();
     expect(ctx.session.isLoggedIn()).to.equal(true);
+  })
+  .then('I should not be logged in', function() {
+    ctx.$httpBackend.flush();
+    expect(ctx.session.isLoggedIn()).to.equal(false);
   });
 }

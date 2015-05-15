@@ -16,16 +16,22 @@ module StepLibrary {
   }
 
   library
-    .given('I provide "(.*)" as "(.*)"', function(value: string, attribute: string) {
+    .given('I provide "(.*)" as "(.*)"', (value: string, attribute: string) => {
       ctx.$scope.vm[attribute.toCamelCase()] = value;
     })
-    .given('the widget "(.*)" is initialized', function(widget) {
+    .given('the widget "(.*)" is initialized', (widget) => {
       ctx.initializeDirective(widget);
     })
-    .given('parent scope is initialized', function() {
+    .given('parent scope is initialized', () => {
       ctx.renew();
     })
-    .when('I press the "(.*)" button', function(action) {
+    .when('I press the "(.*)" button', (action) => {
       ctx.$scope.vm[action.toCamelCase()]();
+    })
+    .then('I should see I am logged in with "(.*)"', () => {
+      
+    })
+    .then('I should see the error message "(.*)"', () => {
+
     });
 }
