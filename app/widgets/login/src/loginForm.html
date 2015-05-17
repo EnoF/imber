@@ -1,1 +1,23 @@
-<h2>Login</h2>
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <h2>{{ 'login.title' | translate }}</h2>
+  </div>
+</md-toolbar>
+<md-content layout-padding>
+  <form name="login-form">
+    <md-input-container>
+      <label for="user-name">{{ 'login.userName' | translate }}</label>
+      <input id="user-name"
+        type="text"
+        ng-model="vm.userName" />
+    </md-input-container>
+    <md-input-container>
+      <label for="password">{{ 'login.password' | translate }}</label>
+      <input type="password"
+        id="password"
+        ng-model="vm.password" />
+    </md-input-container>
+    <md-button class="md-raised md-primary"
+    ng-click="vm.login()">{{ 'login.submit' | translate }}</md-button>
+  </form>
+</md-content>

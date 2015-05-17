@@ -5,6 +5,14 @@ module Models {
     constructor(user: IUser) {
       super(user);
     }
+
+    getUserName() {
+      return this.userName;
+    }
+
+    setUserName(userName) {
+      this.userName = userName;
+    }
   }
 
   export interface IUser {

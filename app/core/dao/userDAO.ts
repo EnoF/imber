@@ -7,7 +7,7 @@ module DAO {
     }
 
     login(userName: string, password: string) {
-      this.get('/api/login', {
+      this.post('/api/login', {
         userName: userName,
         password: password
       });

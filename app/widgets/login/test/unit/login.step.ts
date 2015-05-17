@@ -5,7 +5,7 @@ module ImberTest {
   var expect = chai.expect;
 
   library.given('the credentials are correct', function() {
-    ctx.$httpBackend.expect('GET', '/api/login', {
+    ctx.$httpBackend.expect('POST', '/api/login', {
       userName: ctx.$scope.vm.userName,
       password: ctx.$scope.vm.password
     }).respond(200, {
@@ -17,7 +17,7 @@ module ImberTest {
     });
   })
   .given('the credentials are incorrect', () => {
-    ctx.$httpBackend.expect('GET', '/api/login', {
+    ctx.$httpBackend.expect('POST', '/api/login', {
       userName: ctx.$scope.vm.userName,
       password: ctx.$scope.vm.password
     }).respond(403, ERRORS.UNAUTHORIZED);

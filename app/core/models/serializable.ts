@@ -1,14 +1,14 @@
 module Models {
   export class Serializable {
     constructor(json: Object) {
-      json.forAll((prop, value) => {
-        this[prop] = json[prop];
+      angular.forEach(json, (value, prop) => {
+        this[prop] = value;
       });
     }
 
     toJSON(): Object {
       var json = {};
-      this.forAll((prop, value) => {
+      angular.forEach(this, (value, prop) => {
         if (value instanceof Date) {
           json[prop] = value.getTime();
         } else if (value instanceof Object) {
@@ -21,16 +21,3 @@ module Models {
     }
   }
 }
-
-interface Object {
-  forAll(execution: (prop: string, value: any) => void): void;
-}
-
-Object.prototype.forAll = function(execution: (prop: string, value: any) => void) {
-  for (var prop in this) {
-    if (!this.hasOwnProperty(prop)) {
-      continue;
-    }
-    execution(prop, this[prop]);
-  }
-};
