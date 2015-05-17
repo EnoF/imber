@@ -1,13 +1,14 @@
 module LoginVMS {
   import UserDAO = DAO.UserDAO;
+  import BaseVM = Models.BaseVM;
 
-  export class LoginVM {
+  export class LoginVM  extends BaseVM{
     static $inject = ['$scope', 'userDAO'];
     userName: string;
     password: string;
 
     constructor($scope, private userDAO: UserDAO) {
-      $scope.vm = this;
+      super($scope);
     }
 
     login() {
