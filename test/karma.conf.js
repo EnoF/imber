@@ -16,7 +16,6 @@ module.exports = function(config) {
       'app/bower_components/angular-mocks/angular-mocks.js',
       'app/bower_components/angular-translate/angular-translate.min.js',
       '.tmp/js/test/*.js',
-      '.tmp/js/app/templates.js',
       '.tmp/js/app/core/models/**/*.js',
       '.tmp/js/app/core/dao/**/*.js',
       '.tmp/js/app/core/modules/**/*.js',

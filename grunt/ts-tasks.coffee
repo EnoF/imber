@@ -2,7 +2,6 @@ module.exports =
   ts__all:
     src: [
       'app/bower_components/type-def/angularjs/angular.d.ts'
-      'app/templates.ts'
       'app/core/models/**/*.ts'
       'app/core/dao/**/*.ts'
       'app/core/modules/**/*.ts'
@@ -23,7 +22,6 @@ module.exports =
       'app/bower_components/type-def/mocha/mocha.d.ts'
       'app/bower_components/type-def/sinon-chai/sinon-chai.d.ts'
       'test/angular-mocks.d.ts'
-      'app/templates.ts'
       'test/*.ts'
       'app/core/models/**/*.ts'
       'app/core/dao/**/*.ts'
