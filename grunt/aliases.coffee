@@ -44,8 +44,9 @@ module.exports =
   ]
   package: [
     'test'
-    'protractor_webdriver'
-    'protractor:test_ci'
+    # deactivated untill e2e tests are written
+    # 'protractor_webdriver'
+    # 'protractor:test_ci'
     'dist'
   ]
   default: [

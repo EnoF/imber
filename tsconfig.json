@@ -24,6 +24,7 @@
         "./app/templates.ts",
         "./app/core/dao/dao.ts",
         "./app/core/dao/userDAO.ts",
+        "./app/core/models/baseVM.ts",
         "./app/core/models/errors.ts",
         "./app/core/models/serializable.ts",
         "./app/core/models/session.ts",
