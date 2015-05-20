@@ -24,6 +24,7 @@
     "grunt-karma": "^0.10.1",
     "grunt-protractor-runner": "^2.0.0",
     "grunt-protractor-webdriver": "^0.2.0",
+    "grunt-simple-mocha": "^0.4.0",
     "grunt-template": "^0.2.3",
     "grunt-ts": "^4.1.0",
     "grunt-tslint": "^2.2.0",
@@ -36,10 +37,13 @@
     "karma-sinon-chai": "^0.3.0",
     "load-grunt-config": "^0.17.1",
     "mocha": "^2.2.4",
+    "mockgoose": "^1.10.7",
     "mongo-migrate": "^0.1.0",
     "mongodb": "^1.4.26",
     "phantomjs": "^1.9.16",
     "protractor": "^2.0.0",
+    "sinon": "^1.14.1",
+    "sinon-chai": "^2.7.0",
     "tslint": "^2.2.0",
     "yadda": "^0.11.5"
   },
@@ -57,7 +61,7 @@
     "crypto-js": "^3.1.4",
     "express": "^4.12.3",
     "express-params": "0.0.3",
-    "mongoose": "^4.0.2",
+    "mongoose": "^3.8.18",
     "q": "^1.4.0"
   }
 }

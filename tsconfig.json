@@ -20,7 +20,7 @@
     ],
     "files": [
         "./app/app.ts",
-        "./app/templates.ts",
+        "./app/reference.ts",
         "./app/core/dao/dao.ts",
         "./app/core/dao/userDAO.ts",
         "./app/core/models/baseVM.ts",

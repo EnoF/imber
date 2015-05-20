@@ -49,6 +49,8 @@ module.exports =
           module: 'imber'
     src: 'test/test.spec.template'
     dest: '.tmp/test.spec.js'
+  simplemocha:
+    src: 'test/unit/server/**/*.js'
   watch:
     files: [
       'app/widgets/**/test/features/*.feature'
@@ -57,4 +59,11 @@ module.exports =
     tasks: [
       'template'
       'karma:test_background:run'
+    ]
+  watch__server:
+    files: [
+      'test/unit/server/*.js'
+    ]
+    tasks: [
+      'simplemocha'
     ]
