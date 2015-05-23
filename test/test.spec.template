@@ -13,10 +13,7 @@
   featuresSpecs.push(parser.parse('<%= feature.replace(/\r\n|\r|\n/g, '\\r\\n').replace(/[']+/g, '\\\'') %>'));
   <% }); %>
 
-  var ctx = {
-    ctx: {}
-  };
-  var yadda = new Yadda.Yadda(StepLibrary.library, ctx);
+  var yadda = new Yadda.Yadda(StepLibrary.library);
 
   Yadda.plugins.mocha.ScenarioLevelPlugin.init();
 
@@ -24,7 +21,7 @@
     beforeEach(initModule('<%= module %>'));
 
     beforeEach(function cleanCtx(){
-      ctx.ctx = {};
+      StepLibrary.ctx.renew();
     });
 
     scenarios(feature.scenarios, function(scenario) {

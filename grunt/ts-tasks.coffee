@@ -52,6 +52,8 @@ module.exports =
         'app/bower_components/angular-cookies/angular-cookies.min.js'
         'app/bower_components/angular-route/angular-route.min.js'
         'app/bower_components/angular-translate/angular-translate.min.js'
+        'app/bower_components/angular-material/angular-material.min.js'
+        'app/bower_components/angular-validation-match/dist/angular-input-match.min.js'
         '.tmp/js/build.min.js'
         '.tmp/js/templates.min.js'
       ]

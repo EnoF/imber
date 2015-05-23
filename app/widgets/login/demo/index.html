@@ -6,7 +6,7 @@
 
   <link rel="stylesheet"
     type="text/css"
-    href="https://cdn.rawgit.com/angular/bower-material/master/angular-material.css">
+    href="/bower_components/angular-material/angular-material.css">
 
   <!-- Setup Viewport -->
   <meta name="viewport"
@@ -19,6 +19,9 @@
     <md-card flex
       ng-if="!isLoggedIn()">
       <login-form></login-form>
+    </md-card>
+    <md-card flex ng-if="!isLoggedIn()">
+      <register-form></register-form>
     </md-card>
     <md-card flex
       ng-if="isLoggedIn()">
@@ -37,9 +40,13 @@
     type="text/javascript"></script>
   <script src="/bower_components/angular-aria/angular-aria.js"
     type="text/javascript"></script>
-  <script src="https://cdn.rawgit.com/angular/bower-material/master/angular-material.js"
+  <script src="/bower_components/angular-material/angular-material.js"
     type="text/javascript"></script>
   <script src="/bower_components/angular-translate/angular-translate.js"
+    type="text/javascript"></script>
+  <script src="/bower_components/angular-messages/angular-messages.js"
+    type="text/javascript"></script>
+  <script src="/bower_components/angular-validation-match/dist/angular-input-match.js"
     type="text/javascript"></script>
   <script src="/js/build.js"
     type="text/javascript"></script>

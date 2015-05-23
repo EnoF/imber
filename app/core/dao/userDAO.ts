@@ -12,6 +12,14 @@ module DAO {
         password: password
       });
     }
+
+    register(email: string, userName: string, password: string) {
+      this.post('/api/user', {
+        email: email,
+        userName: userName,
+        password: password
+      });
+    }
   }
 
   var instance = null;

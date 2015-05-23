@@ -2,6 +2,7 @@ module StepLibrary {
   var Yadda = require('yadda');
   var English = Yadda.localisation.English;
   var Dictionary = Yadda.Dictionary;
+  var expect = chai.expect;
 
   var dictionary = new Dictionary()
     .define('NUM', /(\d+)/)
@@ -22,16 +23,13 @@ module StepLibrary {
     .given('the widget "(.*)" is initialized', (widget) => {
       ctx.initializeDirective(widget);
     })
-    .given('parent scope is initialized', () => {
-      ctx.renew();
-    })
     .when('I press the "(.*)" button', (action) => {
       ctx.$scope.vm[action.toCamelCase()]();
     })
     .then('I should see I am logged in with "(.*)"', () => {
-      
-    })
-    .then('I should see the error message "(.*)"', () => {
 
+    })
+    .then('I should see the error message "(.*)"', (message: string) => {
+      
     });
 }

@@ -6,6 +6,8 @@ module Imber {
     'imber.models',
     'imber.templates',
     'ngMaterial',
+    'validation.match',
+    'ngMessages',
     'pascalprecht.translate'
   ])
     .config(configureApp(LoginTranslations))

@@ -19,6 +19,9 @@ module StepLibrary {
         this.$parent = $rootScope.$new();
         this.$httpBackend = $httpBackend;
         this.session = session;
+        this.attributes = {};
+        this.$scope = null;
+        this.$element = null;
       });
     }
 

@@ -5,8 +5,7 @@ Feature: Login to Imber
 
   Background:
 
-  Given parent scope is initialized
-    And the widget "login form" is initialized
+  Given the widget "login form" is initialized
 
   Scenario: Login successful
     Given I provide "enof" as "user name"
