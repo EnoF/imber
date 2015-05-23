@@ -15,8 +15,7 @@
 
 <body data-ng-app="imber.login-demo">
   <div layout="row"
-    ng-controller="Test"
-    md-theme="imber">
+    ng-controller="Test">
     <md-card flex
       ng-if="!isLoggedIn()">
       <login-form></login-form>
@@ -48,11 +47,6 @@
     type="text/javascript"></script>
   <script type="text/javascript">
   angular.module('imber.login-demo', ['imber.login'])
-    .config(function($mdThemingProvider) {
-      $mdThemingProvider.theme('imber', 'default')
-        .primaryPalette('blue-grey')
-        .dark();
-    })
     .controller('Test', function($scope, session) {
       $scope.isLoggedIn = function() {
         return session.isLoggedIn();

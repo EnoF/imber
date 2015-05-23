@@ -1,5 +1,5 @@
 module Imber {
-  import initializeTranslation = Modules.initializeTranslations;
+  import configureApp = Modules.configureAppWithTranslations;
 
   angular.module('imber.login', [
     'imber.dao',
@@ -8,7 +8,7 @@ module Imber {
     'ngMaterial',
     'pascalprecht.translate'
   ])
-    .config(initializeTranslation(LoginTranslations))
+    .config(configureApp(LoginTranslations))
     .controller(LoginVMS)
     .directive(LoginDirectives);
 }
