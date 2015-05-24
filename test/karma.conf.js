@@ -1,99 +1,55 @@
-// con-rest
-// Version: 0.0.1
-//
-// Author: Andy Tang
-// Fork me on Github: https://github.com/EnoF/con-rest
-
 module.exports = function(config) {
-  config.set({
-    // base path, that will be used to resolve files and exclude
+  return config.set({
     basePath: '..',
-
-    // testing framework to use (jasmine/mocha/qunit/...)
-    frameworks: ['mocha', 'sinon-chai'],
-
-    // list of files / patterns to load in the browser
-    files: [
-      // jQuery for easier testing
-      'app/bower_components/jquery/dist/jquery.js',
-      // Angular dependencies
-      'app/bower_components/angular/angular.js',
-      'app/bower_components/angular-route/angular-route.js',
-      'app/bower_components/angular-cookie/angular-cookie.js',
-      'app/bower_components/angular-mocks/angular-mocks.js',
-      'app/bower_components/angular-aria/angular-aria.min.js',
-      'app/bower_components/angular-animate/angular-animate.min.js',
-      'app/bower_components/hammerjs/hammer.min.js',
-      'app/bower_components/angular-material/angular-material.min.js',
-      'app/bower_components/enofjs/src/clazz.js',
-      // App wiring
-      'app/app.js',
-      // DAO
-      'app/dao/**/*.js',
-      // Models
-      'app/models/**/*.js',
-      // Modules
-      'app/modules/*.js',
-      // Directives
-      'app/directives/*.js',
-      // View Models
-      'app/viewModels/**/*.js',
-      // Views encapsuled in widgets
-      'app/widgets/**/*.js',
-      // Templates for the widgets
-      '.tmp/scripts/templates.js',
-      // The specs for unit testing
-      'test/unit/**/*.js'
+    frameworks: [
+      'mocha',
+      'sinon-chai'
     ],
-
-    // list of files / patterns to exclude
-    exclude: ['test/unit/server/**/*.js'],
-
-    // web server port
+    files: [
+      'node_modules/yadda/dist/yadda-0.11.4.js',
+      'app/bower_components/jquery/dist/jquery.js',
+      'app/bower_components/angular/angular.js',
+      'app/bower_components/angular-animate/angular-animate.js',
+      'app/bower_components/angular-aria/angular-aria.js',
+      'app/bower_components/angular-material/angular-material.js',
+      'app/bower_components/angular-route/angular-route.js',
+      'app/bower_components/angular-mocks/angular-mocks.js',
+      'app/bower_components/angular-translate/angular-translate.js',
+      'app/bower_components/angular-messages/angular-messages.js',
+      'app/bower_components/angular-validation-match/dist/angular-input-match.js',
+      '.tmp/js/test/*.js',
+      '.tmp/js/app/core/models/**/*.js',
+      '.tmp/js/app/core/dao/**/*.js',
+      '.tmp/js/app/core/modules/**/*.js',
+      '.tmp/js/app/core/widgets/**/src/**/*.js',
+      '.tmp/js/app/core/widgets/**/*.js',
+      '.tmp/js/app/widgets/**/src/**/*.js',
+      '.tmp/js/app/widgets/**/*.js',
+      '.tmp/js/app/app.js',
+      '.tmp/js/templates.js',
+      '.tmp/js/app/core/widgets/**/test/unit/*.js',
+      '.tmp/js/app/widgets/**/test/unit/*.js',
+      '.tmp/test.spec.js'
+    ],
+    exclude: [],
     port: 5050,
-
-    // level of logging
-    // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
+    colors: true,
     logLevel: config.LOG_INFO,
-
-
-    // enable / disable watching file and executing tests whenever any file changes
     autoWatch: false,
-
-
-    // Start these browsers, currently available:
-    // - Chrome
-    // - ChromeCanary
-    // - Firefox
-    // - Opera
-    // - Safari (only Mac)
-    // - PhantomJS
-    // - IE (only Windows)
+    singleRun: false,
     browsers: ['PhantomJS'],
-
-    // coverage reporter generates the coverage
-    reporters: ['progress', 'coverage'],
-
+    reporters: [
+      'mocha',
+      'coverage'
+    ],
     preprocessors: {
-      // source files, that you wanna generate coverage for
-      // do not include tests or libraries
-      // (these files will be instrumented by Istanbul)
-      'app/dao/**/*.js': ['coverage'],
-      'app/models/**/*.js': ['coverage'],
-      'app/modules/**/*.js': ['coverage'],
-      'app/directives/**/*.js': ['coverage'],
-      'app/viewModels/**/*.js': ['coverage']
+      '.tmp/js/widgets/**/*.js': ['coverage'],
+      '.tmp/js/core/**/*.js': ['coverage']
     },
-
-    // optionally, configure the reporter
     coverageReporter: {
-      type: 'html',
-      dir: '.tmp/coverage/'
-    },
-
-
-    // Continuous Integration mode
-    // if true, it capture browsers, run tests and exit
-    singleRun: false
+      type: 'lcov',
+      dir: 'coverage',
+      subdir: '.'
+    }
   });
 };

@@ -125,7 +125,8 @@
         allMocksCreated.resolve();
       })
       .fail(function reject() {
-        allMocksCreated.reject()
+        console.log('lol')
+        allMocksCreated.reject();
       });
     return allMocksCreated.promise;
   }

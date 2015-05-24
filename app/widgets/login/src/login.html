@@ -1,0 +1,33 @@
+<section layout="row"
+  layout-sm="column">
+  <md-card class="login-card"
+    flex
+    ng-if="vm.state === vm.SELECT || $mdMedia('gt-sm') && vm.state !== vm.LOGIN"
+    ng-click="vm.state = vm.LOGIN">
+    <img src="/images/widgets/login.jpg"
+      alt="login">
+    <md-card-content>
+      <h2>Login</h2>
+    </md-card-content>
+  </md-card>
+  <md-card class="login-form"
+    flex
+    ng-if="vm.state === vm.LOGIN">
+    <login-form></login-form>
+  </md-card>
+  <md-card class="register-card"
+    flex
+    ng-if="vm.state === vm.SELECT || $mdMedia('gt-sm') && vm.state !== vm.REGISTER"
+    ng-click="vm.state = vm.REGISTER">
+    <img src="/images/widgets/register.jpg"
+      alt="login">
+    <md-card-content>
+      <h2>Register</h2>
+    </md-card-content>
+  </md-card>
+  <md-card class="register-form"
+    flex
+    ng-if="vm.state === vm.REGISTER">
+    <register-form></register-form>
+  </md-card>
+</section>

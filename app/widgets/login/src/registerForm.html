@@ -1,0 +1,75 @@
+<md-toolbar class="md-tall">
+  <span flex></span>
+  <div class="md-toolbar-tools md-toolbar-tools-bottom">
+    <md-button class="md-icon-button"
+      aria-label="back"
+      ng-click="vm.state = vm.SELECT">
+      <md-icon md-font-icon="Material-Design-Icons"
+        class="mdi-navigation-arrow-back"></md-icon>
+    </md-button>
+    <span class="md-display-2">{{ 'register.title' | translate }}</span>
+  </div>
+</md-toolbar>
+<md-card-content>
+  <md-content layout-padding>
+    <form name="registerForm"
+      novalidate
+      ng-submit="vm.register()"
+      autocomplete="off">
+      <md-input-container>
+        <label for="email">{{ 'register.email' | translate }}</label>
+        <input id="email"
+          type="email"
+          required
+          name="email"
+          ng-model="vm.email" />
+        <div ng-messages="registerForm.email.$error"
+          ng-if="registerForm.email.$touched">
+          <div ng-message="required">{{ 'register.error.email.required' | translate }}</div>
+          <div ng-message="email">{{ 'register.error.email.email' | translate}}</div>
+        </div>
+      </md-input-container>
+      <md-input-container>
+        <label for="user-name">{{ 'register.userName' | translate }}</label>
+        <input id="user-name"
+          type="text"
+          required
+          name="userName"
+          ng-model="vm.userName" />
+        <div ng-messages="registerForm.userName.$error"
+          ng-if="registerForm.userName.$touched">
+          <div ng-message="required">{{ 'register.error.userName.required' | translate }}</div>
+        </div>
+      </md-input-container>
+      <md-input-container>
+        <label for="password">{{ 'register.password' | translate }}</label>
+        <input type="password"
+          id="password"
+          required
+          name="password"
+          ng-model="vm.password" />
+        <div ng-messages="registerForm.password.$error"
+          ng-if="registerForm.password.$touched">
+          <div ng-message="required">{{ 'register.error.password.required' | translate }}</div>
+        </div>
+      </md-input-container>
+      <md-input-container>
+        <label for="confirm-password">{{ 'register.confirmPassword' | translate }}</label>
+        <input type="password"
+          id="confirm-password"
+          required
+          name="confirmPassword"
+          match="vm.password"
+          ng-model="vm.confirmPassword" />
+        <div ng-messages="registerForm.confirmPassword.$error"
+          ng-if="registerForm.confirmPassword.$touched">
+          <div ng-message="required">{{ 'register.error.confirmPassword.required' | translate }}</div>
+          <div ng-message="match">{{ 'register.error.confirmPassword.match' | translate }}</div>
+        </div>
+      </md-input-container>
+      <md-button class="md-raised md-primary"
+        ng-disabled="!registerForm.$valid"
+        type="submit">{{ 'register.submit' | translate }}</md-button>
+    </form>
+  </md-content>
+</md-card-content>
