@@ -43,6 +43,7 @@ module.exports = (grunt) ->
     'watch'
   ]
   dist: [
+    'build'
     'copy'
     'less'
     'cssmin'

@@ -1,26 +1,45 @@
-<md-toolbar class="md-tall"
-  layout-align="end end">
-  <div class="md-toolbar-tools">
+<md-toolbar class="md-tall">
+  <span flex></span>
+  <div class="md-toolbar-tools md-toolbar-tools-bottom">
+    <md-button class="md-icon-button"
+      aria-label="back"
+      ng-click="vm.state = vm.SELECT">
+      <md-icon class="mdi-navigation-arrow-back"
+        md-font-icon="Material-Design-Icons"></md-icon>
+    </md-button>
     <span class="md-display-2">{{ 'login.title' | translate }}</span>
   </div>
 </md-toolbar>
 <md-card-content>
   <md-content layout-padding>
-    <form name="login-form"
+    <form name="loginForm"
       autocomplete="off">
       <md-input-container>
         <label for="user-name">{{ 'login.userName' | translate }}</label>
         <input id="user-name"
           type="text"
+          required
+          name="userName"
           ng-model="vm.userName" />
+        <div ng-messages="loginForm.userName.$error"
+          ng-if="loginForm.userName.$touched">
+          <div ng-message="required">{{ 'login.error.userName.required' | translate }}</div>
+        </div>
       </md-input-container>
       <md-input-container>
         <label for="password">{{ 'login.password' | translate }}</label>
         <input type="password"
           id="password"
+          required
+          name="password"
           ng-model="vm.password" />
+        <div ng-messages="loginForm.password.$error"
+          ng-if="loginForm.password.$touched">
+          <div ng-message="required">{{ 'login.error.password.required' | translate }}</div>
+        </div>
       </md-input-container>
       <md-button class="md-raised md-primary"
+        ng-disabled="!loginForm.$valid"
         ng-click="vm.login()">{{ 'login.submit' | translate }}</md-button>
     </form>
   </md-content>

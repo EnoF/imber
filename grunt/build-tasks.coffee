@@ -10,13 +10,14 @@ module.exports =
   copy:
     files: [{
       expand: true
-      cwd: 'app/bower_components/bootstrap/fonts/'
+      cwd: 'app/bower_components/bootstrap-material-design/fonts/'
       dest: '.tmp/fonts/'
       src: [
         '*.eot'
         '*.svg'
         '*.ttf'
         '*.woff'
+        '*.woff2'
       ]
     }, {
       expand: true

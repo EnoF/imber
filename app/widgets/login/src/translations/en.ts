@@ -4,7 +4,15 @@ module LoginTranslations {
       title: 'Login',
       userName: 'user name',
       password: 'password',
-      submit: 'login'
+      submit: 'login',
+      error: {
+        userName: {
+          required: 'Please enter an user name'
+        },
+        password: {
+          required: 'Please enter a password'
+        }
+      }
     },
     register: {
       title: 'Register',

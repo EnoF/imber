@@ -1,6 +1,12 @@
-<md-toolbar class="md-tall"
-  layout-align="end end">
-  <div class="md-toolbar-tools">
+<md-toolbar class="md-tall">
+  <span flex></span>
+  <div class="md-toolbar-tools md-toolbar-tools-bottom">
+    <md-button class="md-icon-button"
+      aria-label="back"
+      ng-click="vm.state = vm.SELECT">
+      <md-icon md-font-icon="Material-Design-Icons"
+        class="mdi-navigation-arrow-back"></md-icon>
+    </md-button>
     <span class="md-display-2">{{ 'register.title' | translate }}</span>
   </div>
 </md-toolbar>
