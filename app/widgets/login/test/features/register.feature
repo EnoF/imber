@@ -5,7 +5,7 @@ Feature: Register
 
   Background:
 
-  Given the widget "register form" is initialized
+  Given the widget "login" is initialized
 
   Scenario: Register and login
     Given I provide "andy@provictores.com" as "email"

@@ -54,6 +54,7 @@ module.exports =
         'app/bower_components/angular-translate/angular-translate.min.js'
         'app/bower_components/angular-material/angular-material.min.js'
         'app/bower_components/angular-validation-match/dist/angular-input-match.min.js'
+        'app/bower_components/angular-hero/angular-hero.js'
         '.tmp/js/build.min.js'
         '.tmp/js/templates.min.js'
       ]

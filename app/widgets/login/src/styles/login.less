@@ -1,3 +1,30 @@
-login-form, [login-form] {
-  
+login-form,
+[login-form] {
+  md-toolbar {
+    background-image: url("/images/widgets/login.jpg");
+    background-repeat: no-repeat;
+    background-position: 0 -70px;
+    background-size: 100%;
+  }
+  @media (max-width: 1400px) {
+    md-toolbar {
+      background-size: 800px 600px;
+      background-position: -100px -70px;
+    }
+  }
+}
+register-form,
+[register-form] {
+  md-toolbar {
+    background-image: url("/images/widgets/register.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: 0 -190px;
+  }
+  @media (max-width: 1200px) {
+    md-toolbar {
+      background-size: 800px 600px;
+      background-position: -210px -190px;
+    }
+  }
 }

@@ -6,7 +6,7 @@
 
   <link rel="stylesheet"
     type="text/css"
-    href="/bower_components/angular-material/angular-material.css">
+    href="/styles/main.css">
 
   <!-- Setup Viewport -->
   <meta name="viewport"
@@ -16,13 +16,8 @@
 <body data-ng-app="imber.login-demo">
   <div layout="row"
     ng-controller="Test">
-    <md-card flex
-      ng-if="!isLoggedIn()">
-      <login-form></login-form>
-    </md-card>
-    <md-card flex ng-if="!isLoggedIn()">
-      <register-form></register-form>
-    </md-card>
+    <login flex
+      ng-if="!isLoggedIn()"></login>
     <md-card flex
       ng-if="isLoggedIn()">
       <md-content>

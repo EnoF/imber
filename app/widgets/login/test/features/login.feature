@@ -5,7 +5,7 @@ Feature: Login to Imber
 
   Background:
 
-  Given the widget "login form" is initialized
+  Given the widget "login" is initialized
 
   Scenario: Login successful
     Given I provide "enof" as "user name"
