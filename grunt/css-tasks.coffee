@@ -2,8 +2,8 @@ module.exports =
   cssmin:
     options:
       banner: '/* //// Imber - ProVictores //// Copyright (C) //// 2015 Jumio, Inc. //// */'
-    src: 'dist/styles/main.min.css'
-    dest: '.tmp/styles/main.css'
+    src: '.tmp/styles/main.css'
+    dest: 'dist/styles/main.min.css'
   less:
     options:
       sourceMap: true

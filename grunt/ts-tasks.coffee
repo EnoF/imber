@@ -45,20 +45,28 @@ module.exports =
         ]
       dest: '.tmp/js/build.min.js'
     ]
+  uglify__angular:
+    files: [
+      src: [
+        'app/bower_components/angular/angular.js'
+        'app/bower_components/angular-animate/angular-animate.js'
+        'app/bower_components/angular-aria/angular-aria.js'
+        'app/bower_components/angular-material/angular-material.js'
+        'app/bower_components/angular-route/angular-route.js'
+        'app/bower_components/angular-translate/angular-translate.js'
+        'app/bower_components/angular-messages/angular-messages.js'
+        'app/bower_components/angular-validation-match/dist/angular-input-match.js'
+        ]
+      dest: '.tmp/js/angular.min.js'
+    ]
   concat:
     files: [
       src: [
-        'app/bower_components/angular/angular.min.js'
-        'app/bower_components/angular-cookies/angular-cookies.min.js'
-        'app/bower_components/angular-route/angular-route.min.js'
-        'app/bower_components/angular-translate/angular-translate.min.js'
-        'app/bower_components/angular-material/angular-material.min.js'
-        'app/bower_components/angular-validation-match/dist/angular-input-match.min.js'
-        'app/bower_components/angular-hero/angular-hero.js'
+        '.tmp/js/angular.min.js'
         '.tmp/js/build.min.js'
         '.tmp/js/templates.min.js'
       ]
-      dest: '.tmp/js/<%= package.name %>.min.js'
+      dest: 'dist/js/<%= package.name %>.min.js'
     ]
   watch:
     files: [

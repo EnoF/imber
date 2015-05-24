@@ -43,15 +43,16 @@ module.exports = (grunt) ->
     'watch'
   ]
   dist: [
-    'build'
-    'copy'
+    'copy:build_dist'
     'less'
     'cssmin'
     'ngtemplates:html_dist'
-    'uglify'
+    'uglify:ts_angular'
+    'uglify:ts'
     'concat'
   ]
   serverDist: [
+    'build'
     'dist'
     'express:server_dist',
     'watch'

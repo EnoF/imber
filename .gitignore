@@ -177,3 +177,4 @@ test-results.xml
 .tscache
 .baseDir.ts
 reference.ts
+dist
