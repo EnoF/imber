@@ -46,8 +46,17 @@ module ChallengesVMS {
         });
     }
 
+    resetChallenges() {
+      this.challengesForMe = [];
+      this.myChallenges = [];
+      this.myStartedChallenges = [];
+      this.globalChallenges = [];
+      this.globalStartedChallenges = [];
+    }
+
     sortChallenges() {
       var loggedInId = this.session.getUser()._id;
+      this.resetChallenges();
       this.challenges.forEach((challenge: Game) => {
         if (challenge.started &&
           (challenge.challenger._id === loggedInId ||

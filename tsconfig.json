@@ -40,6 +40,7 @@
         "./app/widgets/challenges/src/challenges.ts",
         "./app/widgets/challenges/src/challengesVM.ts",
         "./app/widgets/challenges/src/translations/en.ts",
+        "./app/widgets/challenges/test/definitions/acceptChallenge.step.ts",
         "./app/widgets/challenges/test/definitions/challenge.step.ts",
         "./app/widgets/challenges/test/definitions/viewChallenges.step.ts",
         "./app/widgets/login/login.ts",

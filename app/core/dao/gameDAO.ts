@@ -34,6 +34,10 @@ module DAO {
         }, deferred.reject);
       return deferred.promise;
     }
+
+    acceptChallenge(gameId: string) {
+      return this.post('/api/games/' + gameId + '/accept', null);
+    }
   }
 
   export function gameDAO($injector: IInjectorService) {

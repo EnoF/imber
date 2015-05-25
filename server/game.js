@@ -46,7 +46,6 @@
         deferred.resolve(game);
       })
       .fail(function playerNotFound(error) {
-        console.log(error);
         res.status(404).send('challenger not found');
         deferred.reject();
       });

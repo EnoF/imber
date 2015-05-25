@@ -1,12 +1,20 @@
-<md-list-item class="md-2-line">
+<md-list-item>
   <md-icon class="md-avatar"
     md-font-icon="Material-Design-Icons"
     ng-class="{ 'mdi-navigation-check': vm.challenge.started, 'mdi-action-schedule': !vm.challenge.started }">
   </md-icon>
-  <div class="md-list-item-text">
-    <h3>{{ vm.getOpponent().userName }}</h3>
-    <p ng-if="vm.isInGame()">{{ 'challengeItem.versusYou' | translate }}</p>
-    <h3 ng-if="!vm.isInGame()">{{ 'challengeItem.versus' | translate }} {{ vm.getChallenger().userName }}</h3>
-  </div>
+  <p>
+    <span>{{ vm.getOpponent().userName }}</span>
+    <span ng-if="vm.isInGame()">{{ 'challengeItem.versusYou' | translate }}</span>
+    <span ng-if="!vm.isInGame()">{{ 'challengeItem.versus' | translate }} {{ vm.getChallenger().userName }}</span>
+  </p>
+  <md-button class="md-fab md-primary md-mini"
+    aria-label="{{ 'challengeItem.accept' | translate }}"
+    ng-disabled="vm.challenge.started"
+    ng-click="vm.accept()">
+    <md-icon class="mdi-av-play-arrow font-icon-28"
+      md-font-icon="Material-Design-Icons">
+    </md-icon>
+  </md-button>
   <md-divider ng-if="!$parent.$last"></md-divider>
 </md-list-item>

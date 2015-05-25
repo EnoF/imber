@@ -2,18 +2,30 @@ module ChallengesVMS {
   import BaseVM = Models.BaseVM;
   import Game = Models.Game;
   import Session = Models.Session;
+  import GameDAO = DAO.GameDAO;
 
   export class ChallengeVM extends BaseVM {
-    static $inject = ['$scope', 'session'];
+    static $inject = ['$scope', 'session', 'gameDAO'];
 
     challenge: Game;
     session: Session;
+    gameDAO: GameDAO;
+    challengesVM: ChallengesVM;
 
-    constructor($scope, session: Session) {
+    constructor($scope, session: Session, gameDAO: GameDAO) {
       super($scope);
 
       this.challenge = $scope.challenge;
       this.session = session;
+      this.gameDAO = gameDAO;
+    }
+
+    accept() {
+      this.gameDAO.acceptChallenge(this.challenge._id)
+        .then(() => {
+          this.challenge.started = true;
+          this.challengesVM.sortChallenges();
+        });
     }
 
     isInGame() {

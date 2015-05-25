@@ -6,8 +6,10 @@ module StepLibrary {
   class Context {
     $parent: any;
     $scope: IScopeVM;
+    $child: IScopeVM;
     $httpBackend: ng.IHttpBackendService;
     $element: ng.IRootElementService;
+    $directive: any;
     session: Session;
     directive: string;
     attributes: Object = {};
@@ -26,6 +28,7 @@ module StepLibrary {
         this.session = session;
         this.attributes = {};
         this.$scope = null;
+        this.$child = null;
         this.$element = null;
         this.games = [];
         this.users = [];
@@ -39,6 +42,7 @@ module StepLibrary {
         var element = $compile(directive)(this.$parent);
         $rootScope.$apply();
         this.$element = $(element);
+        this.$directive = directive;
         this.$scope = directive.children().scope();
       });
     }

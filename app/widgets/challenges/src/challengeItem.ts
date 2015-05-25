@@ -1,4 +1,6 @@
 module ChallengesDirectives {
+  import ChallengesVM = ChallengesVMS.ChallengesVM;
+
   export function challengeItem(): ng.IDirective {
     return {
       restrict: 'EA',
@@ -6,7 +8,11 @@ module ChallengesDirectives {
         challenge: '='
       },
       controller: 'ChallengeVM',
-      templateUrl: 'challengeItem'
+      templateUrl: 'challengeItem',
+      require: '^challenges',
+      link: ($scope: any, $attr, $element, challengesVM) => {
+        $scope.vm.challengesVM = challengesVM;
+      }
     };
   }
 }

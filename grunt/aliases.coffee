@@ -36,6 +36,7 @@ module.exports = (grunt) ->
   test: [
     'setupEnv'
     'karma:test_single'
+    'simplemocha'
   ]
   server: [
     'setupEnv'
