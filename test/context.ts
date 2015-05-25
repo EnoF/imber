@@ -1,6 +1,7 @@
 module StepLibrary {
   import Session = Models.Session;
   import IGame = Models.IGame;
+  import IUser = Models.IUser;
 
   class Context {
     $parent: any;
@@ -11,6 +12,7 @@ module StepLibrary {
     directive: string;
     attributes: Object = {};
     games: Array<IGame>;
+    users: Array<IUser>;
 
     constructor() {
       this.renew();
@@ -26,6 +28,7 @@ module StepLibrary {
         this.$scope = null;
         this.$element = null;
         this.games = [];
+        this.users = [];
       });
     }
 

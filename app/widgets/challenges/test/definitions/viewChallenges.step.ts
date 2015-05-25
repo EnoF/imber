@@ -10,6 +10,7 @@ module ImberTest {
     })
     .given('< Game  >< (.*) >< (.*) >< (.*) >', (challenger: string, opponent: string, state: string) => {
       ctx.games.push({
+        _id: 'gameid' + ctx.games.length,
         board: {
           _id: 0,
           x: 5,

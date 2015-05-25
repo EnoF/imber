@@ -2,6 +2,7 @@
 
 module Models {
   export class Game extends Serializable {
+    _id: string;
     board: Board;
     challenger: User;
     opponent: User;
@@ -16,9 +17,10 @@ module Models {
   }
 
   export interface IGame {
-    board: IBoard;
-    challenger: IUser;
-    opponent: IUser;
-    started: boolean;
+    _id: string;
+    board?: IBoard;
+    challenger?: IUser;
+    opponent?: IUser;
+    started?: boolean;
   }
 }

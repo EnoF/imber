@@ -1,40 +1,50 @@
-<md-toolbar>
-  <div class="md-toolbar-tools">
-    <h2>{{ 'challenges.title' | translate }}</h2>
-  </div>
-</md-toolbar>
-<section ng-if="vm.challengesForMe.length > 0">
-  <md-subheader class="md-primary">{{ 'challenges.challengesForMe' | translate}}</md-subheader>
-  <md-list>
-    <challenge-item ng-repeat="challenge in vm.challengesForMe"
-      challenge="challenge"></challenge-item>
-  </md-list>
-</section>
-<section ng-if="vm.myChallenges.length > 0">
-  <md-subheader class="md-primary">{{ 'challenges.myChallenges' | translate}}</md-subheader>
-  <md-list>
-    <challenge-item ng-repeat="challenge in vm.myChallenges"
-      challenge="challenge"></challenge-item>
-  </md-list>
-</section>
-<section ng-if="vm.myStartedChallenges.length > 0">
-  <md-subheader class="md-primary">{{ 'challenges.myStartedChallenges' | translate}}</md-subheader>
-  <md-list>
-    <challenge-item ng-repeat="challenge in vm.myStartedChallenges"
-      challenge="challenge"></challenge-item>
-  </md-list>
-</section>
-<section ng-if="vm.globalChallenges.length > 0">
-  <md-subheader class="md-primary">{{ 'challenges.globalChallenges' | translate}}</md-subheader>
-  <md-list>
-    <challenge-item ng-repeat="challenge in vm.globalChallenges"
-      challenge="challenge"></challenge-item>
-  </md-list>
-</section>
-<section ng-if="vm.globalStartedChallenges.length > 0">
-  <md-subheader class="md-primary">{{ 'challenges.globalStartedChallenges' | translate}}</md-subheader>
-  <md-list>
-    <challenge-item ng-repeat="challenge in vm.globalStartedChallenges"
-      challenge="challenge"></challenge-item>
-  </md-list>
+<section>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>{{ 'challenges.title' | translate }}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button"
+        aria-label="Create Game">
+        <md-icon md-font-icon="Material-Design-Icons"
+          class="mdi-content-add-circle"
+          ng-click="vm.state = vm.CREATION"></md-icon>
+      </md-button>
+    </div>
+    <challenge-form ng-if="vm.state === vm.CREATION"></challenge-form>
+  </md-toolbar>
+  <section ng-if="vm.challengesForMe.length > 0">
+    <md-subheader class="md-primary">{{ 'challenges.challengesForMe' | translate}}</md-subheader>
+    <md-list>
+      <challenge-item ng-repeat="challenge in vm.challengesForMe"
+        challenge="challenge"></challenge-item>
+    </md-list>
+  </section>
+  <section ng-if="vm.myChallenges.length > 0">
+    <md-subheader class="md-primary">{{ 'challenges.myChallenges' | translate}}</md-subheader>
+    <md-list>
+      <challenge-item ng-repeat="challenge in vm.myChallenges"
+        challenge="challenge"></challenge-item>
+    </md-list>
+  </section>
+  <section ng-if="vm.myStartedChallenges.length > 0">
+    <md-subheader class="md-primary">{{ 'challenges.myStartedChallenges' | translate}}</md-subheader>
+    <md-list>
+      <challenge-item ng-repeat="challenge in vm.myStartedChallenges"
+        challenge="challenge"></challenge-item>
+    </md-list>
+  </section>
+  <section ng-if="vm.globalChallenges.length > 0">
+    <md-subheader class="md-primary">{{ 'challenges.globalChallenges' | translate}}</md-subheader>
+    <md-list>
+      <challenge-item ng-repeat="challenge in vm.globalChallenges"
+        challenge="challenge"></challenge-item>
+    </md-list>
+  </section>
+  <section ng-if="vm.globalStartedChallenges.length > 0">
+    <md-subheader class="md-primary">{{ 'challenges.globalStartedChallenges' | translate}}</md-subheader>
+    <md-list>
+      <challenge-item ng-repeat="challenge in vm.globalStartedChallenges"
+        challenge="challenge"></challenge-item>
+    </md-list>
+  </section>
 </section>

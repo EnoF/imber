@@ -21,6 +21,19 @@ module DAO {
         }, deferred.reject);
       return deferred.promise;
     }
+
+    create(opponent: string) {
+      var deferred = this.$q.defer();
+      var game = {
+        challenger: this.session.getUser()._id,
+        opponent: opponent
+      };
+      this.post('/api/games', game)
+        .then((response: any) => {
+          deferred.resolve(new Game(response.data));
+        }, deferred.reject);
+      return deferred.promise;
+    }
   }
 
   export function gameDAO($injector: IInjectorService) {

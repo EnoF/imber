@@ -25,17 +25,31 @@
     user.getUserById(req.body.challenger)
       .then(function playerFound(user) {
         if (challengerName === user.userName) {
-          Game.create(req.body, deferred.makeNodeResolver());
+          return Game.create(req.body);
         } else {
           res.status(403).send('not authorized');
           deferred.reject();
         }
       })
-      .fail(function playerNotFound() {
+      .then(function sendGame(game) {
+        return Game.findOne({
+            _id: game._id
+          })
+          .populate('board')
+          .populate('challenger', '_id userName')
+          .populate('opponent', '_id userName')
+          .exec();
+      })
+      .then(populateTeams)
+      .then(function resolveGame(game) {
+        res.send(game);
+        deferred.resolve(game);
+      })
+      .fail(function playerNotFound(error) {
+        console.log(error);
         res.status(404).send('challenger not found');
         deferred.reject();
       });
-    deferred.promise.then(resolveWithOk(res));
     return deferred.promise;
   }
 

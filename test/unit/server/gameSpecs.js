@@ -40,7 +40,7 @@
           .when(game.challenge)
           .then(function assert(response, next, data) {
             var deferred = queue.defer();
-            expect(response).to.equal('ok');
+            expect(response).to.equal(data);
           });
       });
 
