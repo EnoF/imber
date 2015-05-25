@@ -38,7 +38,7 @@ module ImberTest {
       }).respond(200, game);
     })
     .given('the server finds players', () => {
-      ctx.$httpBackend.expect('GET', '/api/user?search=ban')
+      ctx.$httpBackend.expect('GET', '/api/users?search=ban')
         .respond(200, ctx.users);
     })
     .then('I should see the challenge in the challenges widget', () => {

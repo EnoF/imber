@@ -16,7 +16,7 @@ module DAO {
     }
 
     register(email: string, userName: string, password: string) {
-      this.post('/api/user', {
+      this.post('/api/users', {
         email: email,
         userName: userName,
         password: password
@@ -25,7 +25,7 @@ module DAO {
 
     search(query: string) {
       var deferred = this.$q.defer();
-      this.get('/api/user', {
+      this.get('/api/users', {
         search: query
       }).then((response: any) => {
         var users: Array<User> = [];
