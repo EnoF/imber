@@ -1,0 +1,10 @@
+<md-list-item class="md-2-line">
+  <md-icon class="md-avatar"
+    md-font-icon="Material-Design-Icons"
+    ng-class="{ 'mdi-navigation-check': vm.challenge.started, 'mdi-action-schedule': !vm.challenge.started }">
+  </md-icon>
+  <div class="md-list-item-text">
+    <h3>{{ vm.challenge.opponent.userName }}</h3>
+    <h4>{{ vm.challenge.challenger.userName }}</h4>
+  </div>
+</md-list-item>

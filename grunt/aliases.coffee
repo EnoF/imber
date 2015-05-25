@@ -5,7 +5,7 @@ module.exports = (grunt) ->
     'ngtemplates:html'
     'ts'
     'template'
-    'concat'
+    'concat:css'
     'less'
   ]
   migrationConfig: () ->

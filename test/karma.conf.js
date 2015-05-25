@@ -17,6 +17,7 @@ module.exports = function(config) {
       'app/bower_components/angular-translate/angular-translate.js',
       'app/bower_components/angular-messages/angular-messages.js',
       'app/bower_components/angular-validation-match/dist/angular-input-match.js',
+      '.tmp/js/build.js',
       '.tmp/js/test/*.js',
       '.tmp/js/app/core/models/**/*.js',
       '.tmp/js/app/core/dao/**/*.js',

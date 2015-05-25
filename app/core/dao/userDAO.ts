@@ -7,7 +7,7 @@ module DAO {
     }
 
     login(userName: string, password: string) {
-      this.post('/api/login', {
+      return this.post('/api/login', {
         userName: userName,
         password: password
       });
@@ -22,10 +22,8 @@ module DAO {
     }
   }
 
-  var instance = null;
-
   export function userDAO($injector: IInjectorService) {
-    return instance = new UserDAO($injector);
+    return new UserDAO($injector);
   }
   userDAO.$inject = ['$injector'];
 }

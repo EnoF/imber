@@ -1,0 +1,9 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <h2>{{ 'challenges.title' | translate }}</h2>
+  </div>
+</md-toolbar>
+<md-list>
+  <challenge-item ng-repeat="challenge in vm.challenges"
+    challenge="challenge"></challenge-item>
+</md-list>

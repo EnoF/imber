@@ -30,11 +30,12 @@ module DAO {
       }
     };
 
-    execute(method, url, data?, isImage?) {
+    execute(method, url, data?, params?, isImage?) {
       var config: IRequestConfig = {
         method: method,
         url: this.session.getBaseUrl() + url,
         data: data,
+        params: params,
         headers: {}
       };
       if (isImage) {
@@ -49,7 +50,7 @@ module DAO {
     }
 
     get(url: string, params: Object) {
-      return this.execute(this.GET, url, params);
+      return this.execute(this.GET, url, null, params);
     }
 
     post(url: string, data: Object) {
