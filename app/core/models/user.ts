@@ -2,6 +2,7 @@
 
 module Models {
   export class User extends Serializable {
+    _id: string;
     userName: string;
 
     constructor(user: IUser) {

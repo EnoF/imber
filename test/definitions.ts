@@ -26,6 +26,12 @@ module StepLibrary {
     .given('the widget has bound "(.*)" with "(.*)"', (prop: string, value: string) => {
       ctx.attributes[prop] = value;
     })
+    .given('I am logged in as "(.*)"', (name: string) => {
+      ctx.session.setUser({
+        _id: name.toFakeId(),
+        userName: name
+      });
+    })
     .when('I press the "(.*)" button', (action) => {
       ctx.$scope.vm[action.toCamelCase()]();
     })

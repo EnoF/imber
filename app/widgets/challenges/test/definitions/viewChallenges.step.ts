@@ -5,39 +5,49 @@ module ImberTest {
   var expect = chai.expect;
 
   library
-    .given('I have $NUM Games in "(.*)" state', (numberOfGames: string, state: string) => {
-      var amountOfGames = parseInt(numberOfGames, 10);
-      for (var i = 0; i < amountOfGames; i++) {
-        ctx.games.push({
-          board: {
-            _id: 1,
-            x: 5,
-            y: 5
-          },
-          challenger: {
-            _id: 'u1s2e3r4o5n6e7',
-            userName: 'EnoF'
-          },
-          opponent: {
-            _id: 'u1s2e3r4t5w6o6',
-            userName: 'Rina'
-          },
-          started: state === 'ACCEPTED'
-        });
-      }
+    .given('< Game  >< Challenger  >< Opponent  >< State     >', () => {
+      ctx.games = [];
+    })
+    .given('< Game  >< (.*) >< (.*) >< (.*) >', (challenger: string, opponent: string, state: string) => {
+      ctx.games.push({
+        board: {
+          _id: 0,
+          x: 5,
+          y: 5
+        },
+        challenger: {
+          _id: challenger.extractValue().toFakeId(),
+          userName: challenger.extractValue()
+        },
+        opponent: {
+          _id: opponent.extractValue().toFakeId(),
+          userName: opponent.extractValue()
+        },
+        started: state.extractValue() === 'ACCEPTED'
+      });
     })
     .given('the server finds challenges', () => {
-      ctx.$httpBackend.expect('GET', '/api/games?player=p1l2a3y4e5r6')
+      ctx.$httpBackend.expect('GET', '/api/games?player=e1n2o3f4')
         .respond(200, ctx.games);
     })
-    .then('I see $NUM challenges in "(.*)"', (numberOfGames: string, state: string) => {
-      var amountOfGames = parseInt(numberOfGames, 10);
-      var stateClass;
-      if (state === 'ACCEPTED') {
-        stateClass = '.mdi-navigation-check';
-      } else {
-        stateClass = '.mdi-action-schedule';
-      }
-      expect(ctx.$element.find('challenge-item[challenge] ' + stateClass).length).to.equal(amountOfGames);
+    .then('I see in pending challenges waiting for me $NUM challenge(:s){0,1}', (numberOfChallenges: string) => {
+      expect(ctx.$element.find('[ng-repeat="challenge in vm.challengesForMe"]').length)
+        .to.equal(numberOfChallenges.toNumber());
+    })
+    .then('I see in my pending challenges $NUM challenge(:s){0,1}', (numberOfChallenges: string) => {
+      expect(ctx.$element.find('[ng-repeat="challenge in vm.myChallenges"]').length)
+        .to.equal(numberOfChallenges.toNumber());
+    })
+    .then('I see in my started challenges $NUM challenge(:s){0,1}', (numberOfChallenges: string) => {
+      expect(ctx.$element.find('[ng-repeat="challenge in vm.myStartedChallenges"]').length)
+        .to.equal(numberOfChallenges.toNumber());
+    })
+    .then('I see in the global pending challenges $NUM challenge(:s){0,1}', (numberOfChallenges: string) => {
+      expect(ctx.$element.find('[ng-repeat="challenge in vm.globalChallenges"]').length)
+        .to.equal(numberOfChallenges.toNumber());
+    })
+    .then('I see in the global started challenges $NUM challenge(:s){0,1}', (numberOfChallenges: string) => {
+      expect(ctx.$element.find('[ng-repeat="challenge in vm.globalStartedChallenges"]').length)
+        .to.equal(numberOfChallenges.toNumber());
     });
 }

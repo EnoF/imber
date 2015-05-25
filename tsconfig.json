@@ -34,6 +34,7 @@
         "./app/core/models/user.ts",
         "./app/core/modules/appConfig.ts",
         "./app/widgets/challenges/challenges.ts",
+        "./app/widgets/challenges/src/challengeForm.ts",
         "./app/widgets/challenges/src/challengeItem.ts",
         "./app/widgets/challenges/src/challengeVM.ts",
         "./app/widgets/challenges/src/challenges.ts",
