@@ -13,14 +13,8 @@
     content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 
-<body data-ng-app="imber.challenges-demo">
-  <div layout="row"
-    ng-controller="Test">
-    <md-content flex>
-      <challenges ng-if="loggedIn"></challenges>
-    </md-content>
-  </div>
-
+<body data-ng-app="imber.imber">
+  <imber></imber>
   <script src="//localhost:35729/livereload.js"></script>
   <script src="/bower_components/angular/angular.js"
     type="text/javascript"></script>
@@ -42,16 +36,6 @@
     type="text/javascript"></script>
   <script src="/js/templates.js"
     type="text/javascript"></script>
-  <script type="text/javascript">
-  angular.module('imber.challenges-demo', ['imber.challenges'])
-    .controller('Test', function($scope, userDAO) {
-      $scope.loggedIn = false;
-      userDAO.login('enof', 'secret')
-        .then(function() {
-          $scope.loggedIn = true;
-        });
-    });
-  </script>
 </body>
 
 </html>

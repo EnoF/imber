@@ -15,6 +15,7 @@
         "./app/widgets/**/*.ts",
         "./test/*.ts",
         "./app/bower_components/type-def/angularjs/angular.d.ts",
+        "./app/bower_components/type-def/angularjs/angular-route.d.ts",
         "./app/bower_components/type-def/angular-material/angular-material.d.ts",
         "./app/bower_components/type-def/node/node.d.ts",
         "!./node_modules/**/*.ts"
@@ -43,6 +44,10 @@
         "./app/widgets/challenges/test/definitions/acceptChallenge.step.ts",
         "./app/widgets/challenges/test/definitions/challenge.step.ts",
         "./app/widgets/challenges/test/definitions/viewChallenges.step.ts",
+        "./app/widgets/imber/imber.ts",
+        "./app/widgets/imber/src/imber.ts",
+        "./app/widgets/imber/src/imberVM.ts",
+        "./app/widgets/imber/src/translations/en.ts",
         "./app/widgets/login/login.ts",
         "./app/widgets/login/src/login.ts",
         "./app/widgets/login/src/loginForm.ts",
@@ -57,6 +62,7 @@
         "./test/definitions.ts",
         "./test/globals.ts",
         "./app/bower_components/type-def/angularjs/angular.d.ts",
+        "./app/bower_components/type-def/angularjs/angular-route.d.ts",
         "./app/bower_components/type-def/angular-material/angular-material.d.ts",
         "./app/bower_components/type-def/node/node.d.ts"
     ],
