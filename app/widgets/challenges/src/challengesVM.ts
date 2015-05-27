@@ -5,9 +5,10 @@ module ChallengesVMS {
   import Game = Models.Game;
   import User = Models.User;
   import Session = Models.Session;
+  import IQService = ng.IQService;
 
   export class ChallengesVM extends BaseVM {
-    static $inject = ['$scope', 'gameDAO', 'userDAO', 'session'];
+    static $inject = ['$scope', 'gameDAO', 'userDAO', 'session', '$q'];
     VIEW: string = 'view';
     CREATION: string = 'creation';
 
@@ -25,25 +26,27 @@ module ChallengesVMS {
 
     session: Session;
     state: string = this.VIEW;
+    $q: IQService;
 
-    constructor($scope, gameDAO: GameDAO, userDAO: UserDAO, session: Session) {
+    constructor($scope, gameDAO: GameDAO, userDAO: UserDAO, session: Session, $q: IQService) {
       super($scope);
       this.session = session;
       this.gameDAO = gameDAO;
       this.userDAO = userDAO;
+      this.$q = $q;
       gameDAO.getGames($scope.playerId)
         .then((challenges: Array<Game>) => {
-          this.challenges = challenges;
-          this.sortChallenges();
-        });
+        this.challenges = challenges;
+        this.sortChallenges();
+      });
     }
 
     challenge() {
       this.gameDAO.create(this.opponent._id)
         .then((game: Game) => {
-          this.myChallenges.push(game);
-          this.state = this.VIEW;
-        });
+        this.myChallenges.push(game);
+        this.state = this.VIEW;
+      });
     }
 
     resetChallenges() {
@@ -60,7 +63,7 @@ module ChallengesVMS {
       this.challenges.forEach((challenge: Game) => {
         if (challenge.started &&
           (challenge.challenger._id === loggedInId ||
-          challenge.opponent._id === loggedInId)) {
+            challenge.opponent._id === loggedInId)) {
           this.myStartedChallenges.push(challenge);
         } else if (challenge.challenger._id === loggedInId) {
           this.myChallenges.push(challenge);
@@ -75,7 +78,18 @@ module ChallengesVMS {
     }
 
     search(query: string) {
-      return this.userDAO.search(query);
+      var deferred = this.$q.defer();
+      this.userDAO.search(query)
+        .then((users: Array<User>) => {
+        var filteredUsers: Array<User> = [];
+        users.forEach((user) => {
+          if (user._id !== this.session.getUser()._id) {
+            filteredUsers.push(user);
+          }
+        });
+        deferred.resolve(filteredUsers);
+      }, deferred.reject);
+      return deferred.promise;
     }
   }
 }

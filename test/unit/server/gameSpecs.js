@@ -44,6 +44,21 @@
           });
       });
 
+      it('should prevent creating a game vs yourself', function preventSelfGaming(done) {
+        test(done)
+          .given({
+            challenger: '545726928469e940235ce769',
+            opponent: '545726928469e940235ce769'
+          })
+          .givenHeader({
+            authorization: createAuthToken('EnoF')
+          })
+          .when(game.challenge)
+          .then(function assert(response) {
+            expect(response).to.equal('not authorized');
+          });
+      });
+
       describe('character position', function characterPositionSpecs() {
         var challengerTeam, opponentTeam;
 

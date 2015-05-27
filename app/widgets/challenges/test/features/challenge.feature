@@ -7,6 +7,7 @@ Feature: Challenge Player
 
   Given I am logged in as "EnoF"
     And < Player >< UserName   >
+    And < Player >< EnoF       >
     And < Player >< BanHammer  >
     And < Player >< Banana     >
     And < Player >< BananaKing >

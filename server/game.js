@@ -33,7 +33,8 @@
     var challengerName = auth.extractUserName(req.header('authorization'));
     user.getUserById(req.body.challenger)
       .then(function playerFound(user) {
-        if (challengerName === user.userName) {
+        if (challengerName === user.userName &&
+          req.body.challenger !== req.body.opponent) {
           return Game.create(req.body);
         } else {
           res.status(403).send('not authorized');
