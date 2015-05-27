@@ -7,5 +7,5 @@ module Imber {
 
   angular.module('imber.templates', []);
 
-  angular.module('imber', ['imber.login']);
+  angular.module('imber', ['imber.imber']);
 }

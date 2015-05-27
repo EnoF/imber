@@ -1,5 +1,7 @@
 module DAO {
   import IInjectorService = ng.auto.IInjectorService;
+  import User = Models.User;
+  import IUser = Models.IUser;
 
   export class UserDAO extends DAO {
     constructor($injector: IInjectorService) {
@@ -7,25 +9,39 @@ module DAO {
     }
 
     login(userName: string, password: string) {
-      this.post('/api/login', {
+      return this.post('/api/login', {
         userName: userName,
         password: password
       });
     }
 
     register(email: string, userName: string, password: string) {
-      this.post('/api/user', {
+      this.post('/api/users', {
         email: email,
         userName: userName,
         password: password
       });
     }
+
+    search(query: string) {
+      var deferred = this.$q.defer();
+      this.get('/api/users', {
+        search: query
+      }).then((response: any) => {
+        var users: Array<User> = [];
+        response.data.forEach((user: IUser) => {
+          users.push(new User(user));
+        });
+        deferred.resolve(users);
+      }, () => {
+        deferred.resolve([]);
+      });
+      return deferred.promise;
+    }
   }
 
-  var instance = null;
-
   export function userDAO($injector: IInjectorService) {
-    return instance = new UserDAO($injector);
+    return new UserDAO($injector);
   }
   userDAO.$inject = ['$injector'];
 }

@@ -25,7 +25,7 @@ module Models {
         if (!json.hasOwnProperty(prop)) {
           continue;
         }
-        iterator(prop, json[prop]);
+        iterator(json[prop], prop);
       }
     }
   }

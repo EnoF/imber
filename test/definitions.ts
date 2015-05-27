@@ -23,13 +23,23 @@ module StepLibrary {
     .given('the widget "(.*)" is initialized', (widget) => {
       ctx.initializeDirective(widget);
     })
+    .given('the widget has bound "(.*)" with "(.*)"', (prop: string, value: string) => {
+      ctx.attributes[prop] = value;
+    })
+    .given('I am logged in as "(.*)"', (name: string) => {
+      ctx.session.setUser({
+        _id: name.toFakeId(),
+        userName: name
+      });
+    })
     .when('I press the "(.*)" button', (action) => {
       ctx.$scope.vm[action.toCamelCase()]();
     })
+    .when('the server responds', () => ctx.$httpBackend.flush())
     .then('I should see I am logged in with "(.*)"', () => {
 
     })
     .then('I should see the error message "(.*)"', (message: string) => {
-      
+
     });
 }

@@ -1,5 +1,8 @@
+/// <reference path="./serializable"/>
+
 module Models {
   export class User extends Serializable {
+    _id: string;
     userName: string;
 
     constructor(user: IUser) {
@@ -16,6 +19,7 @@ module Models {
   }
 
   export interface IUser {
+    _id: string;
     userName: string;
   }
 }

@@ -29,9 +29,9 @@
 
     app.post('/api/login', user.login);
     app.post('/api/reauthenticate', user.reauthenticate);
-    app.post('/api/user', user.register);
+    app.post('/api/users', user.register);
 
-    app.get('/api/user', user.searchFor);
+    app.get('/api/users', user.searchFor);
 
     app.get('/api/games/:id', game.getGame);
     app.get('/api/games', game.getLatestGames);

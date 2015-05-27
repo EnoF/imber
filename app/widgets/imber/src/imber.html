@@ -1,0 +1,6 @@
+<md-content flex
+  layout-fill>
+  <login ng-if="!vm.session.isLoggedIn()"></login>
+  <ng-view autoscroll="true"
+    ng-if="vm.session.isLoggedIn()"></ng-view>
+</md-content>

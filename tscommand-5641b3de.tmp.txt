@@ -1,0 +1,1 @@
+"C:\provictores\imber\app\reference.ts" --sourcemap --removeComments --target ES5 --out .tmp/js/build.js

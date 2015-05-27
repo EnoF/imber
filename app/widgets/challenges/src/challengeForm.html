@@ -1,0 +1,31 @@
+<!-- <md-subheader>{{ 'challengeForm.title' | translate }}</md-subheader> -->
+<form name="registerForm"
+  novalidate
+  ng-submit="vm.challenge()"
+  autocomplete="off"
+  layout="row">
+  <div flex
+    layout-padding>
+    <md-autocomplete md-selected-item="vm.opponent"
+      md-items="user in vm.search(vm.query)"
+      md-search-text="vm.query"
+      md-item-text="user.userName"
+      md-selected-item="vm.opponent"
+      md-search-text-change="vm.opponent = null"
+      md-min-length="3"
+      placeholder="{{ 'challengeForm.searchOpponent' | translate }}">
+      <md-item-template>
+        <span md-highlight-text="vm.query"
+          md-highlight-flags="^i">{{ user.userName }}</span>
+      </md-item-template>
+      <md-not-found>
+        {{ 'challengeForm.noOpponentFoundWith' | translate }}{{ vm.query }}
+      </md-not-found>
+    </md-autocomplete>
+  </div>
+  <md-button type="submit"
+    ng-disabled="!vm.opponent"
+    class="md-raised md-primary">
+    {{ 'challengeForm.challenge' | translate }}
+  </md-button>
+</form>

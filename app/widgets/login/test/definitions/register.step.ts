@@ -7,7 +7,7 @@ module ImberTest {
   library
     .given('the registration will be successful', () => {
       var vm = ctx.$scope.vm;
-      ctx.$httpBackend.expect('POST', '/api/user', {
+      ctx.$httpBackend.expect('POST', '/api/users', {
         email: vm.email,
         userName: vm.userName,
         password: vm.password

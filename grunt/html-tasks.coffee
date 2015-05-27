@@ -2,6 +2,7 @@ module.exports =
   ngtemplates:
     src: [
       'app/widgets/**/src/*.html'
+      'app/widgets/**/src/pages/*.html'
       'app/core/widgets/**/src/*.html'
     ]
     dest: '.tmp/js/templates.js'

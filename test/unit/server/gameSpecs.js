@@ -40,7 +40,22 @@
           .when(game.challenge)
           .then(function assert(response, next, data) {
             var deferred = queue.defer();
-            expect(response).to.equal('ok');
+            expect(response).to.equal(data);
+          });
+      });
+
+      it('should prevent creating a game vs yourself', function preventSelfGaming(done) {
+        test(done)
+          .given({
+            challenger: '545726928469e940235ce769',
+            opponent: '545726928469e940235ce769'
+          })
+          .givenHeader({
+            authorization: createAuthToken('EnoF')
+          })
+          .when(game.challenge)
+          .then(function assert(response) {
+            expect(response).to.equal('not authorized');
           });
       });
 
@@ -344,6 +359,9 @@
         test(done)
           .givenParams({
             id: '548726928469e940235ce769'
+          })
+          .givenHeader({
+            authorization: createAuthToken('Banana')
           })
           .when(game.accept)
           .then(function assert(response) {

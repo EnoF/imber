@@ -2,6 +2,7 @@ module.exports =
   ts__all:
     src: [
       'app/bower_components/type-def/angularjs/angular.d.ts'
+      'app/bower_components/type-def/angularjs/angular-route.d.ts'
       'app/bower_components/type-def/angular-material/angular-material.d.ts'
       'app/core/models/**/*.ts'
       'app/core/dao/**/*.ts'
@@ -19,6 +20,7 @@ module.exports =
   ts__seperate:
     src: [
       'app/bower_components/type-def/angularjs/angular.d.ts'
+      'app/bower_components/type-def/angularjs/angular-route.d.ts'
       'app/bower_components/type-def/angular-material/angular-material.d.ts'
       'app/bower_components/type-def/node/node.d.ts'
       'app/bower_components/type-def/mocha/mocha.d.ts'

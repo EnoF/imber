@@ -5,7 +5,7 @@ module.exports = (grunt) ->
     'ngtemplates:html'
     'ts'
     'template'
-    'concat'
+    'concat:css'
     'less'
   ]
   migrationConfig: () ->
@@ -36,6 +36,7 @@ module.exports = (grunt) ->
   test: [
     'setupEnv'
     'karma:test_single'
+    'simplemocha'
   ]
   server: [
     'setupEnv'
