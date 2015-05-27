@@ -62,7 +62,8 @@ module.exports =
     ]
   watch__server:
     files: [
-      'test/unit/server/*.js'
+      'server/**/*.js'
+      'test/unit/server/**/*.js'
     ]
     tasks: [
       'simplemocha'

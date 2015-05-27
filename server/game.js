@@ -9,14 +9,23 @@
   require('./resources/Character');
 
   function accept(req, res) {
-    var deferred = queue.defer();
-    Game.findByIdAndUpdate(mongoose.Types.ObjectId(req.params.id), {
-      $set: {
-        started: true
-      }
-    }, deferred.makeNodeResolver());
-    deferred.promise.then(resolveWithOk(res));
-    return deferred.promise;
+    var opponentName = auth.extractUserName(req.header('authorization'));
+    return Game.findById(req.params.id)
+      .populate('opponent', '_id userName')
+      .exec()
+      .then(function(game) {
+        if (opponentName === game.opponent.userName) {
+          return Game.findByIdAndUpdate(mongoose.Types.ObjectId(req.params.id), {
+            $set: {
+              started: true
+            }
+          });
+        } else {
+          res.status(403).send('not authorized');
+          return new Error('not authorized');
+        }
+      })
+      .then(resolveWithOk(res));
   }
 
   function challenge(req, res) {

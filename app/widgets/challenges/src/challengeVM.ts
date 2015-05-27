@@ -43,7 +43,7 @@ module ChallengesVMS {
     }
 
     getChallenger() {
-      if (this.challenge.challenger._id === this.session.getUser()._id) {
+      if (this.challenge.opponent._id !== this.session.getUser()._id) {
         return this.challenge.challenger;
       } else {
         return this.challenge.opponent;

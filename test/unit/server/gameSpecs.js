@@ -345,6 +345,9 @@
           .givenParams({
             id: '548726928469e940235ce769'
           })
+          .givenHeader({
+            authorization: createAuthToken('Banana')
+          })
           .when(game.accept)
           .then(function assert(response) {
             expect(response).to.equal('ok');

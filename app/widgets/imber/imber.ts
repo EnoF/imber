@@ -3,8 +3,8 @@ module Imber {
   import IRoute = Modules.IRoute;
 
   var routes: Array<IRoute> = [{
-    templateUrl: 'pages/login',
-    routeUrl: '/login',
+    templateUrl: 'pages/challenges',
+    routeUrl: '/challenges',
     controller: 'ImberVM'
   }];
 
