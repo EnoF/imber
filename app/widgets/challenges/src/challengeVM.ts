@@ -34,6 +34,10 @@ module ChallengesVMS {
         this.challenge.challenger._id === loggedInId;
     }
 
+    isAuthorizedToAccept() {
+      return this.challenge.opponent.userName === this.session.user.userName;
+    }
+
     getOpponent() {
       if (this.challenge.opponent._id === this.session.getUser()._id) {
         return this.challenge.challenger;

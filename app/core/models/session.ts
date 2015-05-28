@@ -1,8 +1,8 @@
 module Models {
   export class Session {
-    private authToken: string;
-    private baseUrl: string = '';
-    private user: User;
+    authToken: string;
+    baseUrl: string = '';
+    user: User;
 
     getAuthToken() {
       return this.authToken;
