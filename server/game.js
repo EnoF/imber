@@ -19,7 +19,7 @@
             $set: {
               started: true
             }
-          });
+          }).exec();
         } else {
           res.status(403).send('not authorized');
           return new Error('not authorized');
@@ -133,7 +133,7 @@
   }
 
   function resolveWithOk(res) {
-    return function resolveOk() {
+    return function resolveOk(anything) {
       res.send('ok');
     };
   }
