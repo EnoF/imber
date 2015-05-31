@@ -10,9 +10,10 @@
   </p>
   <md-button class="md-fab md-primary md-mini"
     aria-label="{{ 'challengeItem.accept' | translate }}"
-    ng-disabled="vm.challenge.started || !vm.isAuthorizedToAccept()"
+    ng-if="!vm.challenge.started"
+    ng-disabled="!vm.isAuthorizedToAccept()"
     ng-click="vm.accept()">
-    <md-icon class="mdi-av-play-arrow font-icon-28"
+    <md-icon class="mdi-navigation-check font-icon-28"
       md-font-icon="Material-Design-Icons">
     </md-icon>
   </md-button>
